@@ -1,0 +1,154 @@
+openapi: "3.0.0"
+
+info:
+  title: Botium Coach Worker API
+  version: "1.0"
+  license:
+    name: MIT
+servers:
+  - url: /1.0
+paths:
+  /ping:
+    get:
+      summary: Ping
+      operationId: api.embeddings.ping
+      responses:
+        200:
+          description: ping response
+          content:
+            text/plain:
+              schema:
+                type: string
+  /static/calculate_embeddings:
+    post:
+      summary: Calculate word embedding statistics on a data set
+      operationId: api.embeddings.calculate_embeddings
+      requestBody:
+        description: Botium data set with user examples
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: intents
+              $ref: "#/components/schemas/Intents"
+            example:
+              - name: INSURANCE.VIEW_CLAIM_STATUS
+                examples:
+                  - Is it possible to know the progress of my insurance claim?
+                  - The status still in pending for like 3 weeks
+                  - What is the date of approval?
+                  - What is the progress on my claim?
+                  - When do I get my money?
+                  - When my claim is gonna be processed?
+                  - When was the claim approved?
+                  - Where is my money?
+                  - Which information do I need to provide to check my claim's status?
+                  - Would it be possible to know claim status over a call?
+                  - Give me info about my current claim.
+                  - Do my claim proceed further?
+                  - Can you tell me the progress on my case?
+                  - Has a decision been reached?
+                  - Help me to know if there is an update for my claim
+                  - How to check health insurance claim status online?
+                  - I need the money immediately, can they approve it quickly?
+                  - I want new information about my claim
+                  - I want to know if my claim has been rejected.
+                  - It seems the status is stills at pending
+              - name: INSURANCE.VIEW_INSURANCE_ID
+                examples:
+                  - Can you email me poi?
+                  - Where can I view my insurance id?
+                  - Where can I see proof of insurance?
+                  - Where can I get my insurance id?
+                  - What is link to download proof of insurance?
+                  - Is there a way to get poi?
+                  - Is there a toll-free number where I can get help on my insurance id?
+                  - I'd like to see poi
+                  - I want to know information about poi
+                  - I need information of poi
+                  - How to view poi?
+                  - How can I find poi?
+                  - Do you know from where I can download poi card?
+                  - Can you please show me poi?
+                  - Can you please provide details of poi?
+                  - Can you assist me to get poi?
+                  - Can my agent give me my poi?
+                  - Can I get my poi on my mobile?
+                  - Where can get details for proof of insurance?
+                  - Can you please give me poi?
+              - name: INSURANCE.VIEW_POLICY
+                examples:
+                  - Please show me my policy
+                  - I would prefer to view the contents of the contract
+                  - I want to look at policy terms.
+                  - How do I download the policy to see?
+                  - Can you please show me my insurance policy?
+                  - Can I view the details of the agreement?
+                  - Show policy
+                  - See contract
+                  - Read contract
+                  - Pull up my policy please
+                  - List all risks
+                  - What is the start date of insurance?
+                  - What's in my plan?
+                  - What's the full amount of things which the plan covers?
+                  - Where is the contract for insurance?
+                  - What is the expiration date of my health insurance?
+                  - What is link to download insurance policy?
+                  - View policy
+                  - Terms and conditions info.
+                  - Tell me everything is covered
+      responses:
+        '201':
+          description: Embeddings and statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Embeddings"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Intent:
+      required:
+        - name
+        - examples
+      properties:
+        name:
+          type: string
+        examples:
+          type: array
+          items:
+            type: string
+    Intents:
+      type: array
+      items:
+        $ref: "#/components/schemas/Intent"
+    Embeddings:
+      properties:
+        embeddings:
+          type: array
+          items:
+            properties:
+              name:
+                type: string
+              examples:
+                type: array
+                items:
+                  properties:
+                    phrase:
+                      type: string
+                    x:
+                      type: number
+                    y:
+                      type: number
+    Error:
+      required:
+        - message
+      properties:
+        message:
+          type: string
