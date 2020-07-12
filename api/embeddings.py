@@ -15,7 +15,7 @@ generate_embeddings = hub.load('https://tfhub.dev/google/universal-sentence-enco
 logging.info('Word embeddings model ready.')
 
 def ping():
-  return 'Botium Coach Worker 1. Tensorflow Version: {tfVersion}'.format(tfVersion=tf.__version__)
+  return 'Botium Coach Worker. Tensorflow Version: {tfVersion}'.format(tfVersion=tf.__version__)
 
 def calculate_embeddings(embeddingsRequest):
   logging.debug(json.dumps(embeddingsRequest, indent=2))
