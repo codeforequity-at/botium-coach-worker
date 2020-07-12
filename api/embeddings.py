@@ -17,8 +17,12 @@ logging.info('Word embeddings model ready.')
 def ping():
   return 'Botium Coach Worker 1. Tensorflow Version: {tfVersion}'.format(tfVersion=tf.__version__)
 
-def calculate_embeddings(intents):
-  logging.debug(json.dumps(intents, indent=2))
+def calculate_embeddings(embeddingsRequest):
+  logging.debug(json.dumps(embeddingsRequest, indent=2))
+
+  filter = embeddingsRequest['filter']
+  intents = embeddingsRequest['intents']
+
   for intent in intents:
     logging.info('Calculating embeddings for intent "%s" with %s examples', intent['name'], len(intent['examples']))
 
@@ -55,4 +59,46 @@ def calculate_embeddings(intents):
 
   logging.debug(json.dumps(embeddings_coords, indent=2))
 
-  return { 'embeddings': embeddings_coords }
+  flatten = []
+
+  for intent in training_phrases_with_embeddings:
+    for phrase in training_phrases_with_embeddings[intent]:
+      flatten.append((intent, phrase,  training_phrases_with_embeddings[intent][phrase]))
+
+  data = []
+  for i in range(len(flatten)):
+    for j in range(i+1, len(flatten)):
+
+      intent_1 = flatten[i][0]
+      phrase_1 = flatten[i][1]
+      embedd_1 = flatten[i][2]
+
+      intent_2 = flatten[j][0]
+      phrase_2 = flatten[j][1]
+      embedd_2 = flatten[j][2]
+
+      similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
+
+      record = [intent_1, phrase_1, intent_2, phrase_2, similarity]
+      data.append(record)
+
+  similarity_df = pd.DataFrame(data, columns=['name1', 'example1', 'name2', 'example2', 'similarity'])
+  similarity_different_intent = similarity_df['name1'] != similarity_df['name2']
+  similarity_same_intent = similarity_df['name1'] == similarity_df['name2']
+
+  similarity_different_intent_filtered = (similarity_df['name1'] != similarity_df['name2']) & (similarity_df['similarity'] > filter['minsimilarity'])
+  similarity_df_sorted = similarity_df[similarity_different_intent_filtered].sort_values('similarity', ascending=False)
+  similarity = [ { 'name1': name1, 'example1': example1, 'name2': name2, 'example2': example2, 'similarity': similarity } for name1, example1, name2, example2, similarity in zip(similarity_df_sorted['name1'], similarity_df_sorted['example1'], similarity_df_sorted['name2'], similarity_df_sorted['example2'], similarity_df_sorted['similarity'])]
+  logging.debug(json.dumps(similarity, indent=2))
+
+  cohesion_df_sorted = pd.DataFrame(similarity_df[similarity_same_intent].groupby('name1', as_index=False)['similarity'].mean()).sort_values('similarity', ascending=False)
+  cohesion_df_sorted.columns = ['name', 'cohesion']
+  cohesion = [ { 'name': name, 'cohesion': cohesion } for name, cohesion in zip(cohesion_df_sorted['name'], cohesion_df_sorted['cohesion'])]
+  logging.debug(json.dumps(cohesion, indent=2))
+
+  separation_df_sorted = pd.DataFrame(similarity_df[similarity_different_intent].groupby(['name1', 'name2'], as_index=False)['similarity'].mean()).sort_values('similarity', ascending=True)
+  separation_df_sorted['separation'] = 1 - separation_df_sorted['similarity']
+  separation = [ { 'name1': name1, 'name2': name2, 'separation': separation } for name1, name2, separation in zip(separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
+  logging.debug(json.dumps(separation, indent=2))
+
+  return { 'embeddings': embeddings_coords, 'similarity': similarity, 'cohesion': cohesion, 'separation': separation }
