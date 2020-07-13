@@ -11,4 +11,5 @@ COPY ./openapi /app/openapi
 RUN rm /app/prestart.sh
 
 ENV LOGLEVEL INFO
-ENV GUNICORN_CMD_ARGS --preload --timeout 600
+ENV WEB_CONCURRENCY 2
+ENV GUNICORN_CMD_ARGS --timeout 600 --worker-class gthread
