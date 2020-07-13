@@ -11,4 +11,4 @@ COPY ./openapi /app/openapi
 RUN rm /app/prestart.sh
 
 ENV LOGLEVEL INFO
-ENV GUNICORN_CMD_ARGS --preload
+ENV GUNICORN_CMD_ARGS --preload --timeout 600
