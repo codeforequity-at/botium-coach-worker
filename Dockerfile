@@ -8,6 +8,7 @@ RUN python /app/setup/download_models.py
 COPY ./main.py /app/main.py
 COPY ./api /app/api
 COPY ./openapi /app/openapi
+RUN rm /app/prestart.sh
 
 ENV LOGLEVEL INFO
-ENV WEB_CONCURRENCY 2
+ENV GUNICORN_CMD_ARGS --preload
