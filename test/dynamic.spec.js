@@ -24,6 +24,8 @@ describe('dynamic', () => {
       for (const key of Object.keys(output)) {
         // JSON.parse + JSON.stringify: we are not able to store undefined in a json file.
         // So we are removing from output too
+        var fs = require('fs');
+        fs.writeFileSync("delme\\" + key + '.json', JSON.stringify(output[key]), 'utf8')
         assert.deepEqual(JSON.parse(JSON.stringify(output[key])), expectedOutput[key], `The field ${key} does not match`)
       }
     })

@@ -1,0 +1,10 @@
+{
+  "intentResolution": true,
+  "intentConfidenceScore": true,
+  "alternateIntents": true,
+  "entityResolution": true,
+  "entityConfidenceScore": true,
+  "testCaseGeneration": true,
+  "testCaseExport": true,
+  "securityTesting": true
+}

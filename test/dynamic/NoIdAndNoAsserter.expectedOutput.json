@@ -1,0 +1,1080 @@
+{
+  "perUtterance": [
+    {
+      "id": "1 - Incomprehension Convo",
+      "utterance": "something you wont ever understanlskfngd.f",
+      "utteranceKey": "something you wont ever understanlskfngd.f_null",
+      "scriptId": "Incomprehension Convo",
+      "step": 1,
+      "testcaseName": "Incomprehension Convo",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - Not incomprehension convo",
+      "utterance": "Hello",
+      "utteranceKey": "Hello_null",
+      "scriptId": "Not incomprehension convo",
+      "step": 1,
+      "testcaseName": "Not incomprehension convo",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - UTT_WITHOUT_INCOMPREHENSION",
+      "utterance": "hi",
+      "utteranceKey": "hi_null",
+      "scriptId": "UTT_WITHOUT_INCOMPREHENSION",
+      "step": 1,
+      "testcaseName": "UTT_WITHOUT_INCOMPREHENSION/UTT_WITHOUT_INCOMPREHENSION-L1",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.884977812402694,
+        "confidenceReal": 0.884977812402694,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.884977812402694,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.19635919476751937,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": 0.3113813823648254,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - UTT_WITH_INCOMPREHENSION",
+      "utterance": "xxxxxx",
+      "utteranceKey": "xxxxxx_null",
+      "scriptId": "UTT_WITH_INCOMPREHENSION",
+      "step": 1,
+      "testcaseName": "UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    }
+  ],
+  "perExpectedIntent": [],
+  "perActualIntent": [
+    {
+      "name": "None",
+      "incomprehension": true,
+      "count": 2,
+      "sum": null,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": null,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-start-allgemein",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 1,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 1,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "hi-bot",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.884977812402694,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.884977812402694,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    }
+  ],
+  "perCorrectedIntent": [
+    {
+      "name": "None",
+      "incomprehension": true,
+      "count": 2,
+      "sum": 0,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-start-allgemein",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 1,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 1,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "hi-bot",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.884977812402694,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.884977812402694,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    }
+  ],
+  "perExpectedEntity": [],
+  "perActualEntity": [],
+  "utteranceList": [
+    {
+      "testSetName": "Ubitec Incomprehension",
+      "scriptName": "UTT_WITHOUT_INCOMPREHENSION",
+      "correct": 1,
+      "incorrect": 0,
+      "recall": 1
+    },
+    {
+      "testSetName": "Ubitec Incomprehension",
+      "scriptName": "UTT_WITH_INCOMPREHENSION",
+      "correct": 0,
+      "incorrect": 1,
+      "recall": 0
+    }
+  ],
+  "overallStat": {
+    "sum": 1.8849778124026941,
+    "avg": 0.9424889062013471,
+    "avgReal": 0.9424889062013471,
+    "testScriptsProcessed": 4,
+    "testScriptsIgnored": 0,
+    "steps": 4,
+    "stepsIgnored": 0,
+    "stepsWithActualIntent": 4,
+    "stepsWithActualIntentAndConfidence": 2,
+    "stepsWithIntent": 0,
+    "stepsWithEntity": 0,
+    "stepsWithEntityValue": 0,
+    "incomprehensionIntents": 2,
+    "matchedIntents": 0,
+    "missedIntents": 0,
+    "missedIntentsAvg": null,
+    "justExpectedEntities": 0,
+    "justActualEntitiesChecked": 0,
+    "justActualEntitiesNotChecked": 0,
+    "expectedAndActualEntities": 0,
+    "confidenceDifferenceSquaredSumExpected": 0,
+    "confidenceDifferenceSquaredSumActual": 0,
+    "intentResolutionSupported": true,
+    "intentConfidenceSupported": true,
+    "intentListSupported": true,
+    "entityResolutionSupported": true,
+    "entityConfidenceSupported": true,
+    "expectedIntentsSupported": false,
+    "expectedEntitiesSupported": false,
+    "accuracy": null,
+    "precision": null,
+    "recall": null,
+    "F1": null,
+    "count": 4,
+    "confidenceDifferenceSquaredSum": 0,
+    "confusionMatrixStrength": null,
+    "actualIntentCount": 3,
+    "actualIntentCountNoIncomprehension": 2,
+    "actualEntityCount": 0
+  },
+  "ignoredTestScripts": [],
+  "ignoredTestScriptSteps": [],
+  "confusionMatrix": [
+    {
+      "intent": "None",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "quickstory-start-allgemein",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "hi-bot",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    }
+  ],
+  "unexpectedIntent": [],
+  "confidenceDistribution": [
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 19
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 9
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 5,
+      "stepIndex": 17
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 10,
+      "stepIndex": 8
+    }
+  ],
+  "unexpectedIntentByAlternativeList": [
+    {
+      "intent1": "hi-bot",
+      "intent2": "quickstory-start-allgemein",
+      "intent1And2": "[\"hi-bot\",\"quickstory-start-allgemein\"]",
+      "count": 1,
+      "avg": 0.22188035905036846,
+      "worstConfidence": 0.22188035905036846,
+      "worstUtterance": "hi"
+    }
+  ],
+  "confidenceThreshold": [
+    {
+      "confidenceThreshold": 0,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.01,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.02,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.03,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.04,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.05,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.06,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.07,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.08,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.09,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.1,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.11,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.12,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.13,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.14,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.15,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.16,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.17,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.18,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.19,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.2,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.21,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.22,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.23,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.24,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.25,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.26,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.27,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.28,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.29,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.3,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.31,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.32,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.33,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.34,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.35,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.36,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.37,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.38,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.39,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.4,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.41,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.42,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.43,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.44,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.45,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.46,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.47,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.48,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.49,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.5,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.51,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.52,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.53,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.54,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.55,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.56,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.57,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.58,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.59,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.6,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.61,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.62,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.63,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.64,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.65,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.66,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.67,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.68,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.69,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.7,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.71,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.72,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.73,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.74,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.75,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.76,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.77,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.78,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.79,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.8,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.81,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.82,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.83,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.84,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.85,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.86,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.87,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.88,
+      "truePositive": 2,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.89,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.9,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.91,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.92,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.93,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.94,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.95,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.96,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.97,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.98,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.99,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 1,
+      "truePositive": 1,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    }
+  ]
+}

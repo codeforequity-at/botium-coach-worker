@@ -521,7 +521,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
 
         overallStat.steps++
         if (criticalErrors.length) {
-          ignoredTestScriptSteps.push({stepId: step.id, stepIndex, err: criticalErrors})
+          ignoredTestScriptSteps.push({stepId: step.id || step.step, stepIndex, err: criticalErrors})
           overallStat.stepsIgnored++
         } else {
           // extract basic info from step
@@ -540,7 +540,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
           if (step.actualIntents && step.actualIntents.length > 0 && !step.actualIntents[0].name) {
             step.actualIntents[0].name = 'None'
             step.actualIntents[0].incomprehension = true
-            debug(`Intent without name in utterance "${utterance}" step "${step.id}"!`)
+            debug(`Intent without name in utterance "${utterance}" step "${step.id || step.step}"!`)
           }
 
           const actualIntent = step.actualIntents && step.actualIntents.length > 0 ? step.actualIntents[0].name : 'None'
@@ -592,7 +592,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
             const result = []
             for (const actualEntity of step.actualEntities) {
               if (!actualEntity.name) {
-                debug(`Entity without name in utterance "${utterance}" step "${step.id}"!`)
+                debug(`Entity without name in utterance "${utterance}" step "${step.id || step.step}"!`)
               }
               const name = actualEntity.name || ENTITY_WITHOUT_NAME
               const count = (nameToCount[name] || 0)
@@ -830,7 +830,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
 
           utteranceListProcessor.process(actualIncomprehensionIntent, actualIncomprehensionIncompUtterance)
           // collecting and returning data
-          const scriptId = entry.testSetScript ? entry.testSetScript.id
+          const scriptId = entry.testSetScript ? (entry.testSetScript.id || entry.testSetScript.name)
             : (entry.testSetRepository ? entry.testSetRepository.id
               : (entry.testSetFolder ? entry.testSetFolder.id
                 : (entry.testSetDownloadLink ? entry.testSetDownloadLink.id
@@ -915,8 +915,8 @@ class UtteranceListProcessor {
       return
     }
     const script = this.testCaseTestSetSciptUtterances
-    if (!this.utteranceListIdToStruct[script.id]) {
-      this.utteranceListIdToStruct[script.id] = {
+    if (!this.utteranceListIdToStruct[script.id || script.name]) {
+      this.utteranceListIdToStruct[script.id || script.name] = {
         testSetId: this.testSet.id,
         testSetName: this.testSet.name,
         scriptId: script.id,
@@ -926,7 +926,7 @@ class UtteranceListProcessor {
       }
     }
 
-    this.utteranceListIdToStruct[script.id][(actualIncomprehensionIntent || actualIncomprehensionIncompUtterance) ? 'incorrect' : 'correct']++
+    this.utteranceListIdToStruct[script.id || script.name][(actualIncomprehensionIntent || actualIncomprehensionIncompUtterance) ? 'incorrect' : 'correct']++
   }
 
   getTrainerUtteranceList() {
