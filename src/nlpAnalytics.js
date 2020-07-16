@@ -145,7 +145,7 @@ const _countUnexpectedIntents = (context) => {
     }
     return accumulator
   }, {})
-  context.unexpectedIntent = Object.values(intentsToStruct)
+  context.result.unexpectedIntent = Object.values(intentsToStruct)
 }
 
 const _calculateConfidenceThreshold = (context) => {
@@ -829,7 +829,6 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
           }
 
           utteranceListProcessor.process(actualIncomprehensionIntent, actualIncomprehensionIncompUtterance)
-
           // collecting and returning data
           const scriptId = entry.testSetScript ? entry.testSetScript.id
             : (entry.testSetRepository ? entry.testSetRepository.id
