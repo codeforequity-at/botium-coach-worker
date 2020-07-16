@@ -1,0 +1,324 @@
+{
+  "perUtterance": [
+    {
+      "id": "1 - ckbt3akqg1mdm0709t8ypmf37",
+      "utterance": "something you wont ever understanlskfngd.f",
+      "utteranceKey": "something you wont ever understanlskfngd.f_null",
+      "scriptId": "ckbt3akqg1mdm0709t8ypmf37",
+      "step": 1,
+      "testcaseName": "Incomprehension Convo",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ckbtbgu8z2io40709ah0xkklh",
+      "utterance": "Hello",
+      "utteranceKey": "Hello_null",
+      "scriptId": "ckbtbgu8z2io40709ah0xkklh",
+      "step": 1,
+      "testcaseName": "Not incomprehension convo",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ckbtbjhy82j02070995nsb7ez",
+      "utterance": "hi",
+      "utteranceKey": "hi_null",
+      "scriptId": "ckbtbjhy82j02070995nsb7ez",
+      "step": 1,
+      "testcaseName": "UTT_WITHOUT_INCOMPREHENSION/UTT_WITHOUT_INCOMPREHENSION-L1",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.884977812402694,
+        "confidenceReal": 0.884977812402694,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.884977812402694,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.19635919476751937,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": 0.3113813823648254,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ckbrsl6j201yu0709l3zxkez4",
+      "utterance": "xxxxxx",
+      "utteranceKey": "xxxxxx_null",
+      "scriptId": "ckbrsl6j201yu0709l3zxkez4",
+      "step": 1,
+      "testcaseName": "UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    }
+  ],
+  "perExpectedIntent": [],
+  "perActualIntent": [
+    {
+      "name": "None",
+      "incomprehension": true,
+      "count": 2,
+      "sum": null,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": null,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-start-allgemein",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 1,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 1,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "hi-bot",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.884977812402694,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.884977812402694,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    }
+  ],
+  "perCorrectedIntent": [
+    {
+      "name": "None",
+      "incomprehension": true,
+      "count": 2,
+      "sum": 0,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-start-allgemein",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 1,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 1,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "hi-bot",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.884977812402694,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.884977812402694,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    }
+  ],
+  "perExpectedEntity": [],
+  "perActualEntity": [],
+  "utteranceList": [
+    {
+      "testSetId": "ckbrsexn801d107095wwj4x02",
+      "testSetName": "Ubitec Incomprehension",
+      "scriptId": "ckbtbjhy82j02070995nsb7ez",
+      "scriptName": "UTT_WITHOUT_INCOMPREHENSION",
+      "correct": 1,
+      "incorrect": 0,
+      "recall": 1
+    },
+    {
+      "testSetId": "ckbrsexn801d107095wwj4x02",
+      "testSetName": "Ubitec Incomprehension",
+      "scriptId": "ckbrsl6j201yu0709l3zxkez4",
+      "scriptName": "UTT_WITH_INCOMPREHENSION",
+      "correct": 0,
+      "incorrect": 1,
+      "recall": 0
+    }
+  ],
+  "overallStat": {
+    "sum": 1.8849778124026941,
+    "avg": 0.9424889062013471,
+    "sumReal": 1.8849778124026941,
+    "avgReal": 0.9424889062013471,
+    "testScriptsProcessed": 4,
+    "testScriptsIgnored": 0,
+    "steps": 4,
+    "stepsIgnored": 0,
+    "stepsWithActualIntent": 4,
+    "stepsWithActualIntentAndConfidence": 2,
+    "stepsWithIntent": 0,
+    "stepsWithEntity": 0,
+    "stepsWithEntityValue": 0,
+    "incomprehensionIntents": 2,
+    "matchedIntents": 0,
+    "missedIntents": 0,
+    "missedIntentsSum": null,
+    "missedIntentsAvg": null,
+    "justExpectedEntities": 0,
+    "justActualEntitiesChecked": 0,
+    "justActualEntitiesNotChecked": 0,
+    "expectedAndActualEntities": 0,
+    "confidenceDifferenceSquaredSumExpected": 0,
+    "confidenceDifferenceSquaredSumActual": 0,
+    "intentResolutionSupported": true,
+    "intentConfidenceSupported": true,
+    "intentListSupported": true,
+    "entityResolutionSupported": true,
+    "entityConfidenceSupported": true,
+    "expectedIntentsSupported": false,
+    "expectedEntitiesSupported": false,
+    "accuracy": null,
+    "precision": null,
+    "recall": null,
+    "F1": null,
+    "count": 4,
+    "confidenceDifferenceSquaredSum": 0,
+    "confusionMatrixStrength": null
+  },
+  "ignoredTestScripts": [],
+  "ignoredTestScriptSteps": [],
+  "confusionMatrix": [
+    {
+      "intent": "None",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "quickstory-start-allgemein",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "hi-bot",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    }
+  ]
+}
