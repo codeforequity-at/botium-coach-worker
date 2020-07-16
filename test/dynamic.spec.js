@@ -14,7 +14,7 @@ describe('dynamic', () => {
     it(suiteName, async () => {
       const input = require('.' + TEST_DIR + suiteName + INPUT_POSTFIX)
       const expectedOutput = require('.' + TEST_DIR + suiteName + OUTPUT_POSTFIX)
-      let connectorFeatures = null
+      let connectorFeatures = {}
       try {
         connectorFeatures = require('.' + TEST_DIR + suiteName + CONNECTOR_FEATURES_POSTFIX)
       } catch (err) {}
