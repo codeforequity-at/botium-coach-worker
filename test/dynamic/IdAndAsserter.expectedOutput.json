@@ -1,0 +1,5548 @@
+{
+  "perUtterance": [
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "ich muss gehen",
+      "utteranceKey": "ich muss gehen_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L01",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.33734562804441953,
+        "confidenceReal": 0.33734562804441953,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.33734562804441953,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.3306711633581266,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.3306711633581266
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Mach’s gut",
+      "utteranceKey": "Mach’s gut_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L02",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Es war schön dich kennen zu lernen",
+      "utteranceKey": "Es war schön dich kennen zu lernen_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L03",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Lebewohl",
+      "utteranceKey": "Lebewohl_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L04",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Ich werde dich vermissen",
+      "utteranceKey": "Ich werde dich vermissen_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L05",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.371429600444936,
+        "confidenceReal": 0.371429600444936,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.371429600444936,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.2965871909576101,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.2965871909576101
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Schönen Tag noch",
+      "utteranceKey": "Schönen Tag noch_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L06",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-hat-bot-einen-freund",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7092861192397679,
+        "confidenceReal": 0.7092861192397679,
+        "actuals": [
+          {
+            "name": "quickstory-hat-bot-einen-freund",
+            "confidence": 0.7092861192397679,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.25610701924452745,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.03992802823398467,
+        "matches": false,
+        "confusionProbability": 0.5468209000047595,
+        "confidenceDifferenceCorrected": -0.03992802823398467
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Bis nachher",
+      "utteranceKey": "Bis nachher_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L07",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Ich sagte Tschüss",
+      "utteranceKey": "Ich sagte Tschüss_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L08",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.30853904790198655,
+        "confidenceReal": 0.30853904790198655,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.30853904790198655,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.35947774350055955,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.35947774350055955
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Super, bis dann",
+      "utteranceKey": "Super, bis dann_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L09",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Haben Sie einen guten Tag Tschüss",
+      "utteranceKey": "Haben Sie einen guten Tag Tschüss_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L10",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "freundliche Grüße",
+      "utteranceKey": "freundliche Grüße_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L11",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.8576315347806659,
+        "confidenceReal": 0.8576315347806659,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.8576315347806659,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.1896147433781198,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.1896147433781198
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "adieu",
+      "utteranceKey": "adieu_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L12",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Ok ich muss gehen, danke",
+      "utteranceKey": "Ok ich muss gehen, danke_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L13",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.28080269795483914,
+        "confidenceReal": 0.28080269795483914,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.28080269795483914,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.38721409344770696,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.38721409344770696
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Viel Spaß!",
+      "utteranceKey": "Viel Spaß!_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L14",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.5119687517280397,
+        "confidenceReal": 0.5119687517280397,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.5119687517280397,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.3470204937510127,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.1580107130906635,
+        "matches": false,
+        "confusionProbability": 0.835051742022973,
+        "confidenceDifferenceCorrected": -0.1580107130906635
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Schönes Wochenende",
+      "utteranceKey": "Schönes Wochenende_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L15",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Schönen Tag",
+      "utteranceKey": "Schönen Tag_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L16",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Auf Wiederhören",
+      "utteranceKey": "Auf Wiederhören_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L17",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-nicht-auf-alles-eine-antwort",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7245865499741384,
+        "confidenceReal": 0.7245865499741384,
+        "actuals": [
+          {
+            "name": "quickstory-nicht-auf-alles-eine-antwort",
+            "confidence": 0.7245865499741384,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.25384053919603106,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 1.1102230246251565e-16,
+        "matches": false,
+        "confusionProbability": 0.5292539892218926,
+        "confidenceDifferenceCorrected": 1.1102230246251565e-16
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Wir sprechen uns bald",
+      "utteranceKey": "Wir sprechen uns bald_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L18",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Wir sprechen uns später",
+      "utteranceKey": "Wir sprechen uns später_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L19",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Bis zum nächsten Mal",
+      "utteranceKey": "Bis zum nächsten Mal_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L20",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.30980708950004326,
+        "confidenceReal": 0.30980708950004326,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.30980708950004326,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.35820970190250284,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.35820970190250284
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Wir sehen uns",
+      "utteranceKey": "Wir sehen uns_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L21",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.2518898704892066,
+        "confidenceReal": 0.2518898704892066,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.2518898704892066,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.4161269209133395,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.4161269209133395
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Bis dann",
+      "utteranceKey": "Bis dann_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L22",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Auf bald",
+      "utteranceKey": "Auf bald_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L23",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-nicht-auf-alles-eine-antwort",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7245865499741384,
+        "confidenceReal": 0.7245865499741384,
+        "actuals": [
+          {
+            "name": "quickstory-nicht-auf-alles-eine-antwort",
+            "confidence": 0.7245865499741384,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.25384053919603106,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 1.1102230246251565e-16,
+        "matches": false,
+        "confusionProbability": 0.5292539892218926,
+        "confidenceDifferenceCorrected": 1.1102230246251565e-16
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Tschüss, Tschüssi",
+      "utteranceKey": "Tschüss, Tschüssi_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L24",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Abschiedsgrusse",
+      "utteranceKey": "Abschiedsgrusse_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L25",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Abschiedsgrüße",
+      "utteranceKey": "Abschiedsgrüße_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L26",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Bis bald",
+      "utteranceKey": "Bis bald_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L27",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Bis später.",
+      "utteranceKey": "Bis später._null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L28",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Ausgezeichnetes Tschüss",
+      "utteranceKey": "Ausgezeichnetes Tschüss_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L29",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Habe ein schönes Wochenende",
+      "utteranceKey": "Habe ein schönes Wochenende_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L30",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "bye bye",
+      "utteranceKey": "bye bye_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L31",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "bye",
+      "utteranceKey": "bye_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L32",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Auf Wiedersehen!",
+      "utteranceKey": "Auf Wiedersehen!_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L33",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.5303451152878712,
+        "confidenceReal": 0.5303451152878712,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.5303451152878712,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.30259468353820484,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.13963434953083198,
+        "matches": false,
+        "confusionProbability": 0.7722495682503336,
+        "confidenceDifferenceCorrected": -0.13963434953083198
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Gute Nacht",
+      "utteranceKey": "Gute Nacht_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L34",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "tschuss",
+      "utteranceKey": "tschuss_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L35",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Auf Wiedersehen",
+      "utteranceKey": "Auf Wiedersehen_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L36",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-nicht-auf-alles-eine-antwort",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7245865499741384,
+        "confidenceReal": 0.7245865499741384,
+        "actuals": [
+          {
+            "name": "quickstory-nicht-auf-alles-eine-antwort",
+            "confidence": 0.7245865499741384,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.25384053919603106,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 1.1102230246251565e-16,
+        "matches": false,
+        "confusionProbability": 0.5292539892218926,
+        "confidenceDifferenceCorrected": 1.1102230246251565e-16
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Byeeeee",
+      "utteranceKey": "Byeeeee_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L37",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "tciao",
+      "utteranceKey": "tciao_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L38",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Adios!",
+      "utteranceKey": "Adios!_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L39",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7706541503270136,
+        "confidenceReal": 0.7706541503270136,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.7706541503270136,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.39539280170360463,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.10067468550831038,
+        "matches": false,
+        "confusionProbability": 0.6247386513765911,
+        "confidenceDifferenceCorrected": 0.10067468550831038
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Tschüss",
+      "utteranceKey": "Tschüss_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L40",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "bis bald",
+      "utteranceKey": "bis bald_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L41",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "gtg",
+      "utteranceKey": "gtg_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L42",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Ich muss los",
+      "utteranceKey": "Ich muss los_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L43",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.6721144253737218,
+        "confidenceReal": 0.6721144253737218,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.6721144253737218,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.004097633971175685,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.004097633971175685
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Prost",
+      "utteranceKey": "Prost_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L44",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "++",
+      "utteranceKey": "++_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L45",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkih31xe00709tx8a6r78",
+      "utterance": "Ciao!",
+      "utteranceKey": "Ciao!_null",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GOODBYE/SMALLTALK.GOODBYE-L46",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7706541503270136,
+        "confidenceReal": 0.7706541503270136,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.7706541503270136,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.39539280170360463,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.10067468550831038,
+        "matches": false,
+        "confusionProbability": 0.6247386513765911,
+        "confidenceDifferenceCorrected": 0.10067468550831038
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Grusse",
+      "utteranceKey": "Grusse_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L01",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Grüße",
+      "utteranceKey": "Grüße_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L02",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.8576315347806659,
+        "confidenceReal": 0.8576315347806659,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.8576315347806659,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.1896147433781198,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.1896147433781198
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Moin!",
+      "utteranceKey": "Moin!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L03",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7706541503270136,
+        "confidenceReal": 0.7706541503270136,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.7706541503270136,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.39539280170360463,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.10067468550831038,
+        "matches": false,
+        "confusionProbability": 0.6247386513765911,
+        "confidenceDifferenceCorrected": 0.10067468550831038
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Coucou",
+      "utteranceKey": "Coucou_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L04",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Yoooo",
+      "utteranceKey": "Yoooo_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L05",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hey Francois",
+      "utteranceKey": "Hey Francois_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L06",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo, mein Freund",
+      "utteranceKey": "Hallo, mein Freund_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L07",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-hat-bot-einen-freund",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7891421757077374,
+        "confidenceReal": 0.7891421757077374,
+        "actuals": [
+          {
+            "name": "quickstory-hat-bot-einen-freund",
+            "confidence": 0.7891421757077374,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.3185339314557995,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.03992802823398478,
+        "matches": false,
+        "confusionProbability": 0.5293917557480621,
+        "confidenceDifferenceCorrected": 0.03992802823398478
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Schöne Grüße!",
+      "utteranceKey": "Schöne Grüße!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L08",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7877018381039649,
+        "confidenceReal": 0.7877018381039649,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.7877018381039649,
+            "incomprehension": null
+          },
+          {
+            "name": "hi-bot",
+            "confidence": 0.453252414933663,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.11968504670141877,
+        "matches": false,
+        "confusionProbability": 0.6655505768296981,
+        "confidenceDifferenceCorrected": 0.11968504670141877
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Schone Grusse",
+      "utteranceKey": "Schone Grusse_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L09",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "hallo kumpel",
+      "utteranceKey": "hallo kumpel_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L10",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo Bot",
+      "utteranceKey": "Hallo Bot_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L11",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.48119886357019387,
+        "confidenceReal": 0.48119886357019387,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.48119886357019387,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.18878060124850932,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.18878060124850932
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "bonjour",
+      "utteranceKey": "bonjour_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L12",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "start",
+      "utteranceKey": "start_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L13",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.3319832085974539,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.3319832085974539
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "heyy",
+      "utteranceKey": "heyy_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L14",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "heyo",
+      "utteranceKey": "heyo_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L15",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hochfahren",
+      "utteranceKey": "Hochfahren_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L16",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Aloa",
+      "utteranceKey": "Aloa_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L17",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo Oliver",
+      "utteranceKey": "Hallo Oliver_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L18",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Grüzi",
+      "utteranceKey": "Grüzi_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L19",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Grüß Gott",
+      "utteranceKey": "Grüß Gott_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L20",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.3319832085974539,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.3319832085974539
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "moinsen",
+      "utteranceKey": "moinsen_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L21",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Sei gegrüßt!",
+      "utteranceKey": "Sei gegrüßt!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L22",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          },
+          {
+            "name": "hi-bot",
+            "confidence": 0.4977937830952166,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.3319832085974539,
+        "matches": false,
+        "confusionProbability": 0.4977937830952166,
+        "confidenceDifferenceCorrected": 0.3319832085974539
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Glück auf!",
+      "utteranceKey": "Glück auf!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L23",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.5303451152878712,
+        "confidenceReal": 0.5303451152878712,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.5303451152878712,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.30259468353820484,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.13963434953083198,
+        "matches": false,
+        "confusionProbability": 0.7722495682503336,
+        "confidenceDifferenceCorrected": -0.13963434953083198
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo zusammen",
+      "utteranceKey": "Hallo zusammen_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L24",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "moin moin",
+      "utteranceKey": "moin moin_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L25",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "guten Tach",
+      "utteranceKey": "guten Tach_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L26",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "na du?",
+      "utteranceKey": "na du?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L27",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallöchen",
+      "utteranceKey": "Hallöchen_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L28",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.3319832085974539,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.3319832085974539
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hi",
+      "utteranceKey": "Hi_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L29",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.884977812402694,
+        "confidenceReal": 0.884977812402694,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.884977812402694,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.19635919476751937,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.21499834758399083,
+        "matches": false,
+        "confusionProbability": 0.3113813823648254,
+        "confidenceDifferenceCorrected": 0.21499834758399083
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hey",
+      "utteranceKey": "Hey_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L30",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "/start",
+      "utteranceKey": "/start_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L31",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.3319832085974539,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.3319832085974539
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "guten morgen Herr",
+      "utteranceKey": "guten morgen Herr_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L32",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Na hallo da",
+      "utteranceKey": "Na hallo da_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L33",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-user-sagt-ok",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7307327993897724,
+        "confidenceReal": 0.7307327993897724,
+        "actuals": [
+          {
+            "name": "quickstory-user-sagt-ok",
+            "confidence": 0.7307327993897724,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.30801191503232234,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": 0.5772791156425499,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Yo kumpel",
+      "utteranceKey": "Yo kumpel_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L34",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "hallooo",
+      "utteranceKey": "hallooo_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L35",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "hallo",
+      "utteranceKey": "hallo_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L36",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "gutenmorgen!",
+      "utteranceKey": "gutenmorgen!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L37",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7706541503270136,
+        "confidenceReal": 0.7706541503270136,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.7706541503270136,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.39539280170360463,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.10067468550831038,
+        "matches": false,
+        "confusionProbability": 0.6247386513765911,
+        "confidenceDifferenceCorrected": 0.10067468550831038
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Herzlich willkommen",
+      "utteranceKey": "Herzlich willkommen_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L38",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Willkommen",
+      "utteranceKey": "Willkommen_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L39",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo",
+      "utteranceKey": "Hallo_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L40",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo Du!",
+      "utteranceKey": "Hallo Du!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L41",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.5485040138008636,
+        "confidenceReal": 0.5485040138008636,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.5485040138008636,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.2142004948044354,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.12147545101783963,
+        "matches": false,
+        "confusionProbability": 0.6656964810035718,
+        "confidenceDifferenceCorrected": -0.12147545101783963
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Yo",
+      "utteranceKey": "Yo_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L42",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 1,
+        "confidenceReal": 1,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.3319832085974539,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.3319832085974539
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo, guten Tag !",
+      "utteranceKey": "Hallo, guten Tag !_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L43",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7706541503270136,
+        "confidenceReal": 0.7706541503270136,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.7706541503270136,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.39539280170360463,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.10067468550831038,
+        "matches": false,
+        "confusionProbability": 0.6247386513765911,
+        "confidenceDifferenceCorrected": 0.10067468550831038
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "guten Nachmittag !",
+      "utteranceKey": "guten Nachmittag !_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L44",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7706541503270136,
+        "confidenceReal": 0.7706541503270136,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.7706541503270136,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.39539280170360463,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.10067468550831038,
+        "matches": false,
+        "confusionProbability": 0.6247386513765911,
+        "confidenceDifferenceCorrected": 0.10067468550831038
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Guten Morgen",
+      "utteranceKey": "Guten Morgen_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L45",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Guten Tag",
+      "utteranceKey": "Guten Tag_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L46",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "h4llo",
+      "utteranceKey": "h4llo_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L47",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Ist deine Laune gut heute ?",
+      "utteranceKey": "Ist deine Laune gut heute ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L48",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Vielen Dank, mit freundlichen Grüßen",
+      "utteranceKey": "Vielen Dank, mit freundlichen Grüßen_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L49",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.653038087140641,
+        "confidenceReal": 0.653038087140641,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.653038087140641,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.014978704261905063,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.014978704261905063
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Seit wann arbeitest du heute?",
+      "utteranceKey": "Seit wann arbeitest du heute?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L50",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-user-fragt-nach-alter",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.8537233515859601,
+        "confidenceReal": 0.8537233515859601,
+        "actuals": [
+          {
+            "name": "quickstory-user-fragt-nach-alter",
+            "confidence": 0.8537233515859601,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.019235652684503002,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0.019235652684503002
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Was muss ich tun, um erneut zu starten",
+      "utteranceKey": "Was muss ich tun, um erneut zu starten_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L51",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.5763392509514744,
+        "confidenceReal": 0.5763392509514744,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.5763392509514744,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.09167754045107168,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.09167754045107168
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Wie geht es Dir ? Hast Du viel zu tun ?",
+      "utteranceKey": "Wie geht es Dir ? Hast Du viel zu tun ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L52",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Sprechen wir kurz ?",
+      "utteranceKey": "Sprechen wir kurz ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L53",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Seit wann bist Du heute im Buero ?",
+      "utteranceKey": "Seit wann bist Du heute im Buero ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L54",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-user-fragt-nach-alter",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.8152520462169542,
+        "confidenceReal": 0.8152520462169542,
+        "actuals": [
+          {
+            "name": "quickstory-user-fragt-nach-alter",
+            "confidence": 0.8152520462169542,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.01923565268450289,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.01923565268450289
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Ich hoffe, dass Du gut geschlafen hast.",
+      "utteranceKey": "Ich hoffe, dass Du gut geschlafen hast._null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L55",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Ich heiße john nicht Tom",
+      "utteranceKey": "Ich heiße john nicht Tom_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L56",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Ich hatte heute noch keinen Kaffe. Hattest Du einen ?",
+      "utteranceKey": "Ich hatte heute noch keinen Kaffe. Hattest Du einen ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L57",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hast Du schon Fruehstueck gehabt ?",
+      "utteranceKey": "Hast Du schon Fruehstueck gehabt ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L58",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hast Du heute viel zu tun?",
+      "utteranceKey": "Hast Du heute viel zu tun?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L59",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo, wie ist Ihr Name?",
+      "utteranceKey": "Hallo, wie ist Ihr Name?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L60",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-user-fragt-bot-nach-namen",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.9169938210483026,
+        "confidenceReal": 0.9169938210483026,
+        "actuals": [
+          {
+            "name": "quickstory-user-fragt-bot-nach-namen",
+            "confidence": 0.9169938210483026,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.17117525215354432,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.08618569304617973,
+        "matches": false,
+        "confusionProbability": 0.2541814311052417,
+        "confidenceDifferenceCorrected": 0.08618569304617973
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo Watson. Guten Morgen!",
+      "utteranceKey": "Hallo Watson. Guten Morgen!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L61",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7706541503270136,
+        "confidenceReal": 0.7706541503270136,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.7706541503270136,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.39539280170360463,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0.10067468550831038,
+        "matches": false,
+        "confusionProbability": 0.6247386513765911,
+        "confidenceDifferenceCorrected": 0.10067468550831038
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Hallo Moto",
+      "utteranceKey": "Hallo Moto_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L62",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "guten Tag, wie geht es Ihnen?",
+      "utteranceKey": "guten Tag, wie geht es Ihnen?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L63",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Bis wann musst Du heute in der Arbeit bleiben ?",
+      "utteranceKey": "Bis wann musst Du heute in der Arbeit bleiben ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L64",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Bist Du heute nicht muede ?",
+      "utteranceKey": "Bist Du heute nicht muede ?_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L65",
+      "intent": {
+        "expected": null,
+        "actual": "None",
+        "incomprehension": true,
+        "incomprehensionIncompUtterance": true,
+        "confidenceCorrected": null,
+        "confidenceReal": null,
+        "actuals": [
+          {
+            "name": "None",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Sei tausendmal gegrüßt!",
+      "utteranceKey": "Sei tausendmal gegrüßt!_null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L66",
+      "intent": {
+        "expected": null,
+        "actual": "hi-bot",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.4977937830952166,
+        "confidenceReal": 0.4977937830952166,
+        "actuals": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.4977937830952166,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.24231277826647812,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.17218568172348658,
+        "matches": false,
+        "confusionProbability": 0.7445189951712615,
+        "confidenceDifferenceCorrected": -0.17218568172348658
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - ck9slkiie1xe607093mhml6ly",
+      "utterance": "Ich möchte anfangen.",
+      "utteranceKey": "Ich möchte anfangen._null",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "step": 1,
+      "testcaseName": "SMALLTALK.GREETINGS/SMALLTALK.GREETINGS-L67",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-start-allgemein",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.42804843118180985,
+        "confidenceReal": 0.42804843118180985,
+        "actuals": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.42804843118180985,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.23996836022073625,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.23996836022073625
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - cka13hdpv7frl0709yqsc4u65",
+      "utterance": "was ist deine name",
+      "utteranceKey": "was ist deine name_null",
+      "scriptId": "cka13hdpv7frl0709yqsc4u65",
+      "step": 1,
+      "testcaseName": "was ist deine name",
+      "intent": {
+        "expected": null,
+        "actual": "quickstory-user-fragt-bot-nach-namen",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.7446224349559432,
+        "confidenceReal": 0.7446224349559432,
+        "actuals": [
+          {
+            "name": "quickstory-user-fragt-bot-nach-namen",
+            "confidence": 0.7446224349559432,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": -0.08618569304617973,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": -0.08618569304617973
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - cka13il167fx80709r1yo6u2w",
+      "utterance": "wer ist Florian",
+      "utteranceKey": "wer ist Florian_null",
+      "scriptId": "cka13il167fx80709r1yo6u2w",
+      "step": 1,
+      "testcaseName": "wer ist Florian",
+      "intent": {
+        "expected": null,
+        "actual": "wer-ist-florian",
+        "incomprehension": null,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0.9515670409541901,
+        "confidenceReal": 0.9515670409541901,
+        "actuals": [
+          {
+            "name": "wer-ist-florian",
+            "confidence": 0.9515670409541901,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": null,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": null,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    }
+  ],
+  "perExpectedIntent": [],
+  "perActualIntent": [
+    {
+      "name": "quickstory-start-allgemein",
+      "incomprehension": null,
+      "count": 19,
+      "sum": 12.692319036648376,
+      "confidenceDifferenceSquaredSum": 1.5916820416757218,
+      "avg": 0.6680167914025461,
+      "deviation": 0.2894352069731053,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "None",
+      "incomprehension": true,
+      "count": 71,
+      "sum": null,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": null,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-hat-bot-einen-freund",
+      "incomprehension": null,
+      "count": 2,
+      "sum": 1.4984282949475052,
+      "confidenceDifferenceSquaredSum": 0.003188494877307763,
+      "avg": 0.7492141474737526,
+      "deviation": 0.039928028233984725,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "hi-bot",
+      "incomprehension": null,
+      "count": 14,
+      "sum": 9.379712507461845,
+      "confidenceDifferenceSquaredSum": 0.2611772337667621,
+      "avg": 0.6699794648187032,
+      "deviation": 0.13658519940910824,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-nicht-auf-alles-eine-antwort",
+      "incomprehension": null,
+      "count": 3,
+      "sum": 2.173759649922415,
+      "confidenceDifferenceSquaredSum": 3.697785493223493e-32,
+      "avg": 0.7245865499741383,
+      "deviation": 1.1102230246251565e-16,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-user-sagt-ok",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.7307327993897724,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.7307327993897724,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-user-fragt-nach-alter",
+      "incomprehension": null,
+      "count": 2,
+      "sum": 1.6689753978029143,
+      "confidenceDifferenceSquaredSum": 0.0007400206683976509,
+      "avg": 0.8344876989014571,
+      "deviation": 0.019235652684502946,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-user-fragt-bot-nach-namen",
+      "incomprehension": null,
+      "count": 2,
+      "sum": 1.6616162560042458,
+      "confidenceDifferenceSquaredSum": 0.014855947371700628,
+      "avg": 0.8308081280021229,
+      "deviation": 0.08618569304617973,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "wer-ist-florian",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.9515670409541901,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.9515670409541901,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    }
+  ],
+  "perCorrectedIntent": [
+    {
+      "name": "quickstory-start-allgemein",
+      "incomprehension": null,
+      "count": 19,
+      "sum": 12.692319036648376,
+      "confidenceDifferenceSquaredSum": 1.5916820416757218,
+      "avg": 0.6680167914025461,
+      "deviation": 0.2894352069731053,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "None",
+      "incomprehension": true,
+      "count": 71,
+      "sum": 0,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-hat-bot-einen-freund",
+      "incomprehension": null,
+      "count": 2,
+      "sum": 1.4984282949475052,
+      "confidenceDifferenceSquaredSum": 0.003188494877307763,
+      "avg": 0.7492141474737526,
+      "deviation": 0.039928028233984725,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "hi-bot",
+      "incomprehension": null,
+      "count": 14,
+      "sum": 9.379712507461845,
+      "confidenceDifferenceSquaredSum": 0.2611772337667621,
+      "avg": 0.6699794648187032,
+      "deviation": 0.13658519940910824,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-nicht-auf-alles-eine-antwort",
+      "incomprehension": null,
+      "count": 3,
+      "sum": 2.173759649922415,
+      "confidenceDifferenceSquaredSum": 3.697785493223493e-32,
+      "avg": 0.7245865499741383,
+      "deviation": 1.1102230246251565e-16,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-user-sagt-ok",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.7307327993897724,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.7307327993897724,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-user-fragt-nach-alter",
+      "incomprehension": null,
+      "count": 2,
+      "sum": 1.6689753978029143,
+      "confidenceDifferenceSquaredSum": 0.0007400206683976509,
+      "avg": 0.8344876989014571,
+      "deviation": 0.019235652684502946,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "quickstory-user-fragt-bot-nach-namen",
+      "incomprehension": null,
+      "count": 2,
+      "sum": 1.6616162560042458,
+      "confidenceDifferenceSquaredSum": 0.014855947371700628,
+      "avg": 0.8308081280021229,
+      "deviation": 0.08618569304617973,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "wer-ist-florian",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0.9515670409541901,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.9515670409541901,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    }
+  ],
+  "perExpectedEntity": [],
+  "perActualEntity": [],
+  "utteranceList": [
+    {
+      "testSetId": "ck9sep4ur07e30709v2b46vua",
+      "testSetName": "Ubitec Smalltalk Incomprension",
+      "scriptId": "ck9slkih31xe00709tx8a6r78",
+      "scriptName": "SMALLTALK.GOODBYE",
+      "correct": 16,
+      "incorrect": 30,
+      "recall": 0.34782608695652173
+    },
+    {
+      "testSetId": "ck9sep4ur07e30709v2b46vua",
+      "testSetName": "Ubitec Smalltalk Incomprension",
+      "scriptId": "ck9slkiie1xe607093mhml6ly",
+      "scriptName": "SMALLTALK.GREETINGS",
+      "correct": 26,
+      "incorrect": 41,
+      "recall": 0.3880597014925373
+    }
+  ],
+  "overallStat": {
+    "sum": 30.75711098313127,
+    "avg": 0.6990252496166197,
+    "avgReal": 0.7206517732746694,
+    "testScriptsProcessed": 115,
+    "testScriptsIgnored": 0,
+    "steps": 115,
+    "stepsIgnored": 0,
+    "stepsWithActualIntent": 115,
+    "stepsWithActualIntentAndConfidence": 44,
+    "stepsWithIntent": 0,
+    "stepsWithEntity": 0,
+    "stepsWithEntityValue": 0,
+    "incomprehensionIntents": 71,
+    "matchedIntents": 0,
+    "missedIntents": 0,
+    "missedIntentsAvg": null,
+    "justExpectedEntities": 0,
+    "justActualEntitiesChecked": 0,
+    "justActualEntitiesNotChecked": 0,
+    "expectedAndActualEntities": 0,
+    "confidenceDifferenceSquaredSumExpected": 0,
+    "confidenceDifferenceSquaredSumActual": 0,
+    "intentResolutionSupported": true,
+    "intentConfidenceSupported": true,
+    "intentListSupported": true,
+    "entityResolutionSupported": true,
+    "entityConfidenceSupported": true,
+    "expectedIntentsSupported": false,
+    "expectedEntitiesSupported": false,
+    "accuracy": null,
+    "precision": null,
+    "recall": null,
+    "F1": null,
+    "count": 115,
+    "confidenceDifferenceSquaredSum": 1.8716437383598896,
+    "confusionMatrixStrength": null,
+    "actualIntentCount": 9,
+    "actualIntentCountNoIncomprehension": 8,
+    "actualEntityCount": 0
+  },
+  "ignoredTestScripts": [],
+  "ignoredTestScriptSteps": [],
+  "confusionMatrix": [
+    {
+      "intent": "quickstory-start-allgemein",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "None",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "quickstory-hat-bot-einen-freund",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "hi-bot",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "quickstory-nicht-auf-alles-eine-antwort",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "quickstory-user-sagt-ok",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "quickstory-user-fragt-nach-alter",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "quickstory-user-fragt-bot-nach-namen",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "wer-ist-florian",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    }
+  ],
+  "unexpectedIntent": [],
+  "confidenceDistribution": [
+    {
+      "count": 3,
+      "countCorrected": 3,
+      "countPredictedCorrect": 3,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 6
+    },
+    {
+      "count": 4,
+      "countCorrected": 4,
+      "countPredictedCorrect": 4,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 3
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 7
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-hat-bot-einen-freund",
+      "step": 5,
+      "stepIndex": 14
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-hat-bot-einen-freund",
+      "step": 10,
+      "stepIndex": 7
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 17
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 8
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 5
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 2
+    },
+    {
+      "count": 4,
+      "countCorrected": 4,
+      "countPredictedCorrect": 4,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 5,
+      "stepIndex": 10
+    },
+    {
+      "count": 4,
+      "countCorrected": 4,
+      "countPredictedCorrect": 4,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 10,
+      "stepIndex": 5
+    },
+    {
+      "count": 3,
+      "countCorrected": 3,
+      "countPredictedCorrect": 3,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-nicht-auf-alles-eine-antwort",
+      "step": 5,
+      "stepIndex": 14
+    },
+    {
+      "count": 3,
+      "countCorrected": 3,
+      "countPredictedCorrect": 3,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-nicht-auf-alles-eine-antwort",
+      "step": 10,
+      "stepIndex": 7
+    },
+    {
+      "count": 7,
+      "countCorrected": 7,
+      "countPredictedCorrect": 7,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 5,
+      "stepIndex": 15
+    },
+    {
+      "count": 7,
+      "countCorrected": 7,
+      "countPredictedCorrect": 7,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 10,
+      "stepIndex": 7
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 13
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 6
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-hat-bot-einen-freund",
+      "step": 5,
+      "stepIndex": 15
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 15
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 7
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 5,
+      "stepIndex": 9
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 10,
+      "stepIndex": 4
+    },
+    {
+      "count": 6,
+      "countCorrected": 6,
+      "countPredictedCorrect": 6,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 19
+    },
+    {
+      "count": 6,
+      "countCorrected": 6,
+      "countPredictedCorrect": 6,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 9
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 5,
+      "stepIndex": 17
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "hi-bot",
+      "step": 10,
+      "stepIndex": 8
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-sagt-ok",
+      "step": 5,
+      "stepIndex": 14
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-sagt-ok",
+      "step": 10,
+      "stepIndex": 7
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-fragt-nach-alter",
+      "step": 5,
+      "stepIndex": 17
+    },
+    {
+      "count": 2,
+      "countCorrected": 2,
+      "countPredictedCorrect": 2,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-fragt-nach-alter",
+      "step": 10,
+      "stepIndex": 8
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 11
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 5
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-fragt-nach-alter",
+      "step": 5,
+      "stepIndex": 16
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-fragt-bot-nach-namen",
+      "step": 5,
+      "stepIndex": 18
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-fragt-bot-nach-namen",
+      "step": 10,
+      "stepIndex": 9
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 5,
+      "stepIndex": 8
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-start-allgemein",
+      "step": 10,
+      "stepIndex": 4
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-fragt-bot-nach-namen",
+      "step": 5,
+      "stepIndex": 14
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "quickstory-user-fragt-bot-nach-namen",
+      "step": 10,
+      "stepIndex": 7
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "wer-ist-florian",
+      "step": 5,
+      "stepIndex": 19
+    },
+    {
+      "count": 1,
+      "countCorrected": 1,
+      "countPredictedCorrect": 1,
+      "countPredictedIncorrect": 0,
+      "intent": "wer-ist-florian",
+      "step": 10,
+      "stepIndex": 9
+    }
+  ],
+  "unexpectedIntentByAlternativeList": [
+    {
+      "intent1": "quickstory-hat-bot-einen-freund",
+      "intent2": "quickstory-start-allgemein",
+      "intent1And2": "[\"quickstory-hat-bot-einen-freund\",\"quickstory-start-allgemein\"]",
+      "count": 2,
+      "avg": 0.05098153138473682,
+      "worstConfidence": 0.4036458083996389,
+      "worstUtterance": "Hallo, mein Freund"
+    },
+    {
+      "intent1": "hi-bot",
+      "intent2": "quickstory-start-allgemein",
+      "intent1And2": "[\"hi-bot\",\"quickstory-start-allgemein\"]",
+      "count": 15,
+      "avg": 0.5055163145016854,
+      "worstConfidence": 0.6778157701612064,
+      "worstUtterance": "Viel Spaß!"
+    },
+    {
+      "intent1": "quickstory-nicht-auf-alles-eine-antwort",
+      "intent2": "quickstory-start-allgemein",
+      "intent1And2": "[\"quickstory-nicht-auf-alles-eine-antwort\",\"quickstory-start-allgemein\"]",
+      "count": 3,
+      "avg": 0.07006493267231942,
+      "worstConfidence": 0.35032466336159707,
+      "worstUtterance": "Auf Wiederhören"
+    },
+    {
+      "intent1": "quickstory-start-allgemein",
+      "intent2": "quickstory-user-sagt-ok",
+      "intent1And2": "[\"quickstory-start-allgemein\",\"quickstory-user-sagt-ok\"]",
+      "count": 1,
+      "avg": 0.02810073351842059,
+      "worstConfidence": 0.4215110027763089,
+      "worstUtterance": "Na hallo da"
+    },
+    {
+      "intent1": "quickstory-start-allgemein",
+      "intent2": "quickstory-user-fragt-bot-nach-namen",
+      "intent1And2": "[\"quickstory-start-allgemein\",\"quickstory-user-fragt-bot-nach-namen\"]",
+      "count": 1,
+      "avg": 0.012444667799241195,
+      "worstConfidence": 0.18667001698861793,
+      "worstUtterance": "Hallo, wie ist Ihr Name?"
+    }
+  ],
+  "confidenceThreshold": [
+    {
+      "confidenceThreshold": 0,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.01,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.02,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.03,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.04,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.05,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.06,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.07,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.08,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.09,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.1,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.11,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.12,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.13,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.14,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.15,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.16,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.17,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.18,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.19,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.2,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.21,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.22,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.23,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.24,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.25,
+      "truePositive": 44,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.26,
+      "truePositive": 43,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.27,
+      "truePositive": 43,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.28,
+      "truePositive": 43,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 1
+    },
+    {
+      "confidenceThreshold": 0.29,
+      "truePositive": 42,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 2
+    },
+    {
+      "confidenceThreshold": 0.3,
+      "truePositive": 42,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 2
+    },
+    {
+      "confidenceThreshold": 0.31,
+      "truePositive": 40,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 4
+    },
+    {
+      "confidenceThreshold": 0.32,
+      "truePositive": 40,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 4
+    },
+    {
+      "confidenceThreshold": 0.33,
+      "truePositive": 40,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 4
+    },
+    {
+      "confidenceThreshold": 0.34,
+      "truePositive": 39,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 5
+    },
+    {
+      "confidenceThreshold": 0.35,
+      "truePositive": 39,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 5
+    },
+    {
+      "confidenceThreshold": 0.36,
+      "truePositive": 39,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 5
+    },
+    {
+      "confidenceThreshold": 0.37,
+      "truePositive": 39,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 5
+    },
+    {
+      "confidenceThreshold": 0.38,
+      "truePositive": 38,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 6
+    },
+    {
+      "confidenceThreshold": 0.39,
+      "truePositive": 38,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 6
+    },
+    {
+      "confidenceThreshold": 0.4,
+      "truePositive": 38,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 6
+    },
+    {
+      "confidenceThreshold": 0.41,
+      "truePositive": 38,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 6
+    },
+    {
+      "confidenceThreshold": 0.42,
+      "truePositive": 38,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 6
+    },
+    {
+      "confidenceThreshold": 0.43,
+      "truePositive": 37,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 7
+    },
+    {
+      "confidenceThreshold": 0.44,
+      "truePositive": 37,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 7
+    },
+    {
+      "confidenceThreshold": 0.45,
+      "truePositive": 37,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 7
+    },
+    {
+      "confidenceThreshold": 0.46,
+      "truePositive": 37,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 7
+    },
+    {
+      "confidenceThreshold": 0.47,
+      "truePositive": 37,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 7
+    },
+    {
+      "confidenceThreshold": 0.48,
+      "truePositive": 37,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 7
+    },
+    {
+      "confidenceThreshold": 0.49,
+      "truePositive": 36,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 8
+    },
+    {
+      "confidenceThreshold": 0.5,
+      "truePositive": 35,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 9
+    },
+    {
+      "confidenceThreshold": 0.51,
+      "truePositive": 35,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 9
+    },
+    {
+      "confidenceThreshold": 0.52,
+      "truePositive": 34,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 10
+    },
+    {
+      "confidenceThreshold": 0.53,
+      "truePositive": 34,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 10
+    },
+    {
+      "confidenceThreshold": 0.54,
+      "truePositive": 32,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 12
+    },
+    {
+      "confidenceThreshold": 0.55,
+      "truePositive": 31,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 13
+    },
+    {
+      "confidenceThreshold": 0.56,
+      "truePositive": 31,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 13
+    },
+    {
+      "confidenceThreshold": 0.57,
+      "truePositive": 31,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 13
+    },
+    {
+      "confidenceThreshold": 0.58,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.59,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.6,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.61,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.62,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.63,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.64,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.65,
+      "truePositive": 30,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 14
+    },
+    {
+      "confidenceThreshold": 0.66,
+      "truePositive": 29,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 15
+    },
+    {
+      "confidenceThreshold": 0.67,
+      "truePositive": 29,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 15
+    },
+    {
+      "confidenceThreshold": 0.68,
+      "truePositive": 28,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 16
+    },
+    {
+      "confidenceThreshold": 0.69,
+      "truePositive": 28,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 16
+    },
+    {
+      "confidenceThreshold": 0.7,
+      "truePositive": 28,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 16
+    },
+    {
+      "confidenceThreshold": 0.71,
+      "truePositive": 27,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 17
+    },
+    {
+      "confidenceThreshold": 0.72,
+      "truePositive": 27,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 17
+    },
+    {
+      "confidenceThreshold": 0.73,
+      "truePositive": 24,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 20
+    },
+    {
+      "confidenceThreshold": 0.74,
+      "truePositive": 23,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 21
+    },
+    {
+      "confidenceThreshold": 0.75,
+      "truePositive": 22,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 22
+    },
+    {
+      "confidenceThreshold": 0.76,
+      "truePositive": 22,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 22
+    },
+    {
+      "confidenceThreshold": 0.77,
+      "truePositive": 22,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 22
+    },
+    {
+      "confidenceThreshold": 0.78,
+      "truePositive": 15,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 29
+    },
+    {
+      "confidenceThreshold": 0.79,
+      "truePositive": 13,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 31
+    },
+    {
+      "confidenceThreshold": 0.8,
+      "truePositive": 13,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 31
+    },
+    {
+      "confidenceThreshold": 0.81,
+      "truePositive": 13,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 31
+    },
+    {
+      "confidenceThreshold": 0.82,
+      "truePositive": 12,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 32
+    },
+    {
+      "confidenceThreshold": 0.83,
+      "truePositive": 12,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 32
+    },
+    {
+      "confidenceThreshold": 0.84,
+      "truePositive": 12,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 32
+    },
+    {
+      "confidenceThreshold": 0.85,
+      "truePositive": 12,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 32
+    },
+    {
+      "confidenceThreshold": 0.86,
+      "truePositive": 9,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 35
+    },
+    {
+      "confidenceThreshold": 0.87,
+      "truePositive": 9,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 35
+    },
+    {
+      "confidenceThreshold": 0.88,
+      "truePositive": 9,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 35
+    },
+    {
+      "confidenceThreshold": 0.89,
+      "truePositive": 8,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 36
+    },
+    {
+      "confidenceThreshold": 0.9,
+      "truePositive": 8,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 36
+    },
+    {
+      "confidenceThreshold": 0.91,
+      "truePositive": 8,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 36
+    },
+    {
+      "confidenceThreshold": 0.92,
+      "truePositive": 7,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 37
+    },
+    {
+      "confidenceThreshold": 0.93,
+      "truePositive": 7,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 37
+    },
+    {
+      "confidenceThreshold": 0.94,
+      "truePositive": 7,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 37
+    },
+    {
+      "confidenceThreshold": 0.95,
+      "truePositive": 7,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 37
+    },
+    {
+      "confidenceThreshold": 0.96,
+      "truePositive": 6,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 38
+    },
+    {
+      "confidenceThreshold": 0.97,
+      "truePositive": 6,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 38
+    },
+    {
+      "confidenceThreshold": 0.98,
+      "truePositive": 6,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 38
+    },
+    {
+      "confidenceThreshold": 0.99,
+      "truePositive": 6,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 38
+    },
+    {
+      "confidenceThreshold": 1,
+      "truePositive": 6,
+      "trueNegative": 0,
+      "falsePositive": 0,
+      "falseNegative": 38
+    }
+  ]
+}

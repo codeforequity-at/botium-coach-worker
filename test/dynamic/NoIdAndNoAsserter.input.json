@@ -1,0 +1,242 @@
+[
+  {
+    "testcaseName": "Incomprehension Convo",
+    "success": true,
+    "err": null,
+    "errDetails": null,
+    "duration": 1386,
+    "testSetScript": {
+      "name": "Incomprehension Convo",
+      "scriptType": "SCRIPTING_TYPE_CONVO"
+    },
+    "testSetRepository": null,
+    "testSetFolder": null,
+    "testSetExcel": null,
+    "testSet": {
+      "name": "Ubitec Incomprehension",
+      "expandUtterancesIncomprehension": "UTT_INCOMPREHENSION"
+    },
+    "steps": [
+      {
+        "step": 0,
+        "sender": "me",
+        "expected": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"something you wont ever understanlskfngd.f\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"something you wont ever understanlskfngd.f\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"sourceData\":{\"requestOptions\":{\"uri\":\"https://test.botium.ubitec.bot/admin/ws/botium/\",\"method\":\"POST\",\"followAllRedirects\":true,\"timeout\":10000,\"headers\":{\"Authorization\":\"Basic Ym90aXVtOjZ3STlHZUpESmFNajZzMGphbDVoVlBRUw==\",\"User-ID\":\"Qm90aXVt\",\"User-Label\":\"Qm90aXVt\",\"Botium-Project\":\"Ubitec Incomprehension\",\"Botium-TestCase\":\"Incomprehension Convo\",\"Botium-TestStep\":\"Line 2\"},\"body\":{\"text\":\"something you wont ever understanlskfngd.f\"},\"json\":true}},\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[],\"currentStepIndex\":0}",
+        "stepDuration": 1373,
+        "botDuration": 1370,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      },
+      {
+        "step": 1,
+        "sender": "bot",
+        "expected": "{\"sender\":\"bot\",\"channel\":null,\"not\":false,\"messageText\":null,\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"bot\",\"channel\":\"default\",\"messageText\":\"Keine Antwort gefunden 🙅\",\"media\":[],\"buttons\":[],\"cards\":null,\"forms\":null,\"nlp\":{\"intent\":{\"incomprehension\":true},\"entities\":[]},\"sourceData\":{\"messages\":[{\"messageText\":\"Keine Antwort gefunden 🙅\",\"nlp\":{\"intent\":{\"incomprehension\":true},\"entities\":[]}}]},\"attachments\":null,\"asserters\":null,\"userInputs\":null,\"logicHooks\":null}",
+        "stepDuration": 9,
+        "botDuration": 7,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [
+          {
+            "name": "",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      }
+    ]
+  },
+  {
+    "createdAt": "2020-07-15T11:06:28.852Z",
+    "testcaseName": "Not incomprehension convo",
+    "success": true,
+    "err": null,
+    "errDetails": null,
+    "duration": 1221,
+    "testSetScript": {
+      "name": "Not incomprehension convo",
+      "scriptType": "SCRIPTING_TYPE_CONVO"
+    },
+    "testSetRepository": null,
+    "testSetFolder": null,
+    "testSetExcel": null,
+    "testSet": {
+      "name": "Ubitec Incomprehension",
+      "expandUtterancesIncomprehension": "UTT_INCOMPREHENSION"
+    },
+    "steps": [
+      {
+        "step": 0,
+        "sender": "me",
+        "expected": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"Hello\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"Hello\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"sourceData\":{\"requestOptions\":{\"uri\":\"https://test.botium.ubitec.bot/admin/ws/botium/\",\"method\":\"POST\",\"followAllRedirects\":true,\"timeout\":10000,\"headers\":{\"Authorization\":\"Basic Ym90aXVtOjZ3STlHZUpESmFNajZzMGphbDVoVlBRUw==\",\"User-ID\":\"Qm90aXVt\",\"User-Label\":\"Qm90aXVt\",\"Botium-Project\":\"Ubitec Incomprehension\",\"Botium-TestCase\":\"Not incomprehension convo\",\"Botium-TestStep\":\"Line 3\"},\"body\":{\"text\":\"Hello\"},\"json\":true}},\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[],\"currentStepIndex\":0}",
+        "stepDuration": 1218,
+        "botDuration": 1217,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      },
+      {
+        "step": 1,
+        "sender": "bot",
+        "expected": "{\"sender\":\"bot\",\"channel\":null,\"not\":false,\"messageText\":null,\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"bot\",\"channel\":\"default\",\"messageText\":\"Hallo, ich bin XXX, der Chatbot des XXX!  \",\"media\":[],\"buttons\":[],\"cards\":null,\"forms\":null,\"nlp\":{\"intent\":{\"name\":\"quickstory-start-allgemein\",\"confidence\":1,\"intents\":[{\"name\":\"quickstory-start-allgemein\",\"confidence\":1}]},\"entities\":[]},\"sourceData\":{\"messages\":[{\"messageText\":\"Hallo, ich bin XXX, der Chatbot des XXX!  \",\"nlp\":{\"intent\":{\"name\":\"quickstory-start-allgemein\",\"confidence\":1,\"intents\":[{\"name\":\"quickstory-start-allgemein\",\"confidence\":1}]},\"entities\":[]}},{\"messageText\":\"Ich beantworte Ihre Fragen rund um XXX.\",\"nlp\":{\"intent\":{\"name\":\"quickstory-start-allgemein\",\"confidence\":1,\"intents\":[{\"name\":\"quickstory-start-allgemein\",\"confidence\":1}]},\"entities\":[]}},{\"messageText\":\"**DU** Ich beantworte deine Fragen rund um Markenrecht und Patente.\",\"nlp\":{\"intent\":{\"name\":\"quickstory-start-allgemein\",\"confidence\":1,\"intents\":[{\"name\":\"quickstory-start-allgemein\",\"confidence\":1}]},\"entities\":[]}},{\"messageText\":\"Worüber möchten Sie mehr erfahren?\",\"nlp\":{\"intent\":{\"name\":\"quickstory-start-allgemein\",\"confidence\":1,\"intents\":[{\"name\":\"quickstory-start-allgemein\",\"confidence\":1}]},\"entities\":[]}},{\"messageText\":\"**DU** Worüber möchtest du mehr erfahren?\",\"nlp\":{\"intent\":{\"name\":\"quickstory-start-allgemein\",\"confidence\":1,\"intents\":[{\"name\":\"quickstory-start-allgemein\",\"confidence\":1}]},\"entities\":[]}}]},\"attachments\":null,\"asserters\":null,\"userInputs\":null,\"logicHooks\":null}",
+        "stepDuration": 3,
+        "botDuration": 1,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 1,
+            "incomprehension": null
+          }
+        ],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      }
+    ]
+  },
+  {
+    "createdAt": "2020-07-15T11:06:29.835Z",
+    "testcaseName": "UTT_WITHOUT_INCOMPREHENSION/UTT_WITHOUT_INCOMPREHENSION-L1",
+    "success": true,
+    "err": null,
+    "errDetails": null,
+    "duration": 747,
+    "testSetScript": {
+      "name": "UTT_WITHOUT_INCOMPREHENSION",
+      "scriptType": "SCRIPTING_TYPE_UTTERANCES"
+    },
+    "testSetRepository": null,
+    "testSetFolder": null,
+    "testSetExcel": null,
+    "testSet": {
+      "name": "Ubitec Incomprehension",
+      "expandUtterancesIncomprehension": "UTT_INCOMPREHENSION"
+    },
+    "steps": [
+      {
+        "step": 0,
+        "sender": "me",
+        "expected": "{\"sender\":\"me\",\"messageText\":\"hi\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"me\",\"messageText\":\"hi\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"sourceData\":{\"requestOptions\":{\"uri\":\"https://test.botium.ubitec.bot/admin/ws/botium/\",\"method\":\"POST\",\"followAllRedirects\":true,\"timeout\":10000,\"headers\":{\"Authorization\":\"Basic Ym90aXVtOjZ3STlHZUpESmFNajZzMGphbDVoVlBRUw==\",\"User-ID\":\"Qm90aXVt\",\"User-Label\":\"Qm90aXVt\",\"Botium-Project\":\"Ubitec Incomprehension\",\"Botium-TestCase\":\"UTT_WITHOUT_INCOMPREHENSION/UTT_WITHOUT_INCOMPREHENSION-L1\",\"Botium-TestStep\":\"Step 1 - tell utterance\"},\"body\":{\"text\":\"hi\"},\"json\":true}},\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[],\"currentStepIndex\":0}",
+        "stepDuration": 737,
+        "botDuration": 736,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      },
+      {
+        "step": 1,
+        "sender": "bot",
+        "expected": "{\"sender\":\"bot\",\"not\":true,\"messageText\":\"UTT_INCOMPREHENSION\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": true,
+        "actual": "{\"sender\":\"bot\",\"channel\":\"default\",\"messageText\":\"You said: Hi Bot!\",\"media\":[],\"buttons\":[],\"cards\":null,\"forms\":null,\"nlp\":{\"intent\":{\"name\":\"hi-bot\",\"confidence\":0.884977812402694,\"intents\":[{\"name\":\"hi-bot\",\"confidence\":0.884977812402694},{\"name\":\"quickstory-start-allgemein\",\"confidence\":0.19635919476751937}]},\"entities\":[]},\"sourceData\":{\"messages\":[{\"messageText\":\"You said: Hi Bot!\",\"nlp\":{\"intent\":{\"name\":\"hi-bot\",\"confidence\":0.884977812402694,\"intents\":[{\"name\":\"hi-bot\",\"confidence\":0.884977812402694},{\"name\":\"quickstory-start-allgemein\",\"confidence\":0.19635919476751937}]},\"entities\":[]}}]},\"attachments\":null,\"asserters\":null,\"userInputs\":null,\"logicHooks\":null}",
+        "stepDuration": 10,
+        "botDuration": 2,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [
+          {
+            "name": "hi-bot",
+            "confidence": 0.884977812402694,
+            "incomprehension": null
+          },
+          {
+            "name": "quickstory-start-allgemein",
+            "confidence": 0.19635919476751937,
+            "incomprehension": null
+          }
+        ],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      }
+    ]
+  },
+  {
+    "createdAt": "2020-07-15T11:06:30.742Z",
+    "testcaseName": "UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1",
+    "success": false,
+    "err": "UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1/Step 2 - check incomprehension: Expected bot response (on Step 1 - tell utterance: #me - xxxxxx) \"Keine Antwort gefunden 🙅\" NOT to match \"Keine Antwort gefunden\"",
+    "errDetails": "[{\"type\":\"asserter\",\"source\":\"TextMatchAsserter\",\"context\":{\"stepTag\":\"UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1/Step 2 - check incomprehension\"},\"cause\":{\"not\":true,\"expected\":[\"Keine Antwort gefunden\"],\"actual\":\"Keine Antwort gefunden 🙅\"},\"message\":\"UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1/Step 2 - check incomprehension: Expected bot response (on Step 1 - tell utterance: #me - xxxxxx) \\\"Keine Antwort gefunden 🙅\\\" NOT to match \\\"Keine Antwort gefunden\\\"\"}]",
+    "duration": 721,
+    "testSetScript": {
+      "name": "UTT_WITH_INCOMPREHENSION",
+      "scriptType": "SCRIPTING_TYPE_UTTERANCES"
+    },
+    "testSetRepository": null,
+    "testSetFolder": null,
+    "testSetExcel": null,
+    "testSet": {
+      "name": "Ubitec Incomprehension",
+      "expandUtterancesIncomprehension": "UTT_INCOMPREHENSION"
+    },
+    "steps": [
+      {
+        "step": 0,
+        "sender": "me",
+        "expected": "{\"sender\":\"me\",\"messageText\":\"xxxxxx\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"me\",\"messageText\":\"xxxxxx\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"sourceData\":{\"requestOptions\":{\"uri\":\"https://test.botium.ubitec.bot/admin/ws/botium/\",\"method\":\"POST\",\"followAllRedirects\":true,\"timeout\":10000,\"headers\":{\"Authorization\":\"Basic Ym90aXVtOjZ3STlHZUpESmFNajZzMGphbDVoVlBRUw==\",\"User-ID\":\"Qm90aXVt\",\"User-Label\":\"Qm90aXVt\",\"Botium-Project\":\"Ubitec Incomprehension\",\"Botium-TestCase\":\"UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1\",\"Botium-TestStep\":\"Step 1 - tell utterance\"},\"body\":{\"text\":\"xxxxxx\"},\"json\":true}},\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[],\"currentStepIndex\":0}",
+        "stepDuration": 714,
+        "botDuration": 713,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      },
+      {
+        "step": 1,
+        "sender": "bot",
+        "expected": "{\"sender\":\"bot\",\"not\":true,\"messageText\":\"UTT_INCOMPREHENSION\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": true,
+        "actual": "{\"sender\":\"bot\",\"channel\":\"default\",\"messageText\":\"Keine Antwort gefunden 🙅\",\"media\":[],\"buttons\":[],\"cards\":null,\"forms\":null,\"nlp\":{\"intent\":{\"incomprehension\":true},\"entities\":[]},\"sourceData\":{\"messages\":[{\"messageText\":\"Keine Antwort gefunden 🙅\",\"nlp\":{\"intent\":{\"incomprehension\":true},\"entities\":[]}}]},\"attachments\":null,\"asserters\":null,\"userInputs\":null,\"logicHooks\":null}",
+        "stepDuration": 7,
+        "botDuration": 1,
+        "err": "UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1/Step 2 - check incomprehension: Expected bot response (on Step 1 - tell utterance: #me - xxxxxx) \"Keine Antwort gefunden 🙅\" NOT to match \"Keine Antwort gefunden\"",
+        "errDetails": "[{\"type\":\"asserter\",\"source\":\"TextMatchAsserter\",\"context\":{\"stepTag\":\"UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1/Step 2 - check incomprehension\"},\"cause\":{\"not\":true,\"expected\":[\"Keine Antwort gefunden\"],\"actual\":\"Keine Antwort gefunden 🙅\"},\"message\":\"UTT_WITH_INCOMPREHENSION/UTT_WITH_INCOMPREHENSION-L1/Step 2 - check incomprehension: Expected bot response (on Step 1 - tell utterance: #me - xxxxxx) \\\"Keine Antwort gefunden 🙅\\\" NOT to match \\\"Keine Antwort gefunden\\\"\"}]",
+        "actualIntents": [
+          {
+            "name": "",
+            "confidence": null,
+            "incomprehension": true
+          }
+        ],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      }
+    ]
+  }
+]
