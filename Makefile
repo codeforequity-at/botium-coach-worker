@@ -5,7 +5,7 @@ docker_build:
 	docker build -t botium/botium-coach-worker:latest ./
 
 docker_run:
-	docker run -p 80:80 botium/botium-coach-worker:latest
+	docker run -p 4002:80 botium/botium-coach-worker:latest
 
 docker_publish:
 	docker push botium/botium-coach-worker:latest
