@@ -1,0 +1,10 @@
+version: '3'
+services:
+  coach:
+    image: botium/botium-coach-worker:latest
+    restart: always
+    ports:
+     - "4002:80"
+    environment:
+      WEB_CONCURRENCY: 1
+
