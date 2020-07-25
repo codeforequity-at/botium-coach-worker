@@ -43,6 +43,8 @@ def calculate_embeddings(embeddingsRequest):
 
   embedding_vectors = np.asarray(embedding_vectors)
 
+  logging.info('Starting principal component analysis')
+
   pca = PCA(n_components=2)
   pca.fit(embedding_vectors)
 
@@ -65,6 +67,8 @@ def calculate_embeddings(embeddingsRequest):
     for phrase in training_phrases_with_embeddings[intent]:
       flatten.append((intent, phrase,  training_phrases_with_embeddings[intent][phrase]))
 
+  logging.info('Ready with principal component analysis, running cosine similarity')
+
   data = []
   for i in range(len(flatten)):
     for j in range(i+1, len(flatten)):
@@ -81,6 +85,8 @@ def calculate_embeddings(embeddingsRequest):
 
       record = [intent_1, phrase_1, intent_2, phrase_2, similarity]
       data.append(record)
+
+  logging.info('Ready with cosine similarity, preparing results')
 
   similarity_df = pd.DataFrame(data, columns=['name1', 'example1', 'name2', 'example2', 'similarity'])
   similarity_different_intent = similarity_df['name1'] != similarity_df['name2']
