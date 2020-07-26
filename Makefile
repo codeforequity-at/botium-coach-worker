@@ -1,5 +1,5 @@
 start_dev:
-	LOGLEVEL=DEBUG FLASK_APP=main.py FLASK_ENV=development flask run
+	LOGLEVEL=INFO python main.py
 
 docker_build:
 	docker build -t botium/botium-coach-worker:latest ./
