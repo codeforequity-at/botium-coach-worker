@@ -1,3 +1,4 @@
+
 import json
 import logging
 import tensorflow as tf
@@ -7,7 +8,8 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 from sklearn.decomposition import PCA
-from sklearn.metrics.pairwise import cosine_similarity      
+from sklearn.metrics.pairwise import cosine_similarity
+from joblib import Parallel, delayed
 import math
 
 logging.info('Loading word embeddings model from tfhub ...')
@@ -16,6 +18,10 @@ logging.info('Word embeddings model ready.')
 
 def ping():
   return 'Botium Coach Worker. Tensorflow Version: {tfVersion}'.format(tfVersion=tf.__version__)
+
+def cosine_similarity_worker(intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2):
+  similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
+  return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
 def calculate_embeddings(embeddingsRequest):
   logging.debug(json.dumps(embeddingsRequest, indent=2))
@@ -65,11 +71,11 @@ def calculate_embeddings(embeddingsRequest):
 
   for intent in training_phrases_with_embeddings:
     for phrase in training_phrases_with_embeddings[intent]:
-      flatten.append((intent, phrase,  training_phrases_with_embeddings[intent][phrase]))
+      flatten.append((intent, phrase, training_phrases_with_embeddings[intent][phrase]))
 
   logging.info('Ready with principal component analysis, running cosine similarity')
 
-  data = []
+  workers = []
   for i in range(len(flatten)):
     for j in range(i+1, len(flatten)):
 
@@ -81,12 +87,13 @@ def calculate_embeddings(embeddingsRequest):
       phrase_2 = flatten[j][1]
       embedd_2 = flatten[j][2]
 
-      similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
+      workers.append((intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2))
 
-      record = [intent_1, phrase_1, intent_2, phrase_2, similarity]
-      data.append(record)
+  logging.info('Running cosine similarity for %s pairs of phrases', len(workers))
 
-  logging.info('Ready with cosine similarity, preparing results')
+  data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
+
+  logging.info('Ready with cosine similarity for %s pairs, preparing results', len(data))
 
   similarity_df = pd.DataFrame(data, columns=['name1', 'example1', 'name2', 'example2', 'similarity'])
   similarity_different_intent = similarity_df['name1'] != similarity_df['name2']
