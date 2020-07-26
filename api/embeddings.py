@@ -91,7 +91,8 @@ def calculate_embeddings(embeddingsRequest):
 
   logging.info('Running cosine similarity for %s pairs of phrases', len(workers))
 
-  data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
+  # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
+  data = [cosine_similarity_worker(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers]
 
   logging.info('Ready with cosine similarity for %s pairs, preparing results', len(data))
 
