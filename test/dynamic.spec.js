@@ -23,9 +23,9 @@ describe('dynamic', () => {
         assert.deepEqual(Object.keys(output).sort(), Object.keys(expectedOutput).sort())
 
         for (const key of Object.keys(output)) {
-        // JSON.parse + JSON.stringify: we are not able to store undefined in a json file.
-        // So we are removing from output too
-          fs.writeFileSync('delme\\' + key + '.json', JSON.stringify(output[key]), 'utf8')
+          // JSON.parse + JSON.stringify: we are not able to store undefined in a json file.
+          // So we are removing from output too
+          // fs.writeFileSync('delme\\' + key + '.json', JSON.stringify(output[key]), 'utf8')
           assert.deepEqual(JSON.parse(JSON.stringify(output[key])), expectedOutput[key], `The field ${key} does not match`)
         }
       })
