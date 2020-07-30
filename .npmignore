@@ -58,4 +58,15 @@ typings/
 .env
 
 temp
+api
 botiumwork
+data
+openapi
+samples
+setup
+Dockerfile
+main.py
+Makefile
+Requirements.txt
+docker-compose.yml
+__pycache__
