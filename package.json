@@ -1,22 +1,24 @@
 {
   "name": "botium-coach-worker",
   "version": "0.0.1",
-  "description": "",
+  "description": "Botium Coach Worker",
   "main": "index.js",
   "scripts": {
+    "build": "npm run eslint && npm test",
+    "eslint": "eslint \"./src/**/*.js\" \"./test/**/*.js\"",
+    "eslint-fix": "eslint --fix \"./src/**/*.js\" \"./test/**/*.js\"",
     "test": "mocha \"./test/**/*.spec.js\""
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/botiumcoreteam/botium-coach-worker.git"
   },
-  "author": "",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/botiumcoreteam/botium-coach-worker#readme",
-  "dependencies": {
-    "debug": "^4.1.1",
-    "lodash": "^4.17.19"
+  "author": "Botium GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codeforequity-at/botium-core/issues"
   },
+  "homepage": "https://www.botium.ai",
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",

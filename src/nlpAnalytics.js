@@ -1,12 +1,11 @@
 const _ = require('lodash')
 const debug = require('debug')('botium-nlp-analytics')
 
-const {ENTITY_WITHOUT_NAME} = '<no name>'
+const { ENTITY_WITHOUT_NAME } = '<no name>'
 
 const _calculateConfidenceDistibution = (context) => {
   const {
     result: {
-      overallStat,
       perUtterance
     }
   } = context
@@ -29,7 +28,7 @@ const _calculateConfidenceDistibution = (context) => {
         return stepIndexRaw === maxStepCount ? (maxStepCount - 1) : stepIndexRaw
       }
       const stepIndex = calculateStepIndex(confidence, step)
-      const mapId = JSON.stringify({intent, step, stepIndex})
+      const mapId = JSON.stringify({ intent, step, stepIndex })
 
       if (!idToRecord[mapId]) {
         idToRecord[mapId] = {
@@ -74,9 +73,9 @@ const _calculateUnexpectedIntentByAlternativeList = (context) => {
     }
   } = context
   const keyToConfidences = perUtterance
-  .filter((u) => {
-    return u.intent.actual && u.intent.actuals.length
-  }).reduce((keyToConfidences, u) => {
+    .filter((u) => {
+      return u.intent.actual && u.intent.actuals.length
+    }).reduce((keyToConfidences, u) => {
       if (u.intent.confidenceReal) {
         for (const alter of u.intent.actuals) {
           if (alter.name !== u.intent.actual && alter.confidence) {
@@ -84,7 +83,7 @@ const _calculateUnexpectedIntentByAlternativeList = (context) => {
             if (!keyToConfidences[key]) {
               keyToConfidences[key] = []
             }
-            keyToConfidences[key].push({confidence: (alter.confidence / u.intent.confidenceReal), utteranceStruct: u})
+            keyToConfidences[key].push({ confidence: (alter.confidence / u.intent.confidenceReal), utteranceStruct: u })
           }
         }
       }
@@ -92,7 +91,7 @@ const _calculateUnexpectedIntentByAlternativeList = (context) => {
       return keyToConfidences
     },
     []
-  )
+    )
 
   let maxCount = 0
   for (const confidences of Object.values(keyToConfidences)) {
@@ -129,22 +128,22 @@ const _countUnexpectedIntents = (context) => {
   } = context
 
   const intentsToStruct = perUtterance
-  .filter((u) => {
-    return u.intent.expected && u.intent.actual && (u.intent.expected !== u.intent.actual)
-  }).filter((u) => {
-    return !u.intent.incomprehension
-  }).map(u => {
-    return [u.intent.expected, u.intent.actual].sort()
-  }).reduce((accumulator, currentValue) => {
-    const key = JSON.stringify(currentValue)
-    accumulator[key] = {
-      intent1: currentValue[0],
-      intent2: currentValue[1],
-      intent1And2: JSON.stringify(currentValue),
-      count: accumulator[key] ? accumulator[key].count + 1 : 1
-    }
-    return accumulator
-  }, {})
+    .filter((u) => {
+      return u.intent.expected && u.intent.actual && (u.intent.expected !== u.intent.actual)
+    }).filter((u) => {
+      return !u.intent.incomprehension
+    }).map(u => {
+      return [u.intent.expected, u.intent.actual].sort()
+    }).reduce((accumulator, currentValue) => {
+      const key = JSON.stringify(currentValue)
+      accumulator[key] = {
+        intent1: currentValue[0],
+        intent2: currentValue[1],
+        intent1And2: JSON.stringify(currentValue),
+        count: accumulator[key] ? accumulator[key].count + 1 : 1
+      }
+      return accumulator
+    }, {})
   context.result.unexpectedIntent = Object.values(intentsToStruct)
 }
 
@@ -206,8 +205,6 @@ const _addSafe = (n1, n2) => {
 const _calculateAggregatedStats = (context) => {
   const {
     result: {
-      ignoredTestScripts,
-      ignoredTestScriptSteps,
       perExpectedEntity,
       perActualEntity,
       perExpectedIntent,
@@ -308,15 +305,12 @@ const _calculateAggregatedStats = (context) => {
 const _calculateDeviation = (context) => {
   const {
     result: {
-      ignoredTestScripts,
       overallStat,
-      ignoredTestScriptSteps,
       perExpectedEntity,
       perActualEntity,
       perExpectedIntent,
       perCorrectedIntent,
-      perActualIntent,
-      perUtterance
+      perActualIntent
     }
   } = context
   if (overallStat.intentConfidenceSupported) {
@@ -345,11 +339,7 @@ const _calculateDeviation = (context) => {
 const _calculateConfusionMatrix = (context) => {
   const {
     result: {
-      ignoredTestScripts,
       overallStat,
-      ignoredTestScriptSteps,
-      perExpectedEntity,
-      perActualEntity,
       perExpectedIntent,
       perCorrectedIntent,
       perActualIntent,
@@ -499,7 +489,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
   checks now just incomprehension utterance asserters
    */
   if (!entry.steps || entry.steps.length < 1) {
-    ignoredTestScripts.push({resultId: entry.id, testcaseName: entry.testcaseName, err: 'No steps'})
+    ignoredTestScripts.push({ resultId: entry.id, testcaseName: entry.testcaseName, err: 'No steps' })
     overallStat.testScriptsIgnored++
   } else {
     let processableStepFound
@@ -521,7 +511,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
 
         overallStat.steps++
         if (criticalErrors.length) {
-          ignoredTestScriptSteps.push({stepId: step.id || step.step, stepIndex, err: criticalErrors})
+          ignoredTestScriptSteps.push({ stepId: step.id || step.step, stepIndex, err: criticalErrors })
           overallStat.stepsIgnored++
         } else {
           // extract basic info from step
@@ -597,7 +587,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
               const name = actualEntity.name || ENTITY_WITHOUT_NAME
               const count = (nameToCount[name] || 0)
               nameToCount[name] = count
-              result.push(Object.assign({entityKey: `${actualEntity.name} - ${count}`}, Object.assign(actualEntity, {name})))
+              result.push(Object.assign({ entityKey: `${actualEntity.name} - ${count}` }, Object.assign(actualEntity, { name })))
             }
             return result
           }
@@ -721,7 +711,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
             }
             const confidenceReal = actualEntity ? actualEntity.confidence : null
             const confidenceCorrected = _.isNil(confidenceReal) ? 0 : actualEntity.confidence
-            expectedEntities.push({name, confidenceReal, confidenceCorrected, matches: !!actualEntity, entityKey})
+            expectedEntities.push({ name, confidenceReal, confidenceCorrected, matches: !!actualEntity, entityKey })
 
             // entity confidence will be null if chatbot does not returns condfidence, or there are no succesfuly resolved entities
             perExpectedEntity[name] = {
@@ -895,19 +885,19 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
 }
 
 class UtteranceListProcessor {
-  constructor() {
+  constructor () {
     this.testCaseProcessable = null
     this.testCaseTestSetSciptUtterances = null
     this.utteranceListIdToStruct = {}
   }
 
-  setTestCaseResult(testCaseResult) {
+  setTestCaseResult (testCaseResult) {
     this.testCaseProcessable = testCaseResult.testSet.expandUtterancesIncomprehension
     this.testCaseTestSetSciptUtterances = (testCaseResult.testSetScript && testCaseResult.testSetScript.scriptType === 'SCRIPTING_TYPE_UTTERANCES') ? testCaseResult.testSetScript : null
     this.testSet = testCaseResult.testSet
   }
 
-  process(actualIncomprehensionIntent, actualIncomprehensionIncompUtterance) {
+  process (actualIncomprehensionIntent, actualIncomprehensionIncompUtterance) {
     if (!this.testCaseProcessable) {
       return
     }
@@ -929,7 +919,7 @@ class UtteranceListProcessor {
     this.utteranceListIdToStruct[script.id || script.name][(actualIncomprehensionIntent || actualIncomprehensionIncompUtterance) ? 'incorrect' : 'correct']++
   }
 
-  getTrainerUtteranceList() {
+  getTrainerUtteranceList () {
     return Object.values(this.utteranceListIdToStruct).map(e => {
       e.recall = (e.correct + e.incorrect) ? e.correct / (e.correct + e.incorrect) : null
       return e
@@ -937,8 +927,7 @@ class UtteranceListProcessor {
   }
 }
 
-module.exports.process = async ({testCaseResults = [], connectorFeatures = {}}) => {
-
+module.exports.process = async ({ testCaseResults = [], connectorFeatures = {} }) => {
   const context = {
     utteranceListProcessor: new UtteranceListProcessor(),
     result: {
@@ -1032,9 +1021,8 @@ module.exports.process = async ({testCaseResults = [], connectorFeatures = {}}) 
     perCorrectedIntent: Object.values(context.result.perCorrectedIntent),
     perExpectedEntity: Object.values(context.result.perExpectedEntity),
     perActualEntity: Object.values(context.result.perActualEntity),
-    utteranceList: context.utteranceListProcessor.getTrainerUtteranceList(),
+    utteranceList: context.utteranceListProcessor.getTrainerUtteranceList()
   })
-
 
   result.overallStat.actualIntentCount = result.perActualIntent.length
   result.overallStat.actualIntentCountNoIncomprehension = result.perActualIntent.filter(i => !i.incomprehension).length
