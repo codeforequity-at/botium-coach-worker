@@ -29,13 +29,18 @@ def calculate_embeddings(embeddingsRequest):
   filter = embeddingsRequest['filter']
   intents = embeddingsRequest['intents']
 
+  if len(intents) == 0:
+    return { 'embeddings': [], 'similarity': [], 'cohesion': [], 'separation': [] }
+
+  logging.info('Calculating embeddings for "%s" intents', len(intents))
   for intent in intents:
     logging.info('Calculating embeddings for intent "%s" with %s examples', intent['name'], len(intent['examples']))
 
   training_phrases_with_embeddings = defaultdict(list)
   for intent in intents:
-    computed_embeddings = generate_embeddings(intent['examples'])
-    training_phrases_with_embeddings[intent['name']] = dict(zip(intent['examples'], computed_embeddings))
+    if len(intent['examples']) > 0:
+      computed_embeddings = generate_embeddings(intent['examples'])
+      training_phrases_with_embeddings[intent['name']] = dict(zip(intent['examples'], computed_embeddings))
 
   for intent_name, _ in training_phrases_with_embeddings.items():
     training_phrase, embeddings = next(iter(training_phrases_with_embeddings[intent_name].items()))
@@ -114,5 +119,7 @@ def calculate_embeddings(embeddingsRequest):
   separation_df_sorted['separation'] = 1 - separation_df_sorted['similarity']
   separation = [ { 'name1': name1, 'name2': name2, 'separation': separation } for name1, name2, separation in zip(separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
   logging.debug(json.dumps(separation, indent=2))
+
+  logging.info('Returning results')
 
   return { 'embeddings': embeddings_coords, 'similarity': similarity, 'cohesion': cohesion, 'separation': separation }
