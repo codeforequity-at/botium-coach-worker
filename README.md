@@ -1,10 +1,14 @@
-# Nlp Analytics information from Chatbot Convesations.
+# Botium Coach Worker
 
-[![NPM](https://nodei.co/npm/botium-cli.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/botium-cli/)
+[![NPM](https://nodei.co/npm/botium-coach-worker.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/botium-coach-worker/)
 
-[ ![Codeship Status for codeforequity-at/botium-cli](https://app.codeship.com/projects/4d7fd410-18ab-0136-6ab1-6e2b4bb62b94/status?branch=master)](https://app.codeship.com/projects/283938)
-[![npm version](https://badge.fury.io/js/botium-cli.svg)](https://badge.fury.io/js/botium-cli)
+[![Codeship Status for codeforequity-at/botium-coach-worker](https://app.codeship.com/projects/9c04d950-c431-0138-30ca-0ef8d48d2ada/status?branch=master)](https://app.codeship.com/projects/406406)
+[![npm version](https://badge.fury.io/js/botium-coach-worker.svg)](https://badge.fury.io/js/botium-coach-worker)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+
+This is a [Botium](https://github.com/codeforequity-at/botium-core) module for extracing and analyzing NLP information from Botium tests.
+
+__Did you read the [Botium in a Nutshell](https://medium.com/@floriantreml/botium-in-a-nutshell-part-1-overview-f8d0ceaf8fb4) articles ? Be warned, without prior knowledge of Botium you won't be able to properly use this library!__
 
 ## Installation
 
