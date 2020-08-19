@@ -1,11 +1,33 @@
 const assert = require('chai').assert
 const fs = require('fs')
 const path = require('path')
+const _ = require('lodash')
+
 const nlpAnalytics = require('../src/nlpAnalytics')
+
 const INPUT_POSTFIX = '.input.json'
 const OUTPUT_POSTFIX = '.expectedOutput.json'
 const CONNECTOR_FEATURES_POSTFIX = '.connectorFeatures.json'
 const TEST_DIR = 'dynamic'
+
+const _assertForNanRecursive = (value, location) => {
+  if (_.isNil(value)) {
+    return
+  }
+  assert.isNotNaN(value, location)
+
+  if (_.isArray(value)) {
+    value.forEach((entry, index) => {
+      _assertForNanRecursive(entry, `${location}[${index}]`)
+    })
+  }
+
+  if (_.isObject(value)) {
+    for (const [key, entry] of Object.entries(value)) {
+      _assertForNanRecursive(entry, `${location}["${key}"]`)
+    }
+  }
+}
 
 describe('dynamic', () => {
   fs.readdirSync(path.join(__dirname, TEST_DIR))
@@ -20,6 +42,9 @@ describe('dynamic', () => {
           connectorFeatures = require(path.join(__dirname, TEST_DIR, suiteName + CONNECTOR_FEATURES_POSTFIX))
         } catch (err) {}
         const output = await nlpAnalytics.process({ testCaseResults: input, connectorFeatures })
+
+        _assertForNanRecursive(output, '')
+
         assert.deepEqual(Object.keys(output).sort(), Object.keys(expectedOutput).sort())
 
         for (const key of Object.keys(output)) {
