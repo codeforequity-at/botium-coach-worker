@@ -11,4 +11,4 @@ docker_publish:
 	docker push botium/botium-coach-worker:latest
 
 freeze:
-		pip3 freeze > Requirements.txt
+	pip3 freeze > Requirements.txt

@@ -12,6 +12,8 @@ paths:
     get:
       summary: Ping
       operationId: api.embeddings.ping
+      security:
+        - api_key: []
       responses:
         200:
           description: ping response
@@ -23,6 +25,8 @@ paths:
     post:
       summary: Calculate word embedding statistics on a data set
       operationId: api.embeddings.calculate_embeddings
+      security:
+        - api_key: []
       requestBody:
         description: Botium data set with user examples
         required: true
@@ -115,6 +119,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-Auth
+      in: header
+      x-apikeyInfoFunc: api.shared.apikey_auth
   schemas:
     EmbeddingsRequest:
       required:
