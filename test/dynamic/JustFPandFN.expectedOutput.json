@@ -1,0 +1,1287 @@
+{
+  "perExpectedIntent": [
+    {
+      "name": "greet",
+      "count": 1,
+      "sum": 0,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0,
+      "deviation": 0,
+      "accuracy": 0,
+      "precision": 0,
+      "recall": 0,
+      "F1": null
+    },
+    {
+      "name": "never",
+      "count": 1,
+      "sum": 0,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0,
+      "deviation": 0,
+      "accuracy": 0.5,
+      "precision": 1,
+      "recall": 0,
+      "F1": 0
+    }
+  ],
+  "perExpectedEntity": [],
+  "perActualIntent": [
+    {
+      "name": "ask_isbot",
+      "incomprehension": false,
+      "count": 1,
+      "sum": 0.3366082609,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.3366082609,
+      "deviation": 0,
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "F1": null
+    },
+    {
+      "name": "greet",
+      "incomprehension": false,
+      "count": 1,
+      "sum": 0.7437937856,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0.7437937856,
+      "deviation": 0,
+      "accuracy": 0,
+      "precision": 0,
+      "recall": 0,
+      "F1": null
+    }
+  ],
+  "perActualEntity": [],
+  "perCorrectedIntent": [
+    {
+      "name": "greet",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0,
+      "deviation": 0,
+      "accuracy": 0,
+      "precision": 0,
+      "recall": 0,
+      "F1": null
+    },
+    {
+      "name": "never",
+      "incomprehension": null,
+      "count": 1,
+      "sum": 0,
+      "confidenceDifferenceSquaredSum": 0,
+      "avg": 0,
+      "deviation": 0,
+      "accuracy": 0.5,
+      "precision": 1,
+      "recall": 0,
+      "F1": 0
+    }
+  ],
+  "perUtterance": [
+    {
+      "id": "1 - cke12rci3583j070981letgfc",
+      "utterance": "who are you",
+      "utteranceKey": "who are you_greet",
+      "scriptId": "cke12rci3583j070981letgfc",
+      "step": 1,
+      "testcaseName": "expected: greet actual:never",
+      "intent": {
+        "expected": "greet",
+        "actual": "ask_isbot",
+        "incomprehension": false,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0,
+        "confidenceReal": 0.3366082609,
+        "actuals": [
+          {
+            "name": "ask_isbot",
+            "confidence": 0.3366082609,
+            "incomprehension": false
+          },
+          {
+            "name": "out_of_scope",
+            "confidence": 0.1577088982,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_howdoing",
+            "confidence": 0.1078337207,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_weather",
+            "confidence": 0.0372882262,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_languagesbot",
+            "confidence": 0.036216829,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_faq_differencecorenlu",
+            "confidence": 0.0302116573,
+            "incomprehension": null
+          },
+          {
+            "name": "human_handoff",
+            "confidence": 0.0289974045,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_whatisrasa",
+            "confidence": 0.0284450781,
+            "incomprehension": null
+          },
+          {
+            "name": "nlu_info",
+            "confidence": 0.02440615,
+            "incomprehension": null
+          },
+          {
+            "name": "install_rasa",
+            "confidence": 0.0235190857,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": 0,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": 0.8211006372999999,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    },
+    {
+      "id": "1 - cke111r1d4zxb0709aj7ead5i",
+      "utterance": "Hi, bot!",
+      "utteranceKey": "Hi, bot!_never",
+      "scriptId": "cke111r1d4zxb0709aj7ead5i",
+      "step": 1,
+      "testcaseName": "expected: never actual:greet",
+      "intent": {
+        "expected": "never",
+        "actual": "greet",
+        "incomprehension": false,
+        "incomprehensionIncompUtterance": false,
+        "confidenceCorrected": 0,
+        "confidenceReal": 0.7437937856,
+        "actuals": [
+          {
+            "name": "greet",
+            "confidence": 0.7437937856,
+            "incomprehension": false
+          },
+          {
+            "name": "ask_languagesbot",
+            "confidence": 0.0305091571,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_isbot",
+            "confidence": 0.0299564134,
+            "incomprehension": null
+          },
+          {
+            "name": "enter_data",
+            "confidence": 0.0254856646,
+            "incomprehension": null
+          },
+          {
+            "name": "human_handoff",
+            "confidence": 0.0200604945,
+            "incomprehension": null
+          },
+          {
+            "name": "thank",
+            "confidence": 0.017542446,
+            "incomprehension": null
+          },
+          {
+            "name": "nlu_info",
+            "confidence": 0.0155112464,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_faq_languages",
+            "confidence": 0.0150929792,
+            "incomprehension": null
+          },
+          {
+            "name": "install_rasa",
+            "confidence": 0.0150578953,
+            "incomprehension": null
+          },
+          {
+            "name": "BANKING.ACCOUNT_BALANCE_CHECK",
+            "confidence": 0.0129325222,
+            "incomprehension": null
+          }
+        ],
+        "confidenceDifferenceExpected": 0,
+        "confidenceDifferenceActual": 0,
+        "matches": false,
+        "confusionProbability": 0.28671537150000004,
+        "confidenceDifferenceCorrected": 0
+      },
+      "entity": {
+        "expected": [],
+        "expectedNames": [],
+        "expectedValues": [],
+        "actual": []
+      }
+    }
+  ],
+  "ignoredTestScripts": [],
+  "ignoredTestScriptSteps": [],
+  "overallStat": {
+    "sum": 0,
+    "avg": 0,
+    "avgReal": 0.3718968928,
+    "testScriptsProcessed": 2,
+    "testScriptsIgnored": 0,
+    "steps": 2,
+    "stepsIgnored": 0,
+    "stepsWithActualIntent": 2,
+    "stepsWithActualIntentAndConfidence": 2,
+    "stepsWithIntent": 2,
+    "stepsWithEntity": 0,
+    "stepsWithEntityValue": 0,
+    "incomprehensionIntents": 0,
+    "matchedIntents": 0,
+    "missedIntents": 2,
+    "missedIntentsAvg": 0.54020102325,
+    "justExpectedEntities": 0,
+    "justActualEntitiesChecked": 0,
+    "justActualEntitiesNotChecked": 0,
+    "expectedAndActualEntities": 0,
+    "confidenceDifferenceSquaredSumExpected": 0,
+    "confidenceDifferenceSquaredSumActual": 0,
+    "intentResolutionSupported": true,
+    "intentConfidenceSupported": true,
+    "intentListSupported": true,
+    "entityResolutionSupported": true,
+    "entityConfidenceSupported": true,
+    "expectedIntentsSupported": true,
+    "expectedEntitiesSupported": false,
+    "accuracy": 0,
+    "precision": 0.3333333333333333,
+    "recall": 0,
+    "F1": 0,
+    "count": 2,
+    "confidenceDifferenceSquaredSum": 0,
+    "confusionMatrixStrength": 1,
+    "actualIntentCount": 2,
+    "actualIntentCountNoIncomprehension": 2,
+    "actualEntityCount": 0
+  },
+  "confusionMatrix": [
+    {
+      "intent": "ask_isbot",
+      "row": {},
+      "score": {
+        "accuracy": null,
+        "precision": null,
+        "recall": null,
+        "F1": null
+      }
+    },
+    {
+      "intent": "greet",
+      "row": {
+        "ask_isbot": 1
+      },
+      "score": {
+        "accuracy": 0,
+        "precision": 0,
+        "recall": 0,
+        "F1": null
+      }
+    },
+    {
+      "intent": "never",
+      "row": {
+        "greet": 1
+      },
+      "score": {
+        "accuracy": 0.5,
+        "precision": 1,
+        "recall": 0,
+        "F1": 0
+      }
+    }
+  ],
+  "unexpectedIntent": [
+    {
+      "intent1": "ask_isbot",
+      "intent2": "greet",
+      "intent1And2": "[\"ask_isbot\",\"greet\"]",
+      "count": 1
+    },
+    {
+      "intent1": "greet",
+      "intent2": "never",
+      "intent1And2": "[\"greet\",\"never\"]",
+      "count": 1
+    }
+  ],
+  "confidenceDistribution": [
+    {
+      "count": 1,
+      "countCorrected": 0,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 1,
+      "intent": "ask_isbot",
+      "step": 5,
+      "stepIndex": 6
+    },
+    {
+      "count": 0,
+      "countCorrected": 1,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 0,
+      "intent": "greet",
+      "step": 5,
+      "stepIndex": 0
+    },
+    {
+      "count": 1,
+      "countCorrected": 0,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 1,
+      "intent": "ask_isbot",
+      "step": 10,
+      "stepIndex": 3
+    },
+    {
+      "count": 0,
+      "countCorrected": 1,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 0,
+      "intent": "greet",
+      "step": 10,
+      "stepIndex": 0
+    },
+    {
+      "count": 1,
+      "countCorrected": 0,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 1,
+      "intent": "greet",
+      "step": 5,
+      "stepIndex": 14
+    },
+    {
+      "count": 0,
+      "countCorrected": 1,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 0,
+      "intent": "never",
+      "step": 5,
+      "stepIndex": 0
+    },
+    {
+      "count": 1,
+      "countCorrected": 0,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 1,
+      "intent": "greet",
+      "step": 10,
+      "stepIndex": 7
+    },
+    {
+      "count": 0,
+      "countCorrected": 1,
+      "countPredictedCorrect": 0,
+      "countPredictedIncorrect": 0,
+      "intent": "never",
+      "step": 10,
+      "stepIndex": 0
+    }
+  ],
+  "unexpectedIntentByAlternativeList": [
+    {
+      "intent1": "ask_isbot",
+      "intent2": "out_of_scope",
+      "intent1And2": "[\"ask_isbot\",\"out_of_scope\"]",
+      "count": 1,
+      "avg": 0.46852355250678873,
+      "worstConfidence": 0.46852355250678873,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_howdoing",
+      "intent2": "ask_isbot",
+      "intent1And2": "[\"ask_howdoing\",\"ask_isbot\"]",
+      "count": 1,
+      "avg": 0.3203537560595857,
+      "worstConfidence": 0.3203537560595857,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_isbot",
+      "intent2": "ask_weather",
+      "intent1And2": "[\"ask_isbot\",\"ask_weather\"]",
+      "count": 1,
+      "avg": 0.11077632527586016,
+      "worstConfidence": 0.11077632527586016,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_isbot",
+      "intent2": "ask_languagesbot",
+      "intent1And2": "[\"ask_isbot\",\"ask_languagesbot\"]",
+      "count": 1,
+      "avg": 0.10759340517421032,
+      "worstConfidence": 0.10759340517421032,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_faq_differencecorenlu",
+      "intent2": "ask_isbot",
+      "intent1And2": "[\"ask_faq_differencecorenlu\",\"ask_isbot\"]",
+      "count": 1,
+      "avg": 0.08975316654208708,
+      "worstConfidence": 0.08975316654208708,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_isbot",
+      "intent2": "human_handoff",
+      "intent1And2": "[\"ask_isbot\",\"human_handoff\"]",
+      "count": 1,
+      "avg": 0.08614584925060584,
+      "worstConfidence": 0.08614584925060584,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_isbot",
+      "intent2": "ask_whatisrasa",
+      "intent1And2": "[\"ask_isbot\",\"ask_whatisrasa\"]",
+      "count": 1,
+      "avg": 0.08450499112513016,
+      "worstConfidence": 0.08450499112513016,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_isbot",
+      "intent2": "nlu_info",
+      "intent1And2": "[\"ask_isbot\",\"nlu_info\"]",
+      "count": 1,
+      "avg": 0.07250609338803664,
+      "worstConfidence": 0.07250609338803664,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_isbot",
+      "intent2": "install_rasa",
+      "intent1And2": "[\"ask_isbot\",\"install_rasa\"]",
+      "count": 1,
+      "avg": 0.06987079175394058,
+      "worstConfidence": 0.06987079175394058,
+      "worstUtterance": "who are you"
+    },
+    {
+      "intent1": "ask_languagesbot",
+      "intent2": "greet",
+      "intent1And2": "[\"ask_languagesbot\",\"greet\"]",
+      "count": 1,
+      "avg": 0.04101830062399489,
+      "worstConfidence": 0.04101830062399489,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "ask_isbot",
+      "intent2": "greet",
+      "intent1And2": "[\"ask_isbot\",\"greet\"]",
+      "count": 1,
+      "avg": 0.04027515956702287,
+      "worstConfidence": 0.04027515956702287,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "enter_data",
+      "intent2": "greet",
+      "intent1And2": "[\"enter_data\",\"greet\"]",
+      "count": 1,
+      "avg": 0.0342644226039632,
+      "worstConfidence": 0.0342644226039632,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "greet",
+      "intent2": "human_handoff",
+      "intent1And2": "[\"greet\",\"human_handoff\"]",
+      "count": 1,
+      "avg": 0.026970505654087575,
+      "worstConfidence": 0.026970505654087575,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "greet",
+      "intent2": "thank",
+      "intent1And2": "[\"greet\",\"thank\"]",
+      "count": 1,
+      "avg": 0.02358509352945043,
+      "worstConfidence": 0.02358509352945043,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "greet",
+      "intent2": "nlu_info",
+      "intent1And2": "[\"greet\",\"nlu_info\"]",
+      "count": 1,
+      "avg": 0.0208542296269489,
+      "worstConfidence": 0.0208542296269489,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "ask_faq_languages",
+      "intent2": "greet",
+      "intent1And2": "[\"ask_faq_languages\",\"greet\"]",
+      "count": 1,
+      "avg": 0.02029188666563659,
+      "worstConfidence": 0.02029188666563659,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "greet",
+      "intent2": "install_rasa",
+      "intent1And2": "[\"greet\",\"install_rasa\"]",
+      "count": 1,
+      "avg": 0.020244717812280686,
+      "worstConfidence": 0.020244717812280686,
+      "worstUtterance": "Hi, bot!"
+    },
+    {
+      "intent1": "BANKING.ACCOUNT_BALANCE_CHECK",
+      "intent2": "greet",
+      "intent1And2": "[\"BANKING.ACCOUNT_BALANCE_CHECK\",\"greet\"]",
+      "count": 1,
+      "avg": 0.0173872415316937,
+      "worstConfidence": 0.0173872415316937,
+      "worstUtterance": "Hi, bot!"
+    }
+  ],
+  "confidenceThreshold": [
+    {
+      "confidenceThreshold": 0,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.01,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.02,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.03,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.04,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.05,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.06,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.07,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.08,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.09,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.1,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.11,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.12,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.13,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.14,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.15,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.16,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.17,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.18,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.19,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.2,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.21,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.22,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.23,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.24,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.25,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.26,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.27,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.28,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.29,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.3,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.31,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.32,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.33,
+      "truePositive": 0,
+      "trueNegative": 0,
+      "falsePositive": 2,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.34,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.35,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.36,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.37,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.38,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.39,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.4,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.41,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.42,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.43,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.44,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.45,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.46,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.47,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.48,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.49,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.5,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.51,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.52,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.53,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.54,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.55,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.56,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.57,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.58,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.59,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.6,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.61,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.62,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.63,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.64,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.65,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.66,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.67,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.68,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.69,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.7,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.71,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.72,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.73,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.74,
+      "truePositive": 0,
+      "trueNegative": 1,
+      "falsePositive": 1,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.75,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.76,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.77,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.78,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.79,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.8,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.81,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.82,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.83,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.84,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.85,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.86,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.87,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.88,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.89,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.9,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.91,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.92,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.93,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.94,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.95,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.96,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.97,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.98,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 0.99,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    },
+    {
+      "confidenceThreshold": 1,
+      "truePositive": 0,
+      "trueNegative": 2,
+      "falsePositive": 0,
+      "falseNegative": 0
+    }
+  ],
+  "utteranceList": []
+}
