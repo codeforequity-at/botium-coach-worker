@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/botiumcoreteam/botium-coach-worker.git"
+    "url": "git+https://github.com/codeforequity-at/botium-coach-worker.git"
   },
   "author": "Botium GmbH",
   "license": "MIT",
