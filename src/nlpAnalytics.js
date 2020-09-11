@@ -392,7 +392,7 @@ const _calculateConfusionMatrix = (context) => {
       } else {
         score.recall = truePositive / totalExpected
       }
-      score.F1 = 2 * ((score.precision * score.recall) / (score.precision + score.recall))
+      score.F1 = (score.precision + score.recall) === 0 ? null : 2 * ((score.precision * score.recall) / (score.precision + score.recall))
     } else {
       score.accuracy = null
       score.precision = null

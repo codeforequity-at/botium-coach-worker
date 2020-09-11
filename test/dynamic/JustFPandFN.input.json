@@ -1,0 +1,220 @@
+[
+  {
+    "id": "cke12se4g58f707093akh9kk2",
+    "createdAt": "2020-08-19T07:49:44.703Z",
+    "testcaseName": "expected: greet actual:never",
+    "success": false,
+    "err": "Line 6: Expected intent \"greet\" but found ask_isbot",
+    "errDetails": "[{\"type\":\"asserter\",\"source\":\"IntentAsserter\",\"context\":{\"params\":{\"args\":[\"greet\"]}},\"cause\":{\"expected\":\"greet\",\"actual\":\"ask_isbot\"},\"message\":\"Line 6: Expected intent \\\"greet\\\" but found ask_isbot\"}]",
+    "duration": 235,
+    "testSetScript": {
+      "id": "cke12rci3583j070981letgfc",
+      "name": "expected: greet actual:never",
+      "scriptType": "SCRIPTING_TYPE_CONVO"
+    },
+    "testSetRepository": null,
+    "testSetFolder": null,
+    "testSetExcel": null,
+    "testSet": {
+      "id": "cke111r0r4zxa07094x8ps3d3",
+      "name": "Test Set - F1 score NAN",
+      "expandUtterancesIncomprehension": null
+    },
+    "steps": [
+      {
+        "id": "cke12se4j58f80709var8e17o",
+        "step": 0,
+        "sender": "me",
+        "expected": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"who are you\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"who are you\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"sourceData\":{\"requestOptions\":{\"uri\":\"https://demo.botiumbox.com/rasa-demo/model/parse?token=B0tium1234\",\"method\":\"POST\",\"followAllRedirects\":true,\"timeout\":10000,\"body\":{\"text\":\"who are you\"},\"json\":true,\"strictSSL\":true}},\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[],\"currentStepIndex\":0}",
+        "stepDuration": 211,
+        "botDuration": 203,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      },
+      {
+        "id": "cke12se4m58f907094nwemu4q",
+        "step": 1,
+        "sender": "bot",
+        "expected": "{\"sender\":\"bot\",\"channel\":null,\"not\":false,\"messageText\":\"\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[{\"name\":\"INTENT\",\"args\":[\"greet\"]}],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"bot\",\"channel\":\"default\",\"messageText\":\"\",\"media\":[],\"buttons\":[],\"cards\":null,\"forms\":null,\"nlp\":{\"intent\":{\"name\":\"ask_isbot\",\"confidence\":0.3366082609,\"incomprehension\":false,\"intents\":[{\"name\":\"ask_isbot\",\"confidence\":0.3366082609},{\"name\":\"out_of_scope\",\"confidence\":0.1577088982},{\"name\":\"ask_howdoing\",\"confidence\":0.1078337207},{\"name\":\"ask_weather\",\"confidence\":0.0372882262},{\"name\":\"ask_languagesbot\",\"confidence\":0.036216829},{\"name\":\"ask_faq_differencecorenlu\",\"confidence\":0.0302116573},{\"name\":\"human_handoff\",\"confidence\":0.0289974045},{\"name\":\"ask_whatisrasa\",\"confidence\":0.0284450781},{\"name\":\"nlu_info\",\"confidence\":0.02440615},{\"name\":\"install_rasa\",\"confidence\":0.0235190857}]},\"entities\":[]},\"sourceData\":{\"intent\":{\"name\":\"ask_isbot\",\"confidence\":0.3366082609},\"entities\":[],\"intent_ranking\":[{\"name\":\"ask_isbot\",\"confidence\":0.3366082609},{\"name\":\"out_of_scope\",\"confidence\":0.1577088982},{\"name\":\"ask_howdoing\",\"confidence\":0.1078337207},{\"name\":\"ask_weather\",\"confidence\":0.0372882262},{\"name\":\"ask_languagesbot\",\"confidence\":0.036216829},{\"name\":\"ask_faq_differencecorenlu\",\"confidence\":0.0302116573},{\"name\":\"human_handoff\",\"confidence\":0.0289974045},{\"name\":\"ask_whatisrasa\",\"confidence\":0.0284450781},{\"name\":\"nlu_info\",\"confidence\":0.02440615},{\"name\":\"install_rasa\",\"confidence\":0.0235190857}],\"text\":\"who are you\"},\"attachments\":null,\"asserters\":null,\"userInputs\":null,\"logicHooks\":null}",
+        "stepDuration": 19,
+        "botDuration": 5,
+        "err": "Line 6: Expected intent \"greet\" but found ask_isbot",
+        "errDetails": "[{\"type\":\"asserter\",\"source\":\"IntentAsserter\",\"context\":{\"params\":{\"args\":[\"greet\"]}},\"cause\":{\"expected\":\"greet\",\"actual\":\"ask_isbot\"},\"message\":\"Line 6: Expected intent \\\"greet\\\" but found ask_isbot\"}]",
+        "actualIntents": [
+          {
+            "name": "ask_isbot",
+            "confidence": 0.3366082609,
+            "incomprehension": false
+          },
+          {
+            "name": "out_of_scope",
+            "confidence": 0.1577088982,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_howdoing",
+            "confidence": 0.1078337207,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_weather",
+            "confidence": 0.0372882262,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_languagesbot",
+            "confidence": 0.036216829,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_faq_differencecorenlu",
+            "confidence": 0.0302116573,
+            "incomprehension": null
+          },
+          {
+            "name": "human_handoff",
+            "confidence": 0.0289974045,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_whatisrasa",
+            "confidence": 0.0284450781,
+            "incomprehension": null
+          },
+          {
+            "name": "nlu_info",
+            "confidence": 0.02440615,
+            "incomprehension": null
+          },
+          {
+            "name": "install_rasa",
+            "confidence": 0.0235190857,
+            "incomprehension": null
+          }
+        ],
+        "actualEntities": [],
+        "expectedIntent": "greet",
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      }
+    ]
+  },
+  {
+    "id": "cke12seja58gl0709t5g8d0tb",
+    "createdAt": "2020-08-19T07:49:45.237Z",
+    "testcaseName": "expected: never actual:greet",
+    "success": false,
+    "err": "expected: never actual:greet/Line 6: Bot response (on Line 3: #me - Hi, bot!) <no response> expected to match \"Hi, meat bag!\",\nLine 6: Expected intent \"never\" but found greet",
+    "errDetails": "[{\"type\":\"asserter\",\"source\":\"TextMatchAsserter\",\"context\":{\"stepTag\":\"expected: never actual:greet/Line 6\"},\"cause\":{\"expected\":[\"Hi, meat bag!\"],\"actual\":\"\"},\"message\":\"expected: never actual:greet/Line 6: Bot response (on Line 3: #me - Hi, bot!) <no response> expected to match \\\"Hi, meat bag!\\\"\"},{\"type\":\"asserter\",\"source\":\"IntentAsserter\",\"context\":{\"params\":{\"args\":[\"never\"]}},\"cause\":{\"expected\":\"never\",\"actual\":\"greet\"},\"message\":\"Line 6: Expected intent \\\"never\\\" but found greet\"}]",
+    "duration": 194,
+    "testSetScript": {
+      "id": "cke111r1d4zxb0709aj7ead5i",
+      "name": "expected: never actual:greet",
+      "scriptType": "SCRIPTING_TYPE_CONVO"
+    },
+    "testSetRepository": null,
+    "testSetFolder": null,
+    "testSetExcel": null,
+    "testSet": {
+      "id": "cke111r0r4zxa07094x8ps3d3",
+      "name": "Test Set - F1 score NAN",
+      "expandUtterancesIncomprehension": null
+    },
+    "steps": [
+      {
+        "id": "cke12sejc58gm07091h05z5ok",
+        "step": 0,
+        "sender": "me",
+        "expected": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"Hi, bot!\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"me\",\"channel\":null,\"not\":false,\"messageText\":\"Hi, bot!\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"sourceData\":{\"requestOptions\":{\"uri\":\"https://demo.botiumbox.com/rasa-demo/model/parse?token=B0tium1234\",\"method\":\"POST\",\"followAllRedirects\":true,\"timeout\":10000,\"body\":{\"text\":\"Hi, bot!\"},\"json\":true,\"strictSSL\":true}},\"attachments\":null,\"asserters\":[],\"userInputs\":[],\"logicHooks\":[],\"currentStepIndex\":0}",
+        "stepDuration": 189,
+        "botDuration": 188,
+        "err": null,
+        "errDetails": null,
+        "actualIntents": [],
+        "actualEntities": [],
+        "expectedIntent": null,
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      },
+      {
+        "id": "cke12sejd58gn0709jpoqwjpy",
+        "step": 1,
+        "sender": "bot",
+        "expected": "{\"sender\":\"bot\",\"channel\":null,\"not\":false,\"messageText\":\"Hi, meat bag!\",\"media\":null,\"buttons\":null,\"cards\":null,\"forms\":null,\"attachments\":null,\"asserters\":[{\"name\":\"INTENT\",\"args\":[\"never\"]}],\"userInputs\":[],\"logicHooks\":[]}",
+        "not": false,
+        "actual": "{\"sender\":\"bot\",\"channel\":\"default\",\"messageText\":\"\",\"media\":[],\"buttons\":[],\"cards\":null,\"forms\":null,\"nlp\":{\"intent\":{\"name\":\"greet\",\"confidence\":0.7437937856,\"incomprehension\":false,\"intents\":[{\"name\":\"greet\",\"confidence\":0.7437937856},{\"name\":\"ask_languagesbot\",\"confidence\":0.0305091571},{\"name\":\"ask_isbot\",\"confidence\":0.0299564134},{\"name\":\"enter_data\",\"confidence\":0.0254856646},{\"name\":\"human_handoff\",\"confidence\":0.0200604945},{\"name\":\"thank\",\"confidence\":0.017542446},{\"name\":\"nlu_info\",\"confidence\":0.0155112464},{\"name\":\"ask_faq_languages\",\"confidence\":0.0150929792},{\"name\":\"install_rasa\",\"confidence\":0.0150578953},{\"name\":\"BANKING.ACCOUNT_BALANCE_CHECK\",\"confidence\":0.0129325222}]},\"entities\":[]},\"sourceData\":{\"intent\":{\"name\":\"greet\",\"confidence\":0.7437937856},\"entities\":[],\"intent_ranking\":[{\"name\":\"greet\",\"confidence\":0.7437937856},{\"name\":\"ask_languagesbot\",\"confidence\":0.0305091571},{\"name\":\"ask_isbot\",\"confidence\":0.0299564134},{\"name\":\"enter_data\",\"confidence\":0.0254856646},{\"name\":\"human_handoff\",\"confidence\":0.0200604945},{\"name\":\"thank\",\"confidence\":0.017542446},{\"name\":\"nlu_info\",\"confidence\":0.0155112464},{\"name\":\"ask_faq_languages\",\"confidence\":0.0150929792},{\"name\":\"install_rasa\",\"confidence\":0.0150578953},{\"name\":\"BANKING.ACCOUNT_BALANCE_CHECK\",\"confidence\":0.0129325222}],\"text\":\"Hi, bot!\"},\"attachments\":null,\"asserters\":null,\"userInputs\":null,\"logicHooks\":null}",
+        "stepDuration": 5,
+        "botDuration": 0,
+        "err": "expected: never actual:greet/Line 6: Bot response (on Line 3: #me - Hi, bot!) <no response> expected to match \"Hi, meat bag!\",\nLine 6: Expected intent \"never\" but found greet",
+        "errDetails": "[{\"type\":\"asserter\",\"source\":\"TextMatchAsserter\",\"context\":{\"stepTag\":\"expected: never actual:greet/Line 6\"},\"cause\":{\"expected\":[\"Hi, meat bag!\"],\"actual\":\"\"},\"message\":\"expected: never actual:greet/Line 6: Bot response (on Line 3: #me - Hi, bot!) <no response> expected to match \\\"Hi, meat bag!\\\"\"},{\"type\":\"asserter\",\"source\":\"IntentAsserter\",\"context\":{\"params\":{\"args\":[\"never\"]}},\"cause\":{\"expected\":\"never\",\"actual\":\"greet\"},\"message\":\"Line 6: Expected intent \\\"never\\\" but found greet\"}]",
+        "actualIntents": [
+          {
+            "name": "greet",
+            "confidence": 0.7437937856,
+            "incomprehension": false
+          },
+          {
+            "name": "ask_languagesbot",
+            "confidence": 0.0305091571,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_isbot",
+            "confidence": 0.0299564134,
+            "incomprehension": null
+          },
+          {
+            "name": "enter_data",
+            "confidence": 0.0254856646,
+            "incomprehension": null
+          },
+          {
+            "name": "human_handoff",
+            "confidence": 0.0200604945,
+            "incomprehension": null
+          },
+          {
+            "name": "thank",
+            "confidence": 0.017542446,
+            "incomprehension": null
+          },
+          {
+            "name": "nlu_info",
+            "confidence": 0.0155112464,
+            "incomprehension": null
+          },
+          {
+            "name": "ask_faq_languages",
+            "confidence": 0.0150929792,
+            "incomprehension": null
+          },
+          {
+            "name": "install_rasa",
+            "confidence": 0.0150578953,
+            "incomprehension": null
+          },
+          {
+            "name": "BANKING.ACCOUNT_BALANCE_CHECK",
+            "confidence": 0.0129325222,
+            "incomprehension": null
+          }
+        ],
+        "actualEntities": [],
+        "expectedIntent": "never",
+        "expectedEntities": [],
+        "expectedEntityValues": []
+      }
+    ]
+  }
+]
