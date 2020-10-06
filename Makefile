@@ -10,5 +10,8 @@ docker_run:
 docker_publish:
 	docker push botium/botium-coach-worker:latest
 
+install:
+	pip3 install -r Requirements.txt
+
 freeze:
 	pip3 freeze > Requirements.txt
