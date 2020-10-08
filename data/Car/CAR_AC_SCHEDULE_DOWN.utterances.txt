@@ -1,0 +1,7 @@
+CAR.CAR_AC_SCHEDULE_DOWN
+turn down the car heating when I go out
+turn down heating for 20 when I leave my car
+temperature down to 5 degrees when I leave the car
+turn down the car heating when I leave my car
+turn down the heating in the car for Mary when she gets in
+temperature down by 5 degrees when I come to my car

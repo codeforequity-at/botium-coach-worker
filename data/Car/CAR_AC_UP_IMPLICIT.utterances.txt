@@ -1,0 +1,6 @@
+CAR.CAR_AC_UP_IMPLICIT
+it is too cold for Mary in the car
+Mary is cold in the car
+too cold in the car
+it's too cold in the car
+I am cold in my car

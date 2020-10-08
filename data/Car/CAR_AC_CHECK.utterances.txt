@@ -1,0 +1,6 @@
+CAR.CAR_AC_CHECK
+temperature in the car
+tell me the temperature in my car
+is the car temperature 25 degrees
+how hot is it in the car
+what's the temperature of the car heating

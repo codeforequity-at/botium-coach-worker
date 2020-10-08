@@ -1,0 +1,13 @@
+BANKING.TRANSFER_MONEY_YES
+sure
+I don't mind
+okay
+that's correct
+I agree
+ok
+of course
+do it
+sounds good
+yes
+exactly
+confirm

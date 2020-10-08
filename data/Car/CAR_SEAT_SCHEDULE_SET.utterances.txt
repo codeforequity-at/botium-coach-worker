@@ -1,0 +1,16 @@
+CAR.CAR_SEAT_SCHEDULE_SET
+make every seat lower to 20 points when everyone get out of the car
+make my seat 20 points lower when I get out of the car
+make Karl's seat 10 points higher when he gets in the car
+make my seat 10 points lower when I get in the car
+bring front seats to safe position when I leave the car
+return all of the seats to safe position once everyone abandon the car
+make my seat 20 points lower on sunrise
+make each seat 20 points higher on sunset
+bring John's  seat to the safe position when he gets out of the car
+make every seat lower to 20 points when I leave the car
+make my seat to safe position when I leave the car
+make Mary's seat lower to 15 points when she gets in the car
+bring all of the seats to safe position when I leave the car
+make Karl's seat higher to 10 points when he gets in the car
+make my seat higher when I get in the car

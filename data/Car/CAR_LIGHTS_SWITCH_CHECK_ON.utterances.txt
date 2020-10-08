@@ -1,0 +1,7 @@
+CAR.CAR_LIGHTS_SWITCH_CHECK_ON
+check if the drivers lights are on
+did I forget to turn on the back seat lights
+did I turn on the dashboard lights
+are the lights on in the car
+is the car fog light on
+are all of the lights on in the car

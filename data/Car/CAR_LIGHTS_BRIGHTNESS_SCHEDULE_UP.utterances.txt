@@ -1,0 +1,5 @@
+CAR.CAR_LIGHTS_BRIGHTNESS_SCHEDULE_UP
+turn up every light when I get in the car
+turn up the lights when I get into my car
+turn up backup lights when I get in my car
+turn up lights for 9 points for Mary when she gets in the car

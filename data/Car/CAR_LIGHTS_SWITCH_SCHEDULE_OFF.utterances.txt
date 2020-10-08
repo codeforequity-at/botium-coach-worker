@@ -1,0 +1,4 @@
+CAR.CAR_LIGHTS_SWITCH_SCHEDULE_OFF
+turn off all of the lights when I leave my car
+turn off the back up lights in the car when I leave it
+turn off lights in my car for Mary when she gets in

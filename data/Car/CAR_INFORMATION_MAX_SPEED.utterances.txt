@@ -1,0 +1,8 @@
+CAR.CAR_INFORMATION_MAX_SPEED
+what's the maximum speed of my car
+speed of my car
+what's the maximum speed of my vehicle
+maximum speed of my car
+how fast can I go
+how fast can my car go
+my maximum acceleration

@@ -1,0 +1,7 @@
+CAR.CAR_AC_DOWN_IMPLICIT
+it is too hot for Mary
+too hot for Mary right now
+it's boiling in the car
+it's too hot in the car
+too hot in the car for Mary
+it is too hot in the car for the driver

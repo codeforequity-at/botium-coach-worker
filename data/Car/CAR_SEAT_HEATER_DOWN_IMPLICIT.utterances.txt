@@ -1,0 +1,5 @@
+CAR.CAR_SEAT_HEATER_DOWN_IMPLICIT
+driver's seat is too hot
+my seat is too hot
+my seat is boiling
+Mary's seat is too hot

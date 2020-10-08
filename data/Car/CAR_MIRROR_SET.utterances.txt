@@ -1,0 +1,13 @@
+CAR.CAR_MIRROR_SET
+set the blind spot safety mirror
+adjust mirrors in my car
+turn the left mirror a little to the right
+rotate car mirror to the right
+adjust the side mirrors
+side view mirror up
+left mirror down
+set car mirrors
+side view mirror upright
+turn car mirror to the left
+adjust mirrors
+shift the right mirror towards me

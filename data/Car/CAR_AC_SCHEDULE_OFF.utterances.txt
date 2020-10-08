@@ -1,0 +1,6 @@
+CAR.CAR_AC_SCHEDULE_OFF
+turn car heating off when I get out
+turn off air conditioner for Jack when he leaves the car
+turn off air conditioner for driver when he leaves the car
+turn off the heating in my car every time I leave my car
+turn off air conditioner when I leave the car

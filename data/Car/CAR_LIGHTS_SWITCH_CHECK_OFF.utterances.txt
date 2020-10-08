@@ -1,0 +1,9 @@
+CAR.CAR_LIGHTS_SWITCH_CHECK_OFF
+did I turn off the dashboard lights
+check if the drivers lights are off
+is fog light off
+are the lights off in the car
+is fog light beam off
+did I forget to turn off the back seat lights
+did I forget to turn off all the lights in my car
+are all the lights off in the car

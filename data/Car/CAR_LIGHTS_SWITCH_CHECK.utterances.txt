@@ -1,0 +1,8 @@
+CAR.CAR_LIGHTS_SWITCH_CHECK
+each car lights status
+is the fog light set for 50 points
+tell the fog light status please
+what is the fog light status
+fog light status
+check lights in the car
+check the car lights

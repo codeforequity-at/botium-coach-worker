@@ -1,0 +1,5 @@
+CAR.CAR_LOCKS_SCHEDULE_LOCK
+you should lock windows of my car when I get into it
+could you lock the roof when I get in the car
+lock all windows when I leave my car
+please lock the roof when I leave the car

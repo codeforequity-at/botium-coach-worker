@@ -1,0 +1,5 @@
+CAR.CAR_LIGHTS_BRIGHTNESS_SCHEDULE_DOWN
+dim everything when I get into the car
+dim the lights when I leave the car
+dim all the lights when I get into the car
+dim the car backup light for Anna for 29 points when I get in
