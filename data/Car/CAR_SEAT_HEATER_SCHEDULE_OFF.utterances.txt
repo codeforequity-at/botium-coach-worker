@@ -1,0 +1,4 @@
+CAR.CAR_SEAT_HEATER_SCHEDULE_OFF
+turn off driver's seat heater when I leave my car
+turn off seat heating for Mary when she leaves the car
+please turn off every seat heaters in the car when I leave it

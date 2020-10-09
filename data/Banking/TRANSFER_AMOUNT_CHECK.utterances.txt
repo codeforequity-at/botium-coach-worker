@@ -1,0 +1,5 @@
+BANKING.TRANSFER_AMOUNT_CHECK
+check my last credit
+how much was my last deposit
+was my last deposit large
+check the amount of my last credit

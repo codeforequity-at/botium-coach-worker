@@ -1,0 +1,4 @@
+CAR.CAR_SEAT_HEATER_SCHEDULE_UP
+turn up Mary's seat heating when she gets in the car
+make my seat warmer when I am getting in the car
+turn up the temperature for driver's seat when I'm getting in the car

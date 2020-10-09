@@ -1,0 +1,21 @@
+BANKING.VIEW_ACTIVITY
+What is the amount of interest that got credited to my a/c?
+View activities
+Transaction history
+Help with viewing activity that take place in an a/c
+How can one get account activities details of his a/c?
+From where did I get the latest credit in my account
+Help me get all the information about all activities of all my checking accounts
+Can I get statement for account activities in past 10 days?
+Do you know about account activities of my checking account?
+Show activities
+See transactions
+Please tell me account activities detail
+Places where account activity history can be found
+I would like to see any recent activity on my account before the interest got added
+I want someone to help me see account activity and summary for every activity of my account
+I wanna check my account summary
+How much interest amount deposited last month in my account?
+How do I access checking account activity information?
+Where to view my account transaction history for my checking account?
+When was the levy order processed for my checking account?

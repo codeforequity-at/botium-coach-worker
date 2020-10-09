@@ -1,0 +1,4 @@
+CAR.CAR_SEAT_HEATER_SCHEDULE_DOWN
+make my seat cooler when I get in the car
+make Mary's seat cooler when I get in the car
+turn down the temperature for driver's seat when I get in the car

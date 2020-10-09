@@ -1,0 +1,8 @@
+BANKING.DEFAULTWELCOMEINTENT
+whatsup
+yo
+welcome
+hi
+hello
+hey
+what's up

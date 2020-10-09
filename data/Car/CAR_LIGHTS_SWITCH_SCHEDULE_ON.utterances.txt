@@ -1,0 +1,5 @@
+CAR.CAR_LIGHTS_SWITCH_SCHEDULE_ON
+turn on car backup lights when I get in the car
+turn on all of the car lights when I leave my car
+turn on lights when I get in the car
+turn on car lights for Jacky when she gets in the car

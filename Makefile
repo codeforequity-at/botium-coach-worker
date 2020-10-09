@@ -1,5 +1,5 @@
 start_dev:
-	LOGLEVEL=INFO python main.py
+	COACH_MAX_UTTERANCES_FOR_EMBEDDINGS=500 LOGLEVEL=INFO python main.py
 
 docker_build:
 	docker build -t botium/botium-coach-worker:latest ./
@@ -9,6 +9,9 @@ docker_run:
 
 docker_publish:
 	docker push botium/botium-coach-worker:latest
+
+install:
+	pip3 install -r Requirements.txt
 
 freeze:
 	pip3 freeze > Requirements.txt

@@ -1,0 +1,5 @@
+CAR.CAR_SEAT_HEATER_SCHEDULE_ON
+please activate Mary's seat heater when she leaves the car
+turn on the driver's seat heating when I get in the car
+turn on all seats heating when I get in the car
+turn on seat heater when I get in my car

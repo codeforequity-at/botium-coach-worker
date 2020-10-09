@@ -1,0 +1,8 @@
+CAR.CAR_LOCKS_UNLOCK
+unlock every door in the car
+unlock the door
+can you please unlock all of the windows in my car
+will you unlock the rear left window for me
+unlock the luggage compartment
+unlock the driver's door for me
+unlock windows in the car

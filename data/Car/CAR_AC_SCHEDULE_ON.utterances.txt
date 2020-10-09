@@ -1,0 +1,16 @@
+CAR.CAR_AC_SCHEDULE_ON
+turn off heating on floor to when I leave in the car
+turn on heating on floor to when I get in the car
+set heating on floor to the 20 points
+set heating on right side when I get in the car
+set heating on left side
+set air condition off when I leave my car
+set air condition off auto regime when I leave my car
+turn on heating for me when I get in the car
+set heating on autoregime
+set the air condition on 30 points to the top
+set heating on auto mode when I leave my car
+set air conditioner to 20 points when I get in my car
+turn the air condition on the floor when I get in the car
+turn on the temperature for Mary when she gets in the car
+turn on the temperature of air conditioner in the car when I get in the car

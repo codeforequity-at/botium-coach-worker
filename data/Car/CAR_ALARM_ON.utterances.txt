@@ -1,0 +1,9 @@
+CAR.CAR_ALARM_ON
+turn on alarm system of my car
+turn on the alarm for my car
+set car state to armed
+turn on the alarm system
+turn on the car alarm system
+activate car alarm
+switch the alarm system of my car
+I need to set the clock in my car

@@ -1,0 +1,4 @@
+CAR.CAR_LOCKS_SCHEDULE_OPEN
+remove the roof when I leave my car
+open luggage compartment every time I leave my car
+open all of the windows when I get in my car

@@ -1,0 +1,10 @@
+CAR.CAR_AC_SCHEDULE_UP
+turn up the temperature for front seat by 10 degrees on sunset
+turn up the temperature for rear seat by 10 degrees when I get in
+turn up the temperature of air conditioner to 25 points in the car when I get in
+temperature up to 5 points when I leave the car
+temperature up to 5 degrees when I leave the car
+turn up the temperature of air conditioner to 25 degrees in the car when I get in
+turn up the temperature for driver when she gets in
+turn up the temperature of air conditioner for 5 points in the car when I get in
+turn up the temperature of air conditioner in the car when I get in

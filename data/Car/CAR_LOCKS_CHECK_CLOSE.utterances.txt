@@ -1,0 +1,6 @@
+CAR.CAR_LOCKS_CHECK_CLOSE
+did I close the door when I left my car
+did I closed all the windows in the car
+is the roof closed
+make sure that all windows are closed in the car
+are you sure that I've closed the driver's door

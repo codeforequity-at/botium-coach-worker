@@ -1,0 +1,8 @@
+CAR.CAR_LOCKS_CHECK_LOCK
+did I lock all of the windows in the car
+did I lock the rear left door
+is the roof locked
+make sure that every window is locked in the car
+did I lock the door when I left my car
+are you sure that I've locked the driver's door
+is the window locked

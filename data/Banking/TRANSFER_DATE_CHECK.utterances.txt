@@ -1,0 +1,7 @@
+BANKING.TRANSFER_DATE_CHECK
+when was my last transfer
+date of my last deposit
+check the last EFT
+can you show the date of my last credit
+when was the last credit
+When was my last deposit?

@@ -1,0 +1,2 @@
+BANKING.DEFAULTFALLBACKINTENT
+check weather today
