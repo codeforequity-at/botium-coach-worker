@@ -87,7 +87,7 @@ def _compute_chi2_top_feature(
 
     return deduplicated_unigram, deduplicated_bigram
 
-def get_chi2_analysis(workspace_pd, significance_level=0.05):
+def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
     """
     find correlated unigram and bigram of each intent with Chi2 analysis
     :param workspace_pd: dataframe, workspace data
@@ -98,7 +98,7 @@ def get_chi2_analysis(workspace_pd, significance_level=0.05):
     labels, vectorizer, features = _preprocess_chi2(workspace_pd)
 
     label_frequency_dict = dict(Counter(workspace_pd["intent"]).most_common())
-    N = 5
+    N = num_xgrams
 
     # keys are the set of unigrams/bigrams and value will be the intent
     # maps one-to-many relationship between unigram and intent,

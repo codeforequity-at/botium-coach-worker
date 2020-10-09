@@ -38,6 +38,7 @@ paths:
             example:
               filter:
                 minsimilarity: 0.5
+                maxxgrams: 8
               intents:
                 - name: INSURANCE.VIEW_CLAIM_STATUS
                   examples:
@@ -134,8 +135,11 @@ components:
         filter:
           required:
             - minsimilarity
+            - maxxgrams
           properties:
             minsimilarity:
+              type: number
+            maxxgrams:
               type: number
         intents:
           $ref: "#/components/schemas/Intents"
