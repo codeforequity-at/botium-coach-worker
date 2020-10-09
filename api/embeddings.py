@@ -1,4 +1,4 @@
-
+import os
 import json
 import logging
 import tensorflow as tf
@@ -18,6 +18,11 @@ logging.info('Loading word embeddings model from tfhub ...')
 generate_embeddings = hub.load('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
 logging.info('Word embeddings model ready.')
 
+maxUtterancesForEmbeddings = -1
+if 'COACH_MAX_UTTERANCES_FOR_EMBEDDINGS' in os.environ:
+  maxUtterancesForEmbeddings = int(os.environ['COACH_MAX_UTTERANCES_FOR_EMBEDDINGS'])
+
+
 def ping():
   return 'Botium Coach Worker. Tensorflow Version: {tfVersion}'.format(tfVersion=tf.__version__)
 
@@ -34,7 +39,7 @@ def calculate_embeddings(embeddingsRequest):
   if len(intents) == 0:
     return { 'embeddings': [], 'similarity': [], 'cohesion': [], 'separation': [] }
 
-  logging.info('Calculating embeddings for "%s" intents', len(intents))
+  logging.info('Calculating embeddings for %s intents', len(intents))
   for intent in intents:
     logging.info('Calculating embeddings for intent "%s" with %s examples', intent['name'], len(intent['examples']))
 
@@ -56,7 +61,7 @@ def calculate_embeddings(embeddingsRequest):
 
   embedding_vectors = np.asarray(embedding_vectors)
 
-  logging.info('Starting principal component analysis')
+  logging.info('Starting principal component analysis for %s examples', len(embedding_vectors))
 
   pca = PCA(n_components=2)
   pca.fit(embedding_vectors)
@@ -73,30 +78,36 @@ def calculate_embeddings(embeddingsRequest):
     })
 
   logging.debug(json.dumps(embeddings_coords, indent=2))
+  logging.info('Ready with principal component analysis for %s examples', len(embedding_vectors))
 
-  flatten = []
+  flattenedForCosine = []
 
   for intent in training_phrases_with_embeddings:
-    for phrase in training_phrases_with_embeddings[intent]:
-      flatten.append((intent, phrase, training_phrases_with_embeddings[intent][phrase]))
+    phrases = list(training_phrases_with_embeddings[intent].keys())
+    if maxUtterancesForEmbeddings > 0:
+      utterancesForIntent = math.ceil(len(phrases) * maxUtterancesForEmbeddings / len(embedding_vectors))
+      if utterancesForIntent < len(phrases):
+        logging.info('Randomly selecting %s examples for intent %s for cosine similarity', utterancesForIntent, intent)
+        phrases = np.random.choice(phrases, utterancesForIntent, replace=False)
+    for phrase in phrases:
+      flattenedForCosine.append((intent, phrase, training_phrases_with_embeddings[intent][phrase]))
 
-  logging.info('Ready with principal component analysis, running cosine similarity')
+  logging.info('Running cosine similarity for %s examples', len(flattenedForCosine))
 
   workers = []
-  for i in range(len(flatten)):
-    for j in range(i+1, len(flatten)):
+  for i in range(len(flattenedForCosine)):
+    for j in range(i+1, len(flattenedForCosine)):
+      intent_1 = flattenedForCosine[i][0]
+      phrase_1 = flattenedForCosine[i][1]
+      embedd_1 = flattenedForCosine[i][2]
 
-      intent_1 = flatten[i][0]
-      phrase_1 = flatten[i][1]
-      embedd_1 = flatten[i][2]
-
-      intent_2 = flatten[j][0]
-      phrase_2 = flatten[j][1]
-      embedd_2 = flatten[j][2]
+      intent_2 = flattenedForCosine[j][0]
+      phrase_2 = flattenedForCosine[j][1]
+      embedd_2 = flattenedForCosine[j][2]
 
       workers.append((intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2))
 
-  logging.info('Running cosine similarity for %s pairs of phrases', len(workers))
+  logging.info('Running cosine similarity for %s pairs of examples', len(workers))
 
   # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
   data = [cosine_similarity_worker(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers]
@@ -122,11 +133,13 @@ def calculate_embeddings(embeddingsRequest):
   separation = [ { 'name1': name1, 'name2': name2, 'separation': separation } for name1, name2, separation in zip(separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
   logging.debug(json.dumps(separation, indent=2))
 
-  flattened = pandas_utils.flatten_intents_list(intents)
-  chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(flattened)
+  logging.info('Running chi2 analysis')
+
+  flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
+  chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(flattenedForChi2)
   chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
   chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
-  chi2_similar_utterances = similarity_analyzer.ambiguous_examples_analysis(flattened, filter['minsimilarity'])
+  chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(flattenedForChi2, filter['minsimilarity'])
 
   logging.info('Returning results')
 
@@ -138,5 +151,5 @@ def calculate_embeddings(embeddingsRequest):
     'chi2': chi2,
     'chi2_ambiguous_unigrams': chi2_ambiguous_unigrams,
     'chi2_ambiguous_bigrams': chi2_ambiguous_bigrams,
-    'chi2_similar_utterances': chi2_similar_utterances
+    'chi2_similarity': chi2_similarity
   }

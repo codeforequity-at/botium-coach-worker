@@ -1,5 +1,5 @@
 start_dev:
-	LOGLEVEL=INFO python main.py
+	COACH_MAX_UTTERANCES_FOR_EMBEDDINGS=500 LOGLEVEL=INFO python main.py
 
 docker_build:
 	docker build -t botium/botium-coach-worker:latest ./

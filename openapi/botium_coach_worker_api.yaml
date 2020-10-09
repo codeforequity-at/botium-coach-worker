@@ -204,6 +204,54 @@ components:
                 type: string
               separation:
                 type: number
+        chi2:
+          type: array
+          items:
+            properties:
+              name:
+                type: string
+              unigrams:
+                type: array
+                items:
+                  type: string
+              bigrams:
+                type: array
+                items:
+                  type: string
+        chi2_ambiguous_unigrams:
+          type: array
+          items:
+            properties:
+              name1:
+                type: string
+              name2:
+                type: string
+              keyword:
+                type: string
+        chi2_ambiguous_bigrams:
+          type: array
+          items:
+            properties:
+              name1:
+                type: string
+              name2:
+                type: string
+              keyword:
+                type: string
+        chi2_similarity:
+          type: array
+          items:
+            properties:
+              name1:
+                type: string
+              example1:
+                type: string
+              name2:
+                type: string
+              example2:
+                type: string
+              similarity:
+                type: number
     Error:
       required:
         - message
