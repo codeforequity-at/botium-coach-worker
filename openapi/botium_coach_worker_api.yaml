@@ -135,7 +135,6 @@ components:
         filter:
           required:
             - minsimilarity
-            - maxxgrams
           properties:
             minsimilarity:
               type: number

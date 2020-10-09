@@ -39,6 +39,9 @@ def calculate_embeddings(embeddingsRequest):
   if len(intents) == 0:
     return { 'embeddings': [], 'similarity': [], 'cohesion': [], 'separation': [] }
 
+  if not 'maxxgrams' in filter:
+    filter['maxxgrams'] = 5
+
   logging.info('Calculating embeddings for %s intents', len(intents))
   for intent in intents:
     logging.info('Calculating embeddings for intent "%s" with %s examples', intent['name'], len(intent['examples']))
