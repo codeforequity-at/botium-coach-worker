@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "node-nlp": "^4.14.0"
   }
 }
