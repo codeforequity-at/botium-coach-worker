@@ -36,7 +36,7 @@ const trainClassification = async (intents, lang) => {
   }
 
   debug(`Training ${flattened.length} utterances ...`)
-  const manager = new NlpManager({ languages: [ lang.alpha2 ], nlu: { log: false } })
+  const manager = new NlpManager({ languages: [lang.alpha2], nlu: { log: false } })
   for (const f of flattened) {
     manager.addDocument(lang.alpha2, f.utterance, f.intentName)
   }

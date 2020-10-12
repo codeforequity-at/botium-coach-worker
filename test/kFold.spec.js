@@ -1,17 +1,16 @@
 const fs = require('fs')
 const path = require('path')
-const _ = require('lodash')
 const assert = require('chai').assert
 const kFold = require('../src/kFold')
 
 const readDefaultSet = () => [
-  { 
+  {
     intentName: 'greetings.bye',
-    utterances: [ 'goodbye for now', 'bye bye take care', 'okay see you later', 'bye for now', 'i must go' ]
+    utterances: ['goodbye for now', 'bye bye take care', 'okay see you later', 'bye for now', 'i must go']
   },
-  { 
+  {
     intentName: 'greetings.hello',
-    utterances: [ 'hello', 'hi', 'howdy' ]
+    utterances: ['hello', 'hi', 'howdy']
   }
 ]
 
@@ -48,12 +47,12 @@ describe('kFold', function () {
   it('should run a basic loocv', async () => {
     const intents = readDefaultSet()
     const result = await kFold.loocv(intents)
-    assert.isTrue(0 <= result.score && result.score <= 1)
+    assert.isTrue(result.score >= 0 && result.score <= 1)
   })
   it('should run a large loocv', async () => {
     const intents = readDataDir('InsuranceAll')
     const result = await kFold.loocv(intents)
-    assert.isTrue(0 <= result.score && result.score <= 1)
+    assert.isTrue(result.score >= 0 && result.score <= 1)
   }).timeout(60000)
   it('should create folds', async () => {
     const intents = readDefaultSet()
@@ -72,15 +71,15 @@ describe('kFold', function () {
   it('should run a basic k-fold', async () => {
     const intents = readDefaultSet()
     const result = await kFold.runKFold(intents, { k: 2 })
-    assert.isTrue(0 <= result.avgPrecision && result.avgPrecision <= 1)
-    assert.isTrue(0 <= result.avgRecall && result.avgRecall <= 1)
-    assert.isTrue(0 <= result.avgF1 && result.avgF1 <= 1)
+    assert.isTrue(result.avgPrecision >= 0 && result.avgPrecision <= 1)
+    assert.isTrue(result.avgRecall >= 0 && result.avgRecall <= 1)
+    assert.isTrue(result.avgF1 >= 0 && result.avgF1 <= 1)
   })
   it('should run a large k-fold', async () => {
     const intents = readDataDir('InsuranceAll')
     const result = await kFold.runKFold(intents, { k: 5 })
-    assert.isTrue(0 <= result.avgPrecision && result.avgPrecision <= 1)
-    assert.isTrue(0 <= result.avgRecall && result.avgRecall <= 1)
-    assert.isTrue(0 <= result.avgF1 && result.avgF1 <= 1)
+    assert.isTrue(result.avgPrecision >= 0 && result.avgPrecision <= 1)
+    assert.isTrue(result.avgRecall >= 0 && result.avgRecall <= 1)
+    assert.isTrue(result.avgF1 >= 0 && result.avgF1 <= 1)
   })
 })
