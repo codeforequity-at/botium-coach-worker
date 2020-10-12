@@ -31,14 +31,14 @@ const trainClassification = async (intents, lang) => {
   const flattened = _flattenIntents(intents)
 
   if (!lang) {
-    lang = await guessLanguageForIntents(flattened)
-    debug(`Identified language ${lang.alpha2}`)
+    lang = (await guessLanguageForIntents(flattened)).alpha2
+    debug(`Identified language ${lang}`)
   }
 
   debug(`Training ${flattened.length} utterances ...`)
-  const manager = new NlpManager({ languages: [lang.alpha2], nlu: { log: false } })
+  const manager = new NlpManager({ languages: [lang], nlu: { log: false } })
   for (const f of flattened) {
-    manager.addDocument(lang.alpha2, f.utterance, f.intentName)
+    manager.addDocument(lang, f.utterance, f.intentName)
   }
   try {
     await manager.train()
@@ -48,7 +48,7 @@ const trainClassification = async (intents, lang) => {
   }
   return async (text) => {
     try {
-      const response = await manager.process(lang.alpha2, text)
+      const response = await manager.process(lang, text)
       return response.classifications.map(cl => ({
         intentName: cl.intent,
         score: cl.score
@@ -63,8 +63,8 @@ const trainClassification = async (intents, lang) => {
 const loocv = async (intents, lang) => {
   if (!lang) {
     const flattened = _flattenIntents(intents)
-    lang = await guessLanguageForIntents(flattened)
-    debug(`Identified language ${lang.alpha2}`)
+    lang = (await guessLanguageForIntents(flattened)).alpha2
+    debug(`Identified language ${lang}`)
   }
 
   const allPromises = intents.reduce((agg, intent, iindex) => {
@@ -140,8 +140,8 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
   debug(`Created ${k} folds (shuffled: ${shuffle})`)
   if (!lang) {
     const flattened = _flattenIntents(intents)
-    lang = await guessLanguageForIntents(flattened)
-    debug(`Identified language ${lang.alpha2}`)
+    lang = (await guessLanguageForIntents(flattened)).alpha2
+    debug(`Identified language ${lang}`)
   }
 
   const foldMatrices = []
@@ -261,6 +261,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
   }
 
   return {
+    lang,
     avgPrecision,
     avgRecall,
     avgF1,
