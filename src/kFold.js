@@ -89,7 +89,8 @@ const loocv = async (intents, lang) => {
         utterance,
         expectedIntent: intent.intentName,
         predictedIntent: prediction ? prediction.intentName : null,
-        match: (prediction && prediction.intentName === intent.intentName) || false
+        match: (prediction && prediction.intentName === intent.intentName) || false,
+        score: (prediction && prediction.score) || 0.0
       }
     })
     return agg.concat(intentPromises)
