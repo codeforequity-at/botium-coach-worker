@@ -1,40 +1,9 @@
-const fs = require('fs')
-const path = require('path')
 const assert = require('chai').assert
 const kFold = require('../src/kFold')
 
-const readDefaultSet = () => [
-  {
-    intentName: 'greetings.bye',
-    utterances: ['goodbye for now', 'bye bye take care', 'okay see you later', 'bye for now', 'i must go']
-  },
-  {
-    intentName: 'greetings.hello',
-    utterances: ['hello', 'hi', 'howdy']
-  }
-]
-
-const readDataDir = (dataSetName) => {
-  return fs.readdirSync(path.join(__dirname, '..', 'data', dataSetName)).map(filename => {
-    const uf = path.join(__dirname, '..', 'data', dataSetName, filename)
-    const uc = fs.readFileSync(uf).toString()
-    const lines = uc.split('\n').map(l => l.trim())
-    return {
-      intentName: lines[0],
-      utterances: lines.slice(1)
-    }
-  })
-}
+const { readDataDir, readDefaultSet } = require('./helper')
 
 describe('kFold', function () {
-  it('should recognize language', async () => {
-    const lang1 = await kFold.guessLanguage('this is some english text')
-    assert.equal(lang1.alpha2, 'en')
-    const lang2 = await kFold.guessLanguage('cest la vie')
-    assert.equal(lang2.alpha2, 'fr')
-    const lang3 = await kFold.guessLanguage('das ist ein deutscher text')
-    assert.equal(lang3.alpha2, 'de')
-  })
   it('should train a basic model', async () => {
     const intents = readDefaultSet()
     const classificator = await kFold.trainClassification(intents)
