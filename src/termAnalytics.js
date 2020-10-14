@@ -1,11 +1,14 @@
-const debug = require('debug')('botium-nlp-termanalytics')
+const _ = require('lodash')
+// const debug = require('debug')('botium-nlp-termanalytics')
 
-const _adversarialExampleInference = async (utterance, classifactor) => {
+const { removeStopwords, tokenize } = require('./language')
+
+const _adversarialExampleInference = async (utterance, classificator, lang) => {
   const adversarialResults = []
 
-  const adversarialExamples = _generateAdversarialExamples(utterance)
+  const adversarialExamples = _generateAdversarialExamples(utterance, lang)
   for (const adversarialExample of adversarialExamples) {
-    const cls = await classifactor(adversarialExample.utterance)
+    const cls = await classificator(adversarialExample.utterance)
 
     adversarialResults.push({
       utterance: adversarialExample.utterance,
@@ -16,9 +19,9 @@ const _adversarialExampleInference = async (utterance, classifactor) => {
   return adversarialResults
 }
 
-const _generateAdversarialExamples = (utterance) => {
+const _generateAdversarialExamples = (utterance, lang) => {
   const adversarialExamples = []
-  const tokens = utterance.split(' ')
+  const tokens = tokenize(utterance, lang)
   tokens.forEach((token, index) => {
     const newExample = [...tokens]
     newExample.splice(index, 1)
@@ -30,7 +33,7 @@ const _generateAdversarialExamples = (utterance) => {
   return adversarialExamples
 }
 
-const _highlightScoring = (utterance, expectedIntentName, originalResult, adversarialResults) => {
+const _highlightScoring = (utterance, expectedIntentName, originalResult, adversarialResults, lang) => {
   // console.log('_highlightScoring', expectedIntentName, originalResult, JSON.stringify(adversarialResults, null, 2))
 
   const _findIntentPosition = (results) => {
@@ -44,7 +47,7 @@ const _highlightScoring = (utterance, expectedIntentName, originalResult, advers
 
   // console.log('_highlightScoring original', originalPosition, originalScore)
 
-  const tokens = utterance.split(' ')
+  const tokens = tokenize(utterance, lang)
   const highlight = tokens.map(token => ({ token, weight: 0.0 }))
 
   for (const adversarialResult of adversarialResults) {
@@ -53,42 +56,80 @@ const _highlightScoring = (utterance, expectedIntentName, originalResult, advers
     const adversarialPosition = _findIntentPosition(adversarialResult.results)
     const adversarialScore = adversarialPosition < adversarialResult.results.length ? adversarialResult.results[adversarialPosition].score : 0.0
 
-    _scoring_function(highlight,
+    _addHighlightScoring(highlight,
       originalPosition,
       adversarialPosition,
       originalScore,
       adversarialScore,
       adversarialResult.index)
   }
-  debug(`_highlightScoring for utterance ${utterance}:`, highlight)
+  // debug(`_highlightScoring for utterance ${utterance}:`, highlight)
   return highlight
 }
 
-const _scoring_function = (highlight, originalPosition, adversarialPosition, originalScore, adversarialScore, index) => {
-  // console.log('_scoring_function', index, originalPosition, adversarialPosition, originalScore, adversarialScore)
-  const position_difference = (1 / (originalPosition + 1.0)) - (
-    1 / (adversarialPosition + 1.0)
+const _addHighlightScoring = (highlight, originalPosition, adversarialPosition, originalScore, adversarialScore, adversarialIndex) => {
+  const positionDifference = (1.0 / (originalPosition + 1.0)) - (
+    1.0 / (adversarialPosition + 1.0)
   )
-  const confidence_difference = originalScore - adversarialScore
-  const weighted_difference = (
-    ((0.2 * confidence_difference) + (0.8 * position_difference))
+  const confidenceDifference = originalScore - adversarialScore
+  const weightedDifference = (
+    ((0.2 * confidenceDifference) + (0.8 * positionDifference))
   )
-  // console.log('scoring', index, position_difference, confidence_difference, weighted_difference)
-  highlight[index].weight += weighted_difference
-
-  return highlight
+  // debug('_addHighlightScoring', adversarialIndex, originalPosition, adversarialPosition, originalScore, adversarialScore)
+  // debug('_addHighlightScoring weights', adversarialIndex, positionDifference, confidenceDifference, weightedDifference)
+  highlight[adversarialIndex].weight += weightedDifference
 }
 
-const getHighlights = async (utterance, expectedIntentName, classifactor) => {
-  const originalResult = await classifactor(utterance)
-  const adversarialResults = await _adversarialExampleInference(utterance, classifactor)
+const getHighlights = async (utterance, expectedIntentName, classificator, lang) => {
+  const originalResult = await classificator(utterance)
+  const adversarialResults = await _adversarialExampleInference(utterance, classificator, lang)
 
-  const highlights = _highlightScoring(utterance, expectedIntentName, originalResult, adversarialResults)
+  const highlights = _highlightScoring(utterance, expectedIntentName, originalResult, adversarialResults, lang)
   return highlights
+}
+
+const getAllHighlights = async (utterances, expectedIntentName, classificator, lang) => {
+  const allTokens = {}
+  for (const utterance of utterances) {
+    const originalResult = await classificator(utterance)
+    const adversarialResults = await _adversarialExampleInference(utterance, classificator, lang)
+    const highlights = _highlightScoring(utterance, expectedIntentName, originalResult, adversarialResults, lang)
+    highlights.forEach(h => {
+      if (allTokens[h.token]) allTokens[h.token] += h.weight
+      else allTokens[h.token] = h.weight
+    })
+  }
+  const allTokensList = removeStopwords(Object.keys(allTokens), lang).map(token => ({ token, weight: allTokens[token] }))
+  const allTokensListSorted = _.orderBy(allTokensList.filter(t => t.weight > 0), ['weight'], ['desc'])
+  return allTokensListSorted
+}
+
+const getHighlightsMatrix = async (intents, classificator, lang) => {
+  const allTokensByIntent = {}
+  for (const intent of intents) {
+    const intentTokens = await getAllHighlights(intent.utterances, intent.intentName, classificator, lang)
+
+    for (const intentToken of intentTokens) {
+      if (intentToken.weight > 0.01) {
+        if (allTokensByIntent[intentToken.token]) {
+          allTokensByIntent[intentToken.token][intent.intentName] = intentToken.weight
+        } else {
+          allTokensByIntent[intentToken.token] = {
+            [intent.intentName]: intentToken.weight
+          }
+        }
+      }
+    }
+  }
+  const allTokensList = removeStopwords(Object.keys(allTokensByIntent), lang).map(token => ({ token, weights: allTokensByIntent[token] }))
+  const allTokensListSorted = _.orderBy(allTokensList, ['token'], ['asc'])
+  return allTokensListSorted
 }
 
 module.exports = {
   _adversarialExampleInference,
   _generateAdversarialExamples,
-  getHighlights
+  getHighlights,
+  getAllHighlights,
+  getHighlightsMatrix
 }

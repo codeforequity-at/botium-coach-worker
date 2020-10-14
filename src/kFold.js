@@ -1,6 +1,7 @@
-const { Language, NlpManager } = require('node-nlp')
+const { NlpManager } = require('node-nlp')
 const _ = require('lodash')
 const debug = require('debug')('botium-nlp-kfold')
+const { guessLanguage } = require('./language')
 
 const _flattenIntents = (intents) => intents.reduce((agg, intent) => [...agg, ...intent.utterances.map(utterance => ({ intentName: intent.intentName, utterance }))], [])
 
@@ -16,14 +17,8 @@ const _splitArray = (array = [], nPieces = 1) => {
   return splitArray
 }
 
-const guessLanguage = async (text) => {
-  const language = new Language()
-  const guess = language.guess(text)
-  return guess[0]
-}
-
 const guessLanguageForIntents = async (flattenedIntents) => {
-  const text = flattenedIntents.map(f => f.utterance).join('\n')
+  const text = flattenedIntents.map(f => f.utterance).join(' ')
   return guessLanguage(text)
 }
 
@@ -31,12 +26,12 @@ const trainClassification = async (intents, lang) => {
   const flattened = _flattenIntents(intents)
 
   if (!lang) {
-    lang = (await guessLanguageForIntents(flattened)).alpha2
+    lang = await guessLanguageForIntents(flattened)
     debug(`Identified language ${lang}`)
   }
 
   debug(`Training ${flattened.length} utterances ...`)
-  const manager = new NlpManager({ languages: [lang], nlu: { log: false } })
+  const manager = new NlpManager({ languages: [lang], autoSave: false, nlu: { log: false } })
   for (const f of flattened) {
     manager.addDocument(lang, f.utterance, f.intentName)
   }
@@ -63,7 +58,7 @@ const trainClassification = async (intents, lang) => {
 const loocv = async (intents, lang) => {
   if (!lang) {
     const flattened = _flattenIntents(intents)
-    lang = (await guessLanguageForIntents(flattened)).alpha2
+    lang = await guessLanguageForIntents(flattened)
     debug(`Identified language ${lang}`)
   }
 
@@ -74,7 +69,7 @@ const loocv = async (intents, lang) => {
       const otherUtterances = [...intent.utterances]
       otherUtterances.splice(uindex, 1)
 
-      const classifactor = await trainClassification([
+      const classificator = await trainClassification([
         ...otherIntents,
         {
           intentName: intent.intentName,
@@ -82,7 +77,7 @@ const loocv = async (intents, lang) => {
         }
       ], lang)
 
-      const response = await classifactor(utterance)
+      const response = await classificator(utterance)
       const prediction = (response && response.length > 0 && response[0]) || null
 
       return {
@@ -167,7 +162,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
   debug(`Created ${k} folds (shuffled: ${shuffle})`)
   if (!lang) {
     const flattened = _flattenIntents(intents)
-    lang = (await guessLanguageForIntents(flattened)).alpha2
+    lang = await guessLanguageForIntents(flattened)
     debug(`Identified language ${lang}`)
   }
 
@@ -184,7 +179,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
 
     try {
       debug(`Starting training for fold ${k + 1}`)
-      const classifactor = await trainClassification(trainingData, lang)
+      const classificator = await trainClassification(trainingData, lang)
 
       debug(`Starting testing for fold ${k + 1}`)
       const testIntents = foldIntents.filter(fi => fi.test)
@@ -193,7 +188,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
         foldIntent.predictions = {}
 
         for (const utterance of foldIntent.test) {
-          const response = await classifactor(utterance)
+          const response = await classificator(utterance)
           const prediction = (response && response.length > 0 && response[0]) || { intentName: 'None', score: 0.0 }
 
           foldIntent.predictions[prediction.intentName] = (foldIntent.predictions[prediction.intentName] || 0) + 1
@@ -300,7 +295,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
 const runValidation = async (trainIntents, testIntents, { lang = null } = {}) => {
   if (!lang) {
     const flattened = _flattenIntents(trainIntents)
-    lang = (await guessLanguageForIntents(flattened)).alpha2
+    lang = await guessLanguageForIntents(flattened)
     debug(`Identified language ${lang}`)
   }
 
@@ -312,14 +307,14 @@ const runValidation = async (trainIntents, testIntents, { lang = null } = {}) =>
 
   try {
     debug('Starting training ...')
-    const classifactor = await trainClassification(trainIntents, lang)
+    const classificator = await trainClassification(trainIntents, lang)
 
     debug('Starting testing ...')
     const intentPromises = testIntents.map(async (intent) => {
       intent.predictions = {}
 
       for (const utterance of intent.utterances) {
-        const response = await classifactor(utterance)
+        const response = await classificator(utterance)
         const prediction = (response && response.length > 0 && response[0]) || { intentName: 'None', score: 0.0 }
 
         intent.predictions[prediction.intentName] = (intent.predictions[prediction.intentName] || 0) + 1
@@ -397,7 +392,6 @@ const runValidation = async (trainIntents, testIntents, { lang = null } = {}) =>
 }
 
 module.exports = {
-  guessLanguage,
   trainClassification,
   loocv,
   makeFolds,
