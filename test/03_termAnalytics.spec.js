@@ -42,10 +42,9 @@ describe('termAnalysis', function () {
   })
   it('should generate another term analysis matrix', async () => {
     const intents = readDataDir('Banking')
-    const classificator = await kFold.trainClassification(intents)
-
-    const allResults = await termAnalytics.getHighlightsMatrix(intents, classificator, 'en')
-    assert.isTrue(allResults.length > 0)
-    assert.equal(allResults[0].token, '2017')
+    const allResults = await termAnalytics.runHighlightsMatrix(intents)
+    assert.equal(allResults.lang, 'en')
+    assert.isTrue(allResults.matrix.length > 0)
+    assert.equal(allResults.matrix[0].token, '2017')
   })
 })

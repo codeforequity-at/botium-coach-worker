@@ -9,6 +9,11 @@ const guessLanguage = async (text) => {
   return guess[0].alpha2
 }
 
+const guessLanguageForIntents = async (intents) => {
+  const text = intents.reduce((agg, intent) => [...agg, ...intent.utterances], []).join(' ')
+  return guessLanguage(text)
+}
+
 const removeStopwords = (tokens, lang) => {
   const moduleName = `Stopwords${_capitalize(lang)}`
   if (LangAll[moduleName]) {
@@ -31,6 +36,7 @@ const tokenize = (utterance, lang) => {
 
 module.exports = {
   guessLanguage,
+  guessLanguageForIntents,
   removeStopwords,
   tokenize
 }
