@@ -1,12 +1,18 @@
+const franc = require('franc')
 const { Language } = require('node-nlp')
 const LangAll = require('@nlpjs/lang-all')
 
 const _capitalize = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : null
+const language = new Language()
 
 const guessLanguage = async (text) => {
-  const language = new Language()
-  const guess = language.guess(text)
-  return guess[0].alpha2
+  const allGuesses = franc.all(text) || []
+  for (const [guessAlpha3] of allGuesses) {
+    const l = language.languagesAlpha3[guessAlpha3]
+    if (l) {
+      return l.alpha2
+    }
+  }
 }
 
 const guessLanguageForIntents = async (intents) => {
