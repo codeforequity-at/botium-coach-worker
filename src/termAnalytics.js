@@ -1,7 +1,8 @@
 const _ = require('lodash')
-// const debug = require('debug')('botium-nlp-termanalytics')
+const debug = require('debug')('botium-nlp-termanalytics')
 
-const { removeStopwords, tokenize } = require('./language')
+const { guessLanguageForIntents, removeStopwords, tokenize } = require('./language')
+const { trainClassification } = require('./kFold')
 
 const _adversarialExampleInference = async (utterance, classificator, lang) => {
   const adversarialResults = []
@@ -126,10 +127,24 @@ const getHighlightsMatrix = async (intents, classificator, lang) => {
   return allTokensListSorted
 }
 
+const runHighlightsMatrix = async (intents, { lang = null } = {}) => {
+  if (!lang) {
+    lang = await guessLanguageForIntents(intents)
+    debug(`Identified language ${lang}`)
+  }
+
+  const classificator = await trainClassification(intents, lang)
+  return {
+    lang,
+    matrix: await getHighlightsMatrix(intents, classificator, lang)
+  }
+}
+
 module.exports = {
   _adversarialExampleInference,
   _generateAdversarialExamples,
   getHighlights,
   getAllHighlights,
-  getHighlightsMatrix
+  getHighlightsMatrix,
+  runHighlightsMatrix
 }

@@ -1,7 +1,7 @@
 const { NlpManager } = require('node-nlp')
 const _ = require('lodash')
 const debug = require('debug')('botium-nlp-kfold')
-const { guessLanguage } = require('./language')
+const { guessLanguageForIntents } = require('./language')
 
 const _flattenIntents = (intents) => intents.reduce((agg, intent) => [...agg, ...intent.utterances.map(utterance => ({ intentName: intent.intentName, utterance }))], [])
 
@@ -17,16 +17,11 @@ const _splitArray = (array = [], nPieces = 1) => {
   return splitArray
 }
 
-const guessLanguageForIntents = async (flattenedIntents) => {
-  const text = flattenedIntents.map(f => f.utterance).join(' ')
-  return guessLanguage(text)
-}
-
 const trainClassification = async (intents, lang) => {
   const flattened = _flattenIntents(intents)
 
   if (!lang) {
-    lang = await guessLanguageForIntents(flattened)
+    lang = await guessLanguageForIntents(intents)
     debug(`Identified language ${lang}`)
   }
 
@@ -57,8 +52,7 @@ const trainClassification = async (intents, lang) => {
 
 const loocv = async (intents, lang) => {
   if (!lang) {
-    const flattened = _flattenIntents(intents)
-    lang = await guessLanguageForIntents(flattened)
+    lang = await guessLanguageForIntents(intents)
     debug(`Identified language ${lang}`)
   }
 
@@ -161,8 +155,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
   const folds = makeFolds(intents, { k, shuffle, onlyIntents })
   debug(`Created ${k} folds (shuffled: ${shuffle})`)
   if (!lang) {
-    const flattened = _flattenIntents(intents)
-    lang = await guessLanguageForIntents(flattened)
+    lang = await guessLanguageForIntents(intents)
     debug(`Identified language ${lang}`)
   }
 
@@ -294,8 +287,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
 
 const runValidation = async (trainIntents, testIntents, { lang = null } = {}) => {
   if (!lang) {
-    const flattened = _flattenIntents(trainIntents)
-    lang = await guessLanguageForIntents(flattened)
+    lang = await guessLanguageForIntents(trainIntents)
     debug(`Identified language ${lang}`)
   }
 
