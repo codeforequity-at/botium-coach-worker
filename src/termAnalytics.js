@@ -133,7 +133,7 @@ const runHighlightsMatrix = async (intents, { lang = null } = {}) => {
     debug(`Identified language ${lang}`)
   }
 
-  const classificator = await trainClassification(intents, lang)
+  const classificator = await trainClassification(intents, { lang })
   return {
     lang,
     matrix: await getHighlightsMatrix(intents, classificator, lang)

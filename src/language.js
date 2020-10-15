@@ -13,10 +13,11 @@ const guessLanguage = async (text) => {
       return l.alpha2
     }
   }
+  throw new Error('Failed to identify language')
 }
 
 const guessLanguageForIntents = async (intents) => {
-  const text = intents.reduce((agg, intent) => [...agg, ...intent.utterances], []).join(' ')
+  const text = intents && intents.length > 0 ? intents.slice(0, 5).reduce((agg, intent) => [...agg, ...intent.utterances.slice(0, 5)], []).join(' ') : ''
   return guessLanguage(text)
 }
 

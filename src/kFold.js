@@ -3,8 +3,6 @@ const _ = require('lodash')
 const debug = require('debug')('botium-nlp-kfold')
 const { guessLanguageForIntents } = require('./language')
 
-const _flattenIntents = (intents) => intents.reduce((agg, intent) => [...agg, ...intent.utterances.map(utterance => ({ intentName: intent.intentName, utterance }))], [])
-
 const _splitArray = (array = [], nPieces = 1) => {
   const splitArray = []
   let atArrPos = 0
@@ -17,24 +15,31 @@ const _splitArray = (array = [], nPieces = 1) => {
   return splitArray
 }
 
-const trainClassification = async (intents, lang) => {
-  const flattened = _flattenIntents(intents)
+const trainClassification = async (intents, { lang = null, sample = null } = {}) => {
+  if (!intents || intents.length === 0) {
+    throw new Error('Training failed, no intents given.')
+  }
 
   if (!lang) {
     lang = await guessLanguageForIntents(intents)
     debug(`Identified language ${lang}`)
   }
 
-  debug(`Training ${flattened.length} utterances ...`)
+  const trainingSamples = intents.reduce((agg, intent) => {
+    const utterances = sample ? [..._.shuffle(intent.utterances).slice(0, sample)] : intent.utterances
+    return [...agg, ...utterances.map(utterance => ({ intentName: intent.intentName, utterance }))]
+  }, [])
+
+  debug(`Training ${trainingSamples.length} utterances for ${intents.length} intents (sample: ${sample || 'all'}) ...`)
   const manager = new NlpManager({ languages: [lang], autoSave: false, nlu: { log: false } })
-  for (const f of flattened) {
+  for (const f of trainingSamples) {
     manager.addDocument(lang, f.utterance, f.intentName)
   }
   try {
     await manager.train()
-    debug(`Training ${flattened.length} utterances ready`)
+    debug(`Training ${trainingSamples.length} utterances for ${intents.length} intents ready`)
   } catch (err) {
-    throw new Error(`Training ${flattened.length} utterances failed: ${err.message}`)
+    throw new Error(`Training ${trainingSamples.length} utterances failed: ${err.message}`)
   }
   return async (text) => {
     try {
@@ -50,42 +55,54 @@ const trainClassification = async (intents, lang) => {
   }
 }
 
-const loocv = async (intents, lang) => {
+const loocv = async (intents, { lang = null, sample = null, trainingSample = null, onlyIntents = null } = {}) => {
+  if (!intents || intents.length === 0) {
+    throw new Error('LOOCV failed, no intents given.')
+  }
+
   if (!lang) {
     lang = await guessLanguageForIntents(intents)
     debug(`Identified language ${lang}`)
   }
 
-  const allPromises = intents.reduce((agg, intent, iindex) => {
+  const results = []
+  const runSingle = async (intent, utterance, iindex, uindex) => {
     const otherIntents = [...intents]
     otherIntents.splice(iindex, 1)
-    const intentPromises = intent.utterances.map(async (utterance, uindex) => {
-      const otherUtterances = [...intent.utterances]
-      otherUtterances.splice(uindex, 1)
 
-      const classificator = await trainClassification([
-        ...otherIntents,
-        {
-          intentName: intent.intentName,
-          utterances: otherUtterances
-        }
-      ], lang)
+    const otherUtterances = [...intent.utterances]
+    otherUtterances.splice(uindex, 1)
 
-      const response = await classificator(utterance)
-      const prediction = (response && response.length > 0 && response[0]) || null
-
-      return {
-        utterance,
-        expectedIntent: intent.intentName,
-        predictedIntent: prediction ? prediction.intentName : null,
-        match: (prediction && prediction.intentName === intent.intentName) || false,
-        score: (prediction && prediction.score) || 0.0
+    const classificator = await trainClassification([
+      ...otherIntents,
+      {
+        intentName: intent.intentName,
+        utterances: otherUtterances
       }
+    ], { lang, sample: trainingSample })
+    const response = await classificator(utterance)
+    const prediction = (response && response.length > 0 && response[0]) || null
+    results.push({
+      utterance,
+      expectedIntent: intent.intentName,
+      predictedIntent: prediction ? prediction.intentName : null,
+      match: (prediction && prediction.intentName === intent.intentName) || false,
+      score: (prediction && prediction.score) || 0.0
     })
-    return agg.concat(intentPromises)
-  }, [])
+  }
 
-  const results = await Promise.all(allPromises)
+  const allPromises = []
+  intents.filter(i => onlyIntents ? onlyIntents.indexOf(i.intentName) >= 0 : true).forEach((intent, iindex) => {
+    const sampleEntries = (sample && sample < intent.utterances.length) ? _.sampleSize([...intent.utterances.entries()], sample) : [...intent.utterances.entries()]
+    debug(`Running LOOCV for ${sampleEntries.length} utterances (of ${intent.utterances.length}) for intent ${intent.intentName}`)
+    for (const [uindex, utterance] of sampleEntries) {
+      allPromises.push(runSingle(intent, utterance, iindex, uindex))
+    }
+  })
+  debug(`Running LOOCV, waiting for ${allPromises.length} results.`)
+  await Promise.all(allPromises)
+  debug(`Running LOOCV, got ${results.length} results.`)
+
   const score = results.filter(r => r.match).length / results.length
   return {
     lang,
@@ -172,7 +189,7 @@ const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyInte
 
     try {
       debug(`Starting training for fold ${k + 1}`)
-      const classificator = await trainClassification(trainingData, lang)
+      const classificator = await trainClassification(trainingData, { lang })
 
       debug(`Starting testing for fold ${k + 1}`)
       const testIntents = foldIntents.filter(fi => fi.test)
@@ -299,7 +316,7 @@ const runValidation = async (trainIntents, testIntents, { lang = null } = {}) =>
 
   try {
     debug('Starting training ...')
-    const classificator = await trainClassification(trainIntents, lang)
+    const classificator = await trainClassification(trainIntents, { lang })
 
     debug('Starting testing ...')
     const intentPromises = testIntents.map(async (intent) => {

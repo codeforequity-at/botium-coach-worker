@@ -4,6 +4,22 @@ const kFold = require('../src/kFold')
 const { readDataDir, readDefaultSet } = require('./helper')
 
 describe('kFold', function () {
+  it('should handle null intents list', async () => {
+    try {
+      await kFold.trainClassification()
+      assert.fail('should have failed')
+    } catch (err) {
+      assert.isTrue(err.message.indexOf('Training failed') >= 0)
+    }
+  })
+  it('should handle empty intents list', async () => {
+    try {
+      await kFold.trainClassification([])
+      assert.fail('should have failed')
+    } catch (err) {
+      assert.isTrue(err.message.indexOf('Training failed') >= 0)
+    }
+  })
   it('should train a basic model', async () => {
     const intents = readDefaultSet()
     const classificator = await kFold.trainClassification(intents)
@@ -13,16 +29,44 @@ describe('kFold', function () {
     const r2 = await classificator('hallo')
     assert.equal(r2[0].intentName, 'greetings.hello')
   })
+  it('should handle null intents list for loocv', async () => {
+    try {
+      await kFold.loocv()
+      assert.fail('should have failed')
+    } catch (err) {
+      assert.isTrue(err.message.indexOf('LOOCV failed') >= 0)
+    }
+  })
+  it('should handle empty intents list for loocv', async () => {
+    try {
+      await kFold.loocv([])
+      assert.fail('should have failed')
+    } catch (err) {
+      assert.isTrue(err.message.indexOf('LOOCV failed') >= 0)
+    }
+  })
   it('should run a basic loocv', async () => {
     const intents = readDefaultSet()
     const result = await kFold.loocv(intents)
     assert.isTrue(result.score >= 0 && result.score <= 1)
   })
   it('should run a large loocv', async () => {
-    const intents = readDataDir('Insurance3')
+    const intents = readDataDir('InsuranceAll')
     const result = await kFold.loocv(intents)
     assert.isTrue(result.score >= 0 && result.score <= 1)
   }).timeout(60000)
+  /*
+  it('should run a very large loocv for one intent', async () => {
+    const intents = readDataDir('Travel_Agency')
+    const result = await kFold.loocv(intents, { trainingSample: 20, onlyIntents: ['TRAVEL_AGENCY.VENUES_TRAVEL_SEARCH'] })
+    assert.isTrue(result.score >= 0 && result.score <= 1)
+  }).timeout(180000)
+  it('should run a very large loocv for all intents', async () => {
+    const intents = readDataDir('Travel_Agency')
+    const result = await kFold.loocv(intents, { trainingSample: 20 })
+    assert.isTrue(result.score >= 0 && result.score <= 1)
+  }).timeout(180000)
+  */
   it('should create folds', async () => {
     const intents = readDefaultSet()
     const folds = kFold.makeFolds(intents, { k: 5, shuffle: true })
