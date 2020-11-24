@@ -117,6 +117,8 @@ describe('kFold', function () {
     assert.isTrue(result.avgPrecision >= 0 && result.avgPrecision <= 1)
     assert.isTrue(result.avgRecall >= 0 && result.avgRecall <= 1)
     assert.isTrue(result.avgF1 >= 0 && result.avgF1 <= 1)
+    assert.lengthOf(result.foldMatrices, 2)
+    assert.isTrue(result.predictionDetails.length > 0)
   })
   it('should run a large k-fold', async () => {
     const intents = readDataDir('InsuranceAll')
@@ -124,6 +126,19 @@ describe('kFold', function () {
     assert.isTrue(result.avgPrecision >= 0 && result.avgPrecision <= 1)
     assert.isTrue(result.avgRecall >= 0 && result.avgRecall <= 1)
     assert.isTrue(result.avgF1 >= 0 && result.avgF1 <= 1)
+    assert.lengthOf(result.foldMatrices, 5)
+    assert.isTrue(result.predictionDetails.length > 0)
+  })
+  it('should not run k-fold if too less data', async () => {
+    const intents = readDefaultSet()
+    intents[0].utterances = []
+    intents[1].utterances = []
+    const result = await kFold.runKFold(intents, { k: 5 })
+    assert.isNaN(result.avgPrecision)
+    assert.isNaN(result.avgRecall)
+    assert.isNaN(result.avgF1)
+    assert.lengthOf(result.foldMatrices, 0)
+    assert.lengthOf(result.predictionDetails, 0)
   })
   it('should run a basic validation', async () => {
     const intents = readDefaultSet()

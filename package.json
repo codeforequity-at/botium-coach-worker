@@ -1,6 +1,6 @@
 {
   "name": "botium-coach-worker",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Botium Coach Worker",
   "main": "index.js",
   "scripts": {

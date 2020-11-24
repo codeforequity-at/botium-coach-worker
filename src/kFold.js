@@ -170,6 +170,17 @@ const makeSplit = async (intents, { ratio = 0.5, shuffle = false } = {}) => {
 
 const runKFold = async (intents, { lang = null, k = 5, shuffle = false, onlyIntents = null } = {}) => {
   const folds = makeFolds(intents, { k, shuffle, onlyIntents })
+  if (folds.findIndex(fold => fold.findIndex(i => i.test && i.test.length > 0) >= 0) < 0) {
+    debug('No folds created, too less data.')
+    return {
+      lang,
+      avgPrecision: NaN,
+      avgRecall: NaN,
+      avgF1: NaN,
+      foldMatrices: [],
+      predictionDetails: []
+    }
+  }
   debug(`Created ${k} folds (shuffled: ${shuffle})`)
   if (!lang) {
     lang = await guessLanguageForIntents(intents)
