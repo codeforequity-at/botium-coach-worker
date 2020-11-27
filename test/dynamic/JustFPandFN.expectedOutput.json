@@ -91,6 +91,7 @@
       "scriptId": "cke12rci3583j070981letgfc",
       "step": 1,
       "testcaseName": "expected: greet actual:never",
+      "testCaseResultId": "cke12se4g58f707093akh9kk2",
       "intent": {
         "expected": "greet",
         "actual": "ask_isbot",
@@ -170,6 +171,7 @@
       "scriptId": "cke111r1d4zxb0709aj7ead5i",
       "step": 1,
       "testcaseName": "expected: never actual:greet",
+      "testCaseResultId": "cke12seja58gl0709t5g8d0tb",
       "intent": {
         "expected": "never",
         "actual": "greet",

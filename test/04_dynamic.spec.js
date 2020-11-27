@@ -43,6 +43,7 @@ describe('dynamic', () => {
         } catch (err) {}
         const output = await nlpAnalytics.process({ testCaseResults: input, connectorFeatures })
 
+        console.log(JSON.stringify(output))
         _assertForNanRecursive(output, '')
 
         assert.deepEqual(Object.keys(output).sort(), Object.keys(expectedOutput).sort())

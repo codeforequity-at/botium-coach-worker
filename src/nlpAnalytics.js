@@ -832,6 +832,7 @@ const _processTestCaseResult = (entry, stepIndex, context) => {
             scriptId,
             step: step.step,
             testcaseName: entry.testcaseName,
+            testCaseResultId: entry.id,
             // because of a fatal error (because wrong structured convo for example) this entry cant be used in stat
             intent: {
               expected: expectedIntent,
