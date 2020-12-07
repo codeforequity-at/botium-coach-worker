@@ -8,7 +8,7 @@ docker_build:
 	docker build -t botium/botium-coach-worker:$(COACH_WORKER_VERSION) ./
 
 docker_run:
-	docker run --rm -p 4002:80 --name botium-coach-worker botium/botium-coach-worker:$(COACH_WORKER_VERSION) 
+	docker run --rm -p 4002:8080 --name botium-coach-worker botium/botium-coach-worker:$(COACH_WORKER_VERSION)
 
 docker_bash:
 	docker exec -it botium-coach-worker bash

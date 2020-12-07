@@ -9,4 +9,5 @@ app = connexion.App(__name__, specification_dir='openapi/')
 app.add_api('botium_coach_worker_api.yaml')
 
 if __name__ == '__main__':
-  app.run(port=4002)
+  port = int(os.environ.get('PORT', '4002'))
+  app.run(port=port)
