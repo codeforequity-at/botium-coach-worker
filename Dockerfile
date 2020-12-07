@@ -21,4 +21,5 @@ RUN chown -R 1000:1000 /app
 ENV LOGLEVEL INFO
 ENV WEB_CONCURRENCY 1
 ENV COACH_MAX_UTTERANCES_FOR_EMBEDDINGS 500
-ENV GUNICORN_CMD_ARGS -b 127.0.0.1:8080 --timeout 1800 --worker-class gthread -u coach -g coach
+ENV PORT 8080
+ENV GUNICORN_CMD_ARGS --timeout 1800 --worker-class gthread -u coach -g coach
