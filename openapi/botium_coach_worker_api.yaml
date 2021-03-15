@@ -21,6 +21,37 @@ paths:
             text/plain:
               schema:
                 type: string
+  /static/translation:
+    post:
+      summary: Translate a sentence
+      operationId: api.translation.translate
+#      security:
+#        - api_key: []
+      requestBody:
+        description: Sentence
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: translationRequest
+              $ref: "#/components/schemas/TranslationRequest"
+            example:
+              language_from: en_GB
+              language_to: de_DE
+              sentence: Nice to meet you
+      responses:
+        '200':
+          description: Embeddings and statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Translations"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /static/calculate_embeddings:
     post:
       summary: Calculate word embedding statistics on a data set
@@ -34,7 +65,7 @@ paths:
           application/json:
             schema:
               x-body-name: embeddingsRequest
-              $ref: "#/components/schemas/EmbeddingsRequest"            
+              $ref: "#/components/schemas/EmbeddingsRequest"
             example:
               filter:
                 minsimilarity: 0.5
@@ -255,6 +286,22 @@ components:
                 type: string
               similarity:
                 type: number
+    TranslationRequest:
+      required:
+        - language_from
+        - language_to
+        - sentence
+      properties:
+        language_from:
+          type: string
+        language_to:
+          type: string
+        sentence:
+          type: string
+    Translations:
+      properties:
+        translation:
+          type: string
     Error:
       required:
         - message
