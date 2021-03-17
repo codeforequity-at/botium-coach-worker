@@ -25,8 +25,8 @@ paths:
     post:
       summary: Translate a sentence
       operationId: api.translation.translate
-#      security:
-#        - api_key: []
+      security:
+        - api_key: []
       requestBody:
         description: Sentence
         required: true
@@ -296,11 +296,15 @@ components:
           type: string
         language_to:
           type: string
+        model:
+          type: string
         sentence:
           type: string
     Translations:
       properties:
         translation:
+          type: string
+        provider:
           type: string
     Error:
       required:

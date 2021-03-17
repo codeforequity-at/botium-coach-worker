@@ -14,5 +14,6 @@ print('Word embeddings model ready.')
 print("PyTorch with cuda: " + str(torch.cuda.is_available()))
 
 print('Downloading translation model for Huggingface Transformers ...')
-MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+# its just a fallback model. Its not good to have here, because its 2.5 G. Docker build would be very slow. So its lazy initlalized
+# MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
 print('Translation model for Huggingface Transformers ready.')
