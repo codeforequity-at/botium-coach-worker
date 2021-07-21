@@ -6,6 +6,7 @@ COPY ./setup /app/setup
 
 ENV TFHUB_CACHE_DIR /app/tfhub_modules
 ENV NLTK_DATA /app/nltk_data
+ENV TRANSFORMERS_CACHE /app/transformers_data
 RUN python /app/setup/download_models.py
 RUN python -m nltk.downloader -d /app/nltk_data punkt
 RUN python -m nltk.downloader -d /app/nltk_data stopwords

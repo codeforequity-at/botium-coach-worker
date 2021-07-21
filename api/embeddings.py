@@ -13,6 +13,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from joblib import Parallel, delayed
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
+import torch
 
 logging.info('Loading word embeddings model from tfhub ...')
 generate_embeddings = hub.load('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
@@ -24,7 +25,8 @@ if 'COACH_MAX_UTTERANCES_FOR_EMBEDDINGS' in os.environ:
 
 
 def ping():
-  return 'Botium Coach Worker. Tensorflow Version: {tfVersion}'.format(tfVersion=tf.__version__)
+  return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
+    tfVersion=tf.__version__, ptVersion=torch.__version__, ptCuda=str(torch.cuda.is_available()))
 
 def cosine_similarity_worker(intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2):
   similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
