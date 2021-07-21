@@ -10,4 +10,5 @@ app.add_api('botium_coach_worker_api.yaml')
 
 if __name__ == '__main__':
   port = int(os.environ.get('PORT', '4002'))
+  logging.info('Swagger UI on /ui endpoint')
   app.run(port=port)

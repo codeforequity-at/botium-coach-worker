@@ -57,6 +57,10 @@ def _calculate_cosine_similarity(workspace_bow):
     :return: cosine_similarity_matrix
     """
     # normalized and calculate cosine similarity
-    workspace_bow = workspace_bow / np.linalg.norm(workspace_bow, axis=1, keepdims=True)
-    cosine_similarity_matrix = workspace_bow.dot(np.transpose(workspace_bow))
+    divisor = np.linalg.norm(workspace_bow, axis=1, keepdims=True)
+
+    workspace_bow_out = np.ones(workspace_bow.shape)
+    np.divide(workspace_bow, divisor, out=workspace_bow_out, where=divisor != 0)
+
+    cosine_similarity_matrix = workspace_bow_out.dot(np.transpose(workspace_bow_out))
     return cosine_similarity_matrix

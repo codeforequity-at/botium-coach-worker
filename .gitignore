@@ -2,3 +2,5 @@ env
 __pycache__
 /.idea
 /node_modules
+/nltk_data
+/venv
