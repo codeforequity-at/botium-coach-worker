@@ -58,7 +58,7 @@ def _calculate_cosine_similarity(workspace_bow):
     """
     # normalized and calculate cosine similarity
     divisor = np.linalg.norm(workspace_bow, axis=1, keepdims=True)
-
+    # is 1 a good default value?
     workspace_bow_out = np.ones(workspace_bow.shape)
     np.divide(workspace_bow, divisor, out=workspace_bow_out, where=divisor != 0)
 
