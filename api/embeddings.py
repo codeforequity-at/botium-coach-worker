@@ -139,7 +139,7 @@ def calculate_embeddings(embeddingsRequest):
   logging.debug(json.dumps(separation, indent=2))
 
 #   logging.info('Running chi2 analysis')
-   logging.info('Skipping chi2 analysis')
+  logging.info('Skipping chi2 analysis')
 
 #   flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
 #   chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(flattenedForChi2, num_xgrams=filter['maxxgrams'])
