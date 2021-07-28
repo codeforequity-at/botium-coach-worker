@@ -72,7 +72,7 @@ def calculate_embeddings(embeddingsRequest):
   pca.fit(embedding_vectors)
 
   embeddings_coords = []
-  
+
   for color, intent in enumerate(training_phrases_with_embeddings.keys()):
     phrases = list(training_phrases_with_embeddings[intent].keys())
     embeddings = list(training_phrases_with_embeddings[intent].values())
@@ -138,23 +138,24 @@ def calculate_embeddings(embeddingsRequest):
   separation = [ { 'name1': name1, 'name2': name2, 'separation': separation } for name1, name2, separation in zip(separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
   logging.debug(json.dumps(separation, indent=2))
 
-  logging.info('Running chi2 analysis')
+#   logging.info('Running chi2 analysis')
+   logging.info('Skipping chi2 analysis')
 
-  flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
-  chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(flattenedForChi2, num_xgrams=filter['maxxgrams'])
-  chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
-  chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
-  chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(flattenedForChi2, filter['minsimilarity'])
+#   flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
+#   chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(flattenedForChi2, num_xgrams=filter['maxxgrams'])
+#   chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
+#   chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
+#   chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(flattenedForChi2, filter['minsimilarity'])
 
   logging.info('Returning results')
 
-  return { 
-    'embeddings': embeddings_coords, 
-    'similarity': similarity, 
-    'cohesion': cohesion, 
-    'separation': separation, 
-    'chi2': chi2,
-    'chi2_ambiguous_unigrams': chi2_ambiguous_unigrams,
-    'chi2_ambiguous_bigrams': chi2_ambiguous_bigrams,
-    'chi2_similarity': chi2_similarity
+  return {
+    'embeddings': embeddings_coords,
+    'similarity': similarity,
+    'cohesion': cohesion,
+    'separation': separation,
+    'chi2': [],
+    'chi2_ambiguous_unigrams': [],
+    'chi2_ambiguous_bigrams': [],
+    'chi2_similarity': []
   }
