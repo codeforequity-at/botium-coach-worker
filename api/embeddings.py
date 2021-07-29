@@ -29,7 +29,7 @@ def cosine_similarity_worker(intent_1, phrase_1, embedd_1, intent_2, phrase_2, e
   return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
 def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log_datefmt):
-    logging.basicConfig(format=log_format, level=log_level, datefmt=log_datefmt)
+    logging.basicConfig(format='%(name): ' + log_format, level=log_level, datefmt=log_datefmt)
     logger = logging.getLogger('Worker ' + str(processId))
     logger.info(' Initialize worker ...')
     logger.info('Loading word embeddings model from tfhub ...')
