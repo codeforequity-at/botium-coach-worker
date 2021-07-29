@@ -178,7 +178,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
             }
             logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
             res = requests.post(boxEndpoint, json = response_data)
-            logger.info('%s: ' + res, worker_name)
+            logger.info('%s: ' + str(res), worker_name)
             calc_count += 1
         except Exception as e:
             logger.error('%s: Calculating embeddings failed: ' + str(e), worker_name)
@@ -190,7 +190,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
             }
             logger.debug(json.dumps(response_data, indent=2))
             res = requests.post(boxEndpoint, json = response_data)
-            logger.info('%s: ' + res, worker_name)
+            logger.info('%s: ' + str(res), worker_name)
 
 def ping():
   return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
