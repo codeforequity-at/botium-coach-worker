@@ -30,10 +30,9 @@ def cosine_similarity_worker(intent_1, phrase_1, embedd_1, intent_2, phrase_2, e
 
 def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log_datefmt):
     logger = logging.getLogger('Worker ' + str(processId))
-    logger.setLevel(log_level)
     # create console handler with a higher log level
     handler = logging.StreamHandler()
-    handler.setLevel(logging.DEBUG)
+    handler.setLevel(log_level)
     # create formatter and add it to the handler
     formatter = logging.Formatter('%(asctime)-15s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
