@@ -22,7 +22,6 @@ from collections import defaultdict
 import torch
 import requests
 import gc
-from guppy import hpy
 import inspect
 
 def process_scheduler(req_queue,log_format,log_level,log_datefmt):
