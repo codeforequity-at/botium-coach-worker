@@ -29,7 +29,7 @@ def process_scheduler(req_queue,log_format,log_level,log_datefmt):
     logger.setLevel(log_level)
     logger.info('Worker scheduler started...')
     processes = []
-    for i in range(int(os.environ.get('PARALLEL_WORKERS', 1))):
+    for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
         p = Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
         p.daemon = True
         p.start()
