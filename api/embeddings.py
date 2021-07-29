@@ -31,6 +31,14 @@ def cosine_similarity_worker(intent_1, phrase_1, embedd_1, intent_2, phrase_2, e
 def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log_datefmt):
     logger = logging.getLogger('Worker ' + str(processId))
     logger.setLevel(log_level)
+    # create console handler with a higher log level
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.DEBUG)
+    # create formatter and add it to the handler
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    # add the handler to the logger
+    logger.addHandler(handler)
     logger.info(' Initialize worker ...')
     logger.info('Loading word embeddings model from tfhub ...')
     generate_embeddings = hub.load('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
