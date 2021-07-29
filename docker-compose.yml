@@ -7,3 +7,5 @@ services:
      - "4002:8080"
     environment:
       WEB_CONCURRENCY: 1
+      COACH_MAX_CALCULATIONS_PER_WORKER: 3
+      PARALLEL_WORKERS: 5
