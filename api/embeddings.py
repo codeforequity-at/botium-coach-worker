@@ -29,13 +29,14 @@ def cosine_similarity_worker(intent_1, phrase_1, embedd_1, intent_2, phrase_2, e
   return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
 def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log_datefmt):
+    worker_name = 'Worker ' + str(processId)
     logging.basicConfig(format='%(name): ' + log_format, level=log_level, datefmt=log_datefmt)
-    logger = logging.getLogger('Worker ' + str(processId))
-    logger.info(' Initialize worker ...')
-    logger.info('Loading word embeddings model from tfhub ...')
+    logger = logging.getLogger(worker_name)
+    logger.info('%s: Initialize worker ...', worker_name)
+    logger.info('%s: Loading word embeddings model from tfhub ...', worker_name)
     generate_embeddings = hub.load('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
-    logger.info('Word embeddings model ready.')
-    logger.info('Worker started!')
+    logger.info('%s: Word embeddings model ready.', worker_name)
+    logger.info('%s: Worker started!', worker_name)
     calc_count = 0
     while calc_count < maxCalcCount:
         embeddingsRequest = req_queue.get()
@@ -54,9 +55,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
             if not 'maxxgrams' in filter:
               filter['maxxgrams'] = 5
 
-            logger.info('Calculating embeddings for %s intents', len(intents))
+            logger.info('%s: Calculating embeddings for %s intents', worker_name, len(intents))
             for intent in intents:
-              logger.info('Calculating embeddings for intent "%s" with %s examples', intent['name'], len(intent['examples']))
+              logger.info('%s: Calculating embeddings for intent "%s" with %s examples', worker_name, intent['name'], len(intent['examples']))
 
             training_phrases_with_embeddings = defaultdict(list)
             for intent in intents:
@@ -66,7 +67,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
             for intent_name, _ in training_phrases_with_embeddings.items():
               training_phrase, embeddings = next(iter(training_phrases_with_embeddings[intent_name].items()))
-              logger.info('Calculated embeddings for intent {}, example: {{\'{}\':{}}}'.format(intent_name, training_phrase, embeddings[:5]))
+              logger.info('{}: Calculated embeddings for intent {}, example: {{\'{}\':{}}}'.format(worker_name, intent_name, training_phrase, embeddings[:5]))
 
             embedding_vectors = []
 
@@ -76,7 +77,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
             embedding_vectors = np.asarray(embedding_vectors)
 
-            logger.info('Starting principal component analysis for %s examples', len(embedding_vectors))
+            logger.info('%s: Starting principal component analysis for %s examples', worker_name, len(embedding_vectors))
 
             pca = PCA(n_components=2)
             pca.fit(embedding_vectors)
@@ -93,7 +94,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
               })
 
             logger.debug(json.dumps(embeddings_coords, indent=2))
-            logger.info('Ready with principal component analysis for %s examples', len(embedding_vectors))
+            logger.info('%s: Ready with principal component analysis for %s examples', worker_name, len(embedding_vectors))
 
             flattenedForCosine = []
 
@@ -102,12 +103,12 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
               if maxUtterancesForEmbeddings > 0:
                 utterancesForIntent = math.ceil(len(phrases) * maxUtterancesForEmbeddings / len(embedding_vectors))
                 if utterancesForIntent < len(phrases):
-                  logger.info('Randomly selecting %s examples for intent %s for cosine similarity', utterancesForIntent, intent)
+                  logger.info('%s: Randomly selecting %s examples for intent %s for cosine similarity', worker_name, utterancesForIntent, intent)
                   phrases = np.random.choice(phrases, utterancesForIntent, replace=False)
               for phrase in phrases:
                 flattenedForCosine.append((intent, phrase, training_phrases_with_embeddings[intent][phrase]))
 
-            logger.info('Running cosine similarity for %s examples', len(flattenedForCosine))
+            logger.info('%s: Running cosine similarity for %s examples', worker_name, len(flattenedForCosine))
 
             workers = []
             for i in range(len(flattenedForCosine)):
@@ -122,12 +123,12 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
                 workers.append((intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2))
 
-            logger.info('Running cosine similarity for %s pairs of examples', len(workers))
+            logger.info('%s: Running cosine similarity for %s pairs of examples', worker_name, len(workers))
 
             # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
             data = [cosine_similarity_worker(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers]
 
-            logger.info('Ready with cosine similarity for %s pairs, preparing results', len(data))
+            logger.info('%s: Ready with cosine similarity for %s pairs, preparing results', worker_name, len(data))
 
             similarity_df = pd.DataFrame(data, columns=['name1', 'example1', 'name2', 'example2', 'similarity'])
             similarity_different_intent = similarity_df['name1'] != similarity_df['name2']
@@ -136,19 +137,19 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
             similarity_different_intent_filtered = (similarity_df['name1'] != similarity_df['name2']) & (similarity_df['similarity'] > filter['minsimilarity'])
             similarity_df_sorted = similarity_df[similarity_different_intent_filtered].sort_values('similarity', ascending=False)
             similarity = [ { 'name1': name1, 'example1': example1, 'name2': name2, 'example2': example2, 'similarity': similarity } for name1, example1, name2, example2, similarity in zip(similarity_df_sorted['name1'], similarity_df_sorted['example1'], similarity_df_sorted['name2'], similarity_df_sorted['example2'], similarity_df_sorted['similarity'])]
-            logger.debug(json.dumps(similarity, indent=2))
+            logger.debug('%s: ' + json.dumps(similarity, indent=2), worker_name)
 
             cohesion_df_sorted = pd.DataFrame(similarity_df[similarity_same_intent].groupby('name1', as_index=False)['similarity'].mean()).sort_values('similarity', ascending=False)
             cohesion_df_sorted.columns = ['name', 'cohesion']
             cohesion = [ { 'name': name, 'cohesion': cohesion } for name, cohesion in zip(cohesion_df_sorted['name'], cohesion_df_sorted['cohesion'])]
-            logger.debug(json.dumps(cohesion, indent=2))
+            logger.debug('%s: ' + json.dumps(cohesion, indent=2), worker_name)
 
             separation_df_sorted = pd.DataFrame(similarity_df[similarity_different_intent].groupby(['name1', 'name2'], as_index=False)['similarity'].mean()).sort_values('similarity', ascending=True)
             separation_df_sorted['separation'] = 1 - separation_df_sorted['similarity']
             separation = [ { 'name1': name1, 'name2': name2, 'separation': separation } for name1, name2, separation in zip(separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
-            logger.debug(json.dumps(separation, indent=2))
+            logger.debug('%s: ' + json.dumps(separation, indent=2), worker_name)
 
-            logger.info('Running chi2 analysis')
+            logger.info('%s: Running chi2 analysis', worker_name)
             #logger.info('Skipping chi2 analysis')
 
             flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
@@ -157,9 +158,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
             chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
             chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(flattenedForChi2, filter['minsimilarity'])
 
-            logger.info('Returning results')
+            logger.info('%s: Returning results', worker_name)
 
-            logger.info(f'Sending results to {boxEndpoint}')
+            logger.info('%s: Sending results to %s', worker_name, boxEndpoint)
             response_data = {
                 "method": "calculate_embeddings",
                 "status": "finished",
@@ -175,12 +176,12 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                   'chi2_similarity': []
                 }
             }
-            logger.debug(json.dumps(response_data, indent=2))
+            logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
             res = requests.post(boxEndpoint, json = response_data)
-            logger.info(res)
+            logger.info('%s: ' + res, worker_name)
             calc_count += 1
         except Exception as e:
-            logger.error('Calculating embeddings failed: ' + str(e))
+            logger.error('%s: Calculating embeddings failed: ' + str(e), worker_name)
             response_data = {
                 "method": "calculate_embeddings",
                 "status": "failed",
@@ -189,7 +190,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
             }
             logger.debug(json.dumps(response_data, indent=2))
             res = requests.post(boxEndpoint, json = response_data)
-            logger.info(res)
+            logger.info('%s: ' + res, worker_name)
 
 def ping():
   return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
