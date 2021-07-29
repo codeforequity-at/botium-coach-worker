@@ -35,7 +35,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
     handler = logging.StreamHandler()
     handler.setLevel(logging.DEBUG)
     # create formatter and add it to the handler
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)-15s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     # add the handler to the logger
     logger.addHandler(handler)

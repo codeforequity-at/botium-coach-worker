@@ -62,7 +62,6 @@ def create_app():
 if os.environ.get('GUNICORN_MODE', 0) == 0:
     if __name__ == '__main__':
       app = create_app()
-      app.run(port=4002)
+      app.run(port=int(os.environ.get('PORT', 4002)))
 else:
     app = create_app()
-    #app.run(port=8080)
