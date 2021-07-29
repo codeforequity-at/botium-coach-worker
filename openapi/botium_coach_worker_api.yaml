@@ -322,6 +322,8 @@ components:
           type: string
         boxEndpoint:
           type: string
+        workerEndpoint:
+          type: string
     Error:
       required:
         - message

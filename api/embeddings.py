@@ -207,5 +207,6 @@ def calculate_embeddings(embeddingsRequest):
   return {
     'status': 'queued',
     'coachSessionId': coachSessionId,
-    'boxEndpoint': boxEndpoint
+    'boxEndpoint': boxEndpoint,
+    'workerEndpoint': os.environ['COACH_HOSTNAME']
   }
