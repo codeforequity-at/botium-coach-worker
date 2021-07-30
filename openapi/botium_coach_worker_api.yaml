@@ -141,11 +141,16 @@ paths:
                     - Tell me everything is covered
       responses:
         '201':
-          description: Embeddings and statistics
+          description: Embeddings Response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Embeddings"
+                $ref: "#/components/schemas/EmbeddingsResponse"
+              example:
+                status': 'queued'
+                coachSessionId: hfkajdhkab4r2brqb2e,
+                boxEndpoint: 'http://localhost:4000/api/coach'
+                workerEndpoint: 'coach-worker-17'
         default:
           description: unexpected error
           content:
@@ -196,6 +201,16 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Intent"
+    EmbeddingsResponse:
+      properties:
+        status:
+          type: string
+        coachSessionId:
+          type: string
+        boxEndpoint:
+          type: string
+        workerEndpoint:
+          type: string
     Embeddings:
       properties:
         embeddings:

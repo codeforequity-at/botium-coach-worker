@@ -149,14 +149,14 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
             separation = [ { 'name1': name1, 'name2': name2, 'separation': separation } for name1, name2, separation in zip(separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
             logger.debug('%s: ' + json.dumps(separation, indent=2), worker_name)
 
-            logger.info('%s: Running chi2 analysis', worker_name)
-            #logger.info('Skipping chi2 analysis')
+            #logger.info('%s: Running chi2 analysis', worker_name)
+            logger.info('Skipping chi2 analysis')
 
-            flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
-            chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(flattenedForChi2, num_xgrams=filter['maxxgrams'])
-            chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
-            chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
-            chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(flattenedForChi2, filter['minsimilarity'])
+            #flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
+            #chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(flattenedForChi2, num_xgrams=filter['maxxgrams'])
+            #chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
+            #chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
+            #chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(flattenedForChi2, filter['minsimilarity'])
 
             logger.info('%s: Returning results', worker_name)
 
