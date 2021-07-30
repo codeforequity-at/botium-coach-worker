@@ -67,6 +67,8 @@ paths:
               x-body-name: embeddingsRequest
               $ref: "#/components/schemas/EmbeddingsRequest"
             example:
+              coachSessionId: 'hfkajdhkab4r2brqb2e'
+              boxEndpoint: 'http://localhost:4000/api/coach'
               filter:
                 minsimilarity: 0.5
                 maxxgrams: 8
@@ -160,9 +162,15 @@ components:
   schemas:
     EmbeddingsRequest:
       required:
+        - coachSessionId
+        - boxEndpoint
         - filter
         - intents
       properties:
+        coachSessionId:
+          type: string
+        boxEndpoint:
+          type: string
         filter:
           required:
             - minsimilarity
@@ -305,6 +313,16 @@ components:
         translation:
           type: string
         provider:
+          type: string
+    JobAdded:
+      properties:
+        status:
+          type: string
+        coachSessionId:
+          type: string
+        boxEndpoint:
+          type: string
+        workerEndpoint:
           type: string
     Error:
       required:
