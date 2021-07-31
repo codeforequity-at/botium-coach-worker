@@ -7,14 +7,23 @@ start_dev:
 docker_build:
 	docker build -t botium/botium-coach-worker:$(COACH_WORKER_VERSION) ./
 
+docker_build_dev:
+	docker build -t botium/botium-coach-worker:develop ./
+
 docker_run:
 	docker run --rm -p 4002:8080 --name botium-coach-worker botium/botium-coach-worker:$(COACH_WORKER_VERSION)
+
+docker_run_dev:
+	docker run --rm -p 4002:8080 --name botium-coach-worker botium/botium-coach-worker:develop
 
 docker_bash:
 	docker exec -it botium-coach-worker bash
 
 docker_publish:
 	docker push botium/botium-coach-worker:$(COACH_WORKER_VERSION)
+
+docker_publish_dev:
+	docker push botium/botium-coach-worker:develop
 
 docker_latest:
 	docker tag botium/botium-coach-worker:$(COACH_WORKER_VERSION) botium/botium-coach-worker:latest
