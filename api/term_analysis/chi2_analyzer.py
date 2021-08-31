@@ -122,56 +122,56 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     classes = list()
     chi_unigrams = list()
     chi_bigrams = list()
-    with Pool(processes=5) as pool:
-        args = []
-        for label in label_frequency_dict.keys():
-            classes.append(label)
-            args.append({
-                'features': features,
-                'labels': labels,
-                'vectorizer': vectorizer,
-                'label': label,
-                'significance_level': significance_level,
-                'logger': logger
-            })
-        #print('ss')
-        results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
-        #print('ss1')
+    pool = Pool(5)
+    args = []
+    for label in label_frequency_dict.keys():
+        classes.append(label)
+        args.append({
+            'features': features,
+            'labels': labels,
+            'vectorizer': vectorizer,
+            'label': label,
+            'significance_level': significance_level,
+            'logger': logger
+        })
+    #print('ss')
+    results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
+    #print('ss1')
 
-        logger.info("Pool calc done")
+    logger.info("Pool calc done")
 
-        for r in results:
-            unigrams, bigrams = r
+    for r in results:
+        unigrams, bigrams = r
 
-            if unigrams:
-                chi_unigrams.append(unigrams[-N:])
+        if unigrams:
+            chi_unigrams.append(unigrams[-N:])
+        else:
+            chi_unigrams.append([])
+
+        if bigrams:
+            chi_bigrams.append(bigrams[-N:])
+        else:
+            chi_bigrams.append([])
+
+        if unigrams:
+            if frozenset(unigrams[-N:]) in unigram_intent_dict:
+                unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
             else:
-                chi_unigrams.append([])
+                unigram_intent_dict[frozenset(unigrams[-N:])] = list()
+                unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
 
-            if bigrams:
-                chi_bigrams.append(bigrams[-N:])
+        if bigrams:
+            if frozenset(bigrams[-N:]) in bigram_intent_dict:
+                bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
             else:
-                chi_bigrams.append([])
+                bigram_intent_dict[frozenset(bigrams[-N:])] = list()
+                bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
 
-            if unigrams:
-                if frozenset(unigrams[-N:]) in unigram_intent_dict:
-                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
-                else:
-                    unigram_intent_dict[frozenset(unigrams[-N:])] = list()
-                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+    chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 
-            if bigrams:
-                if frozenset(bigrams[-N:]) in bigram_intent_dict:
-                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
-                else:
-                    bigram_intent_dict[frozenset(bigrams[-N:])] = list()
-                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+    logger.info("get_chi2_analysis done")
 
-        chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
-
-        logger.info("get_chi2_analysis done")
-
-        return chi_df, unigram_intent_dict, bigram_intent_dict
+    return chi_df, unigram_intent_dict, bigram_intent_dict
 
 def get_confusing_key_terms(keyterm_intent_map):
     """
