@@ -151,19 +151,19 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
             else:
                 chi_bigrams.append([])
 
-            if unigrams:
-                if frozenset(unigrams[-N:]) in unigram_intent_dict:
-                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
-                else:
-                    unigram_intent_dict[frozenset(unigrams[-N:])] = list()
-                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+            #if unigrams:
+            #    if frozenset(unigrams[-N:]) in unigram_intent_dict:
+            #        unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+            #    else:
+            #        unigram_intent_dict[frozenset(unigrams[-N:])] = list()
+            #        unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
 
-            if bigrams:
-                if frozenset(bigrams[-N:]) in bigram_intent_dict:
-                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
-                else:
-                    bigram_intent_dict[frozenset(bigrams[-N:])] = list()
-                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+            #if bigrams:
+            #    if frozenset(bigrams[-N:]) in bigram_intent_dict:
+            #        bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+            #    else:
+            #        bigram_intent_dict[frozenset(bigrams[-N:])] = list()
+            #        bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
 
     chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 
