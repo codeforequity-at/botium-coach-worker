@@ -140,18 +140,18 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
 
         logger.info("Pool calc done")
 
-        for r in results:
-            unigrams, bigrams = r
+        #for r in results:
+        #    unigrams, bigrams = r
 
-            if unigrams:
-                chi_unigrams.append(unigrams[-N:])
-            else:
-                chi_unigrams.append([])
+        #    if unigrams:
+        #        chi_unigrams.append(unigrams[-N:])
+        #    else:
+        #        chi_unigrams.append([])
 
-            if bigrams:
-                chi_bigrams.append(bigrams[-N:])
-            else:
-                chi_bigrams.append([])
+        #    if bigrams:
+        #        chi_bigrams.append(bigrams[-N:])
+        #    else:
+        #        chi_bigrams.append([])
 
             #if unigrams:
             #    if frozenset(unigrams[-N:]) in unigram_intent_dict:
