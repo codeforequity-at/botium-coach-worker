@@ -140,34 +140,34 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
 
         logger.info("Pool calc done")
 
-        #for r in results:
-        #    unigrams, bigrams = r
+        for r in results:
+            unigrams, bigrams = r
 
-        #    if unigrams:
-        #        chi_unigrams.append(unigrams[-N:])
-        #    else:
-        #        chi_unigrams.append([])
+            if unigrams:
+                chi_unigrams.append(unigrams[-N:])
+            else:
+                chi_unigrams.append([])
 
-        #    if bigrams:
-        #        chi_bigrams.append(bigrams[-N:])
-        #    else:
-        #        chi_bigrams.append([])
+            if bigrams:
+                chi_bigrams.append(bigrams[-N:])
+            else:
+                chi_bigrams.append([])
 
-            #if unigrams:
-            #    if frozenset(unigrams[-N:]) in unigram_intent_dict:
-            #        unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
-            #    else:
-            #        unigram_intent_dict[frozenset(unigrams[-N:])] = list()
-            #        unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+            if unigrams:
+                if frozenset(unigrams[-N:]) in unigram_intent_dict:
+                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+                else:
+                    unigram_intent_dict[frozenset(unigrams[-N:])] = list()
+                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
 
-            #if bigrams:
-            #    if frozenset(bigrams[-N:]) in bigram_intent_dict:
-            #        bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
-            #    else:
-            #        bigram_intent_dict[frozenset(bigrams[-N:])] = list()
-            #        bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+            if bigrams:
+                if frozenset(bigrams[-N:]) in bigram_intent_dict:
+                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+                else:
+                    bigram_intent_dict[frozenset(bigrams[-N:])] = list()
+                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
 
-        chi_df = []#[ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
+        chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 
         logger.info("get_chi2_analysis done")
 
