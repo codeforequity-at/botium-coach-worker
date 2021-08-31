@@ -91,6 +91,8 @@ def _compute_chi2_top_feature(
         if bigram not in deduplicated_bigram:
             deduplicated_bigram.append(bigram)
 
+    logger.info("compute_chi2_top_feature done for label %s", cls)
+
     return deduplicated_unigram, deduplicated_bigram
 
 def _compute_chi2_top_feature_obj(obj):
