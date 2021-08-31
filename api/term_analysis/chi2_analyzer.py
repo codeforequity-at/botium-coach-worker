@@ -64,7 +64,7 @@ def _compute_chi2_top_feature(
     """
 
     logger.info("Pool calculation agent started")
-    
+
     features_chi2, pval = chi2(features, labels == cls)
 
     feature_names = np.array(vectorizer.get_feature_names())
@@ -96,7 +96,7 @@ def _compute_chi2_top_feature_obj(obj):
         obj['logger'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
     )
 
-def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
+def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.05):
     """
     find correlated unigram and bigram of each intent with Chi2 analysis
     :param workspace_pd: dataframe, workspace data
