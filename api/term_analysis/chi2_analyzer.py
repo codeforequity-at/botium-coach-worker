@@ -138,6 +138,8 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
         results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
         #print('ss1')
 
+        logger.info("Pool calc done")
+
         for r in results:
             unigrams, bigrams = r
 
