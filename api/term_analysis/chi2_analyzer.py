@@ -63,7 +63,7 @@ def _compute_chi2_top_feature(
     :return deduplicated_bigram:
     """
 
-    logger.info("Pool calculation agent started")
+    logger.info("Pool calculation agent started for label %s", cls)
 
     features_chi2, pval = chi2(features, labels == cls)
 
