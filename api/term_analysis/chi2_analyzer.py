@@ -167,11 +167,11 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
             #        bigram_intent_dict[frozenset(bigrams[-N:])] = list()
             #        bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
 
-    chi_df = []#[ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
+            chi_df = []#[ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 
-    logger.info("get_chi2_analysis done")
+            logger.info("get_chi2_analysis done")
 
-    return chi_df, unigram_intent_dict, bigram_intent_dict
+            return chi_df, unigram_intent_dict, bigram_intent_dict
 
 def get_confusing_key_terms(keyterm_intent_map):
     """
