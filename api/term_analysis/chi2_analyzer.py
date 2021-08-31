@@ -50,7 +50,7 @@ def _preprocess_chi2(workspace_pd):
 
 
 def _compute_chi2_top_feature(
-    features, labels, vectorizer, cls, significance_level=0.05
+    logger, features, labels, vectorizer, cls, significance_level=0.05
 ):
     """
     Perform chi2 analysis, punctuation filtering and deduplication
@@ -62,6 +62,9 @@ def _compute_chi2_top_feature(
     :return deduplicated_unigram:
     :return deduplicated_bigram:
     """
+
+    logger.info("Pool calculation agent started")
+    
     features_chi2, pval = chi2(features, labels == cls)
 
     feature_names = np.array(vectorizer.get_feature_names())
@@ -90,7 +93,7 @@ def _compute_chi2_top_feature(
 
 def _compute_chi2_top_feature_obj(obj):
     return _compute_chi2_top_feature(
-        obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
+        obj['logger'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
     )
 
 def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
@@ -124,7 +127,8 @@ def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
                 'labels': labels,
                 'vectorizer': vectorizer,
                 'label': label,
-                'significance_level': significance_level
+                'significance_level': significance_level,
+                'logger': logger
             })
         #print('ss')
         results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
