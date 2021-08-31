@@ -6,6 +6,7 @@ from sklearn.feature_selection import chi2
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk import word_tokenize
 from api.utils import term_data
+from multiprocessing import Pool
 
 def strip_punctuations(utterance: str):
     """
@@ -87,6 +88,11 @@ def _compute_chi2_top_feature(
 
     return deduplicated_unigram, deduplicated_bigram
 
+def _compute_chi2_top_feature_obj(obj):
+    return _compute_chi2_top_feature(
+        obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
+    )
+
 def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
     """
     find correlated unigram and bigram of each intent with Chi2 analysis
@@ -109,36 +115,47 @@ def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
     classes = list()
     chi_unigrams = list()
     chi_bigrams = list()
-    for label in label_frequency_dict.keys():
+    with Pool(processes=5) as pool:
+        args = []
+        for label in label_frequency_dict.keys():
+            classes.append(label)
+            args.append({
+                'features': features,
+                'labels': labels,
+                'vectorizer': vectorizer,
+                'label': label,
+                'significance_level': significance_level
+            })
+        #print('ss')
+        results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
+        #print('ss1')
 
-        unigrams, bigrams = _compute_chi2_top_feature(
-            features, labels, vectorizer, label, significance_level
-        )
-        classes.append(label)
+        for r in results:
+            unigrams, bigrams = r
 
-        if unigrams:
-            chi_unigrams.append(unigrams[-N:])
-        else:
-            chi_unigrams.append([])
-
-        if bigrams:
-            chi_bigrams.append(bigrams[-N:])
-        else:
-            chi_bigrams.append([])
-
-        if unigrams:
-            if frozenset(unigrams[-N:]) in unigram_intent_dict:
-                unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+            if unigrams:
+                chi_unigrams.append(unigrams[-N:])
             else:
-                unigram_intent_dict[frozenset(unigrams[-N:])] = list()
-                unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+                chi_unigrams.append([])
 
-        if bigrams:
-            if frozenset(bigrams[-N:]) in bigram_intent_dict:
-                bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+            if bigrams:
+                chi_bigrams.append(bigrams[-N:])
             else:
-                bigram_intent_dict[frozenset(bigrams[-N:])] = list()
-                bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+                chi_bigrams.append([])
+
+            if unigrams:
+                if frozenset(unigrams[-N:]) in unigram_intent_dict:
+                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+                else:
+                    unigram_intent_dict[frozenset(unigrams[-N:])] = list()
+                    unigram_intent_dict[frozenset(unigrams[-N:])].append(label)
+
+            if bigrams:
+                if frozenset(bigrams[-N:]) in bigram_intent_dict:
+                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+                else:
+                    bigram_intent_dict[frozenset(bigrams[-N:])] = list()
+                    bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
 
     chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 

@@ -31,7 +31,7 @@ def process_scheduler(req_queue,log_format,log_level,log_datefmt):
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
         p = Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
-        p.daemon = True
+        p.daemon = False
         p.start()
         processes.append(p)
     while True:
@@ -39,7 +39,7 @@ def process_scheduler(req_queue,log_format,log_level,log_datefmt):
             p = processes[i]
             if not p.is_alive():
                 p = Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
-                p.daemon = True
+                p.daemon = False
                 p.start()
                 processes[i] = p
 
