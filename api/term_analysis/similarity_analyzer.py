@@ -53,6 +53,7 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
                 temp_pd, ignore_index=True
             )
 
+    logger.info('chi2 similarity: sorting by similarity')
     similarity_df_sorted = similar_utterance_pd.sort_values(by=["similarity"], ascending=False)
     return [ { 'name1': name1, 'example1': example1, 'name2': name2, 'example2': example2, 'similarity': similarity } for name1, example1, name2, example2, similarity in zip(similarity_df_sorted['name1'], similarity_df_sorted['example1'], similarity_df_sorted['name2'], similarity_df_sorted['example2'], similarity_df_sorted['similarity'])]
 
