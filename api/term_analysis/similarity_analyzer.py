@@ -8,6 +8,7 @@ def pd_frame(obj):
     workspace_pd = obj["workspace_pd"]
     index = obj["index"]
     logger = obj["logger"]
+    cos_sim_score_matrix = obj["cos_sim_score_matrix"]
     if (
         workspace_pd["intent"].iloc[index[0]]
         != workspace_pd["intent"].iloc[index[1]]
@@ -64,6 +65,7 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
         task_data.append({
             "workspace_pd": workspace_pd,
             "index": index,
+            "cos_sim_score_matrix": cos_sim_score_matrix,
             "logger": logger
         })
     executer = ThreadPoolExecutor(max_workers = 3)
