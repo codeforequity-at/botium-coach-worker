@@ -64,7 +64,7 @@ def _calculate_cosine_similarity(logger, workspace_bow):
     """
     # normalized and calculate cosine similarity
     logger.info('1')
-    workspace_bow = workspace_bow / np.linalg.norm(workspace_bow, axis=1, keepdims=True)
+    workspace_bow = np.linalg.norm(workspace_bow, axis=1, keepdims=True)
     logger.info('2')
     cosine_similarity_matrix = workspace_bow.dot(np.transpose(workspace_bow))
     logger.info('3')
