@@ -3,7 +3,7 @@ import os
 import connexion
 import logging
 from flask import current_app
-import multiprocessing
+import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
@@ -23,6 +23,32 @@ import torch
 import requests
 import gc
 import inspect
+from multiprocessing.reduction import ForkingPickler, AbstractReducer
+
+class ForkingPickler4(ForkingPickler):
+    def __init__(self, *args):
+        if len(args) > 1:
+            args[1] = 2
+        else:
+            args.append(2)
+        super().__init__(*args)
+
+    @classmethod
+    def dumps(cls, obj, protocol=4):
+        return ForkingPickler.dumps(obj, protocol)
+
+
+def dump(obj, file, protocol=4):
+    ForkingPickler4(file, protocol).dump(obj)
+
+
+class Pickle4Reducer(AbstractReducer):
+    ForkingPickler = ForkingPickler4
+    register = ForkingPickler4.register
+    dump = dump
+
+ctx = mp.get_context()
+ctx.reducer = Pickle4Reducer()
 
 def process_scheduler(req_queue,log_format,log_level,log_datefmt):
     logger = logging.getLogger('Worker scheduler')
@@ -30,7 +56,7 @@ def process_scheduler(req_queue,log_format,log_level,log_datefmt):
     logger.info('Worker scheduler started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
+        p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
         p.daemon = False
         p.start()
         processes.append(p)
@@ -38,7 +64,7 @@ def process_scheduler(req_queue,log_format,log_level,log_datefmt):
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
+                p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
                 p.daemon = False
                 p.start()
                 processes[i] = p
@@ -52,7 +78,7 @@ def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
     req_queue = multiprocessing.Queue()
-    p = Process(target=process_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
+    p = mp.Process(target=process_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
     p.start()
     with app.app.app_context():
         current_app.req_queue = req_queue
