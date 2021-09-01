@@ -8,6 +8,7 @@ from nltk import word_tokenize
 from api.utils import term_data
 import multiprocessing as mp
 from multiprocessing.reduction import ForkingPickler, AbstractReducer
+from concurrent.futures import ThreadPoolExecutor
 
 class ForkingPickler4(ForkingPickler):
     def __init__(self, *args):
@@ -149,7 +150,9 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     #lst = manager.list([])
     ctx = mp.get_context()
     ctx.reducer = Pickle4Reducer()
-    pool = mp.Pool(processes=5)
+    #pool = mp.Pool(processes=5)
+    executer = ThreadPoolExecutor(max_workers = 3)
+    #results = executor.map(square, values)
     args = []
     for label in label_frequency_dict.keys():
         classes.append(label)
@@ -162,7 +165,10 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
             'logger': logger
         })
     #print('ss')
-    results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
+    results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
+    #results = pool.imap(_compute_chi2_top_feature_obj, tuple(args))
+    #pool.close()
+    #pool.join()
     #print('ss1')
 
     logger.info("Pool calc done")
