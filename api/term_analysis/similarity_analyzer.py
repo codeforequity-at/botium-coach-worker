@@ -66,7 +66,7 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
                     "example1": [],#[utterance1],
                     "name2": [],#[intent2],
                     "example2": [],#[utterance2],
-                    "similarity": [][],#[score],
+                    "similarity": [],#[score],
                 }
             )
             logger.info('Index done %s', index)
