@@ -6,10 +6,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import multiprocessing as mp
 
 def pd_frame(obj):
-    workspace_pd = obj["workspace_pd"]
+    #workspace_pd = obj["workspace_pd"]
     index = obj["index"]
     logger = obj["logger"]
-    cos_sim_score_matrix = obj["cos_sim_score_matrix"]
+    #cos_sim_score_matrix = obj["cos_sim_score_matrix"]
     if (
         workspace_pd["intent"].iloc[index[0]]
         != workspace_pd["intent"].iloc[index[1]]
@@ -66,11 +66,11 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     for index in similar_utterance_index:
         logger.info('index %s of %s', index, len(similar_utterance_index))
         task_data.append({
-            "workspace_pd": workspace_pd,
             "index": index,
-            "cos_sim_score_matrix": cos_sim_score_matrix,
             "logger": logger
         })
+    global workspace_pd
+    global cos_sim_score_matrix
     #temp_pds = as_completed(task_data)#executer.map(pd_frame, tuple(task_data))
     temp_pds = pool.imap_unordered(pd_frame, task_data)
     for temp_pd in temp_pds:
