@@ -65,9 +65,9 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     #executer = ThreadPoolExecutor(max_workers = 100)
     mgr = mp.Manager()
     ns = mgr.Namespace()
-    pool = mp.Pool(5)
     ns.workspace_pd = workspace_pd
     ns.cos_sim_score_matrix = cos_sim_score_matrix
+    pool = mp.Pool(5)
     for index in similar_utterance_index:
         logger.info('index %s of %s', index, len(similar_utterance_index))
         task_data.append({
