@@ -60,7 +60,7 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
 
     logger.info('chi2 similarity: post processing')
     task_data = []
-    executer = ThreadPoolExecutor(max_workers = 10)
+    executer = ThreadPoolExecutor(max_workers = 100)
     for index in similar_utterance_index:
         logger.info('index %s of %s', index, len(similar_utterance_index))
         task_data.append(executer.submit(pd_frame, {
