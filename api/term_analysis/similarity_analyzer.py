@@ -5,34 +5,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import multiprocessing as mp
 
-def pd_frame(obj):
-    #workspace_pd = obj["workspace_pd"]
-    index = obj["index"]
-    logger = obj["logger"]
-    #cos_sim_score_matrix = obj["cos_sim_score_matrix"]
-    if (
-        global_workspace_pd["intent"].iloc[index[0]]
-        != global_workspace_pd["intent"].iloc[index[1]]
-    ):
-        logger.info('Index started %s', index)
-        intent1 = global_workspace_pd["intent"].iloc[index[0]]
-        utterance1 = global_workspace_pd["utterance"].iloc[index[0]]
-        intent2 = global_workspace_pd["intent"].iloc[index[1]]
-        utterance2 = global_workspace_pd["utterance"].iloc[index[1]]
-        score = global_cos_sim_score_matrix[index[0], index[1]]
-        temp_pd = pd.DataFrame(
-            {
-                "name1": [intent1],
-                "example1": [utterance1],
-                "name2": [intent2],
-                "example2": [utterance2],
-                "similarity": [score],
-            }
-        )
-        logger.info('Index done %s', index)
-        return temp_pd
-    return None
-
 def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     """
     Analyze the test workspace and find out similar utterances that belongs to different intent
@@ -84,6 +56,34 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     logger.info('chi2 similarity: sorting by similarity')
     similarity_df_sorted = similar_utterance_pd.sort_values(by=["similarity"], ascending=False)
     return [ { 'name1': name1, 'example1': example1, 'name2': name2, 'example2': example2, 'similarity': similarity } for name1, example1, name2, example2, similarity in zip(similarity_df_sorted['name1'], similarity_df_sorted['example1'], similarity_df_sorted['name2'], similarity_df_sorted['example2'], similarity_df_sorted['similarity'])]
+
+def pd_frame(obj):
+    #workspace_pd = obj["workspace_pd"]
+    index = obj["index"]
+    logger = obj["logger"]
+    #cos_sim_score_matrix = obj["cos_sim_score_matrix"]
+    if (
+        global_workspace_pd["intent"].iloc[index[0]]
+        != global_workspace_pd["intent"].iloc[index[1]]
+    ):
+        logger.info('Index started %s', index)
+        intent1 = global_workspace_pd["intent"].iloc[index[0]]
+        utterance1 = global_workspace_pd["utterance"].iloc[index[0]]
+        intent2 = global_workspace_pd["intent"].iloc[index[1]]
+        utterance2 = global_workspace_pd["utterance"].iloc[index[1]]
+        score = global_cos_sim_score_matrix[index[0], index[1]]
+        temp_pd = pd.DataFrame(
+            {
+                "name1": [intent1],
+                "example1": [utterance1],
+                "name2": [intent2],
+                "example2": [utterance2],
+                "similarity": [score],
+            }
+        )
+        logger.info('Index done %s', index)
+        return temp_pd
+    return None
 
 def _calculate_cosine_similarity(logger, workspace_bow):
     """
