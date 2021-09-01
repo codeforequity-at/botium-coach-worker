@@ -11,15 +11,15 @@ def pd_frame(obj):
     logger = obj["logger"]
     #cos_sim_score_matrix = obj["cos_sim_score_matrix"]
     if (
-        workspace_pd["intent"].iloc[index[0]]
-        != workspace_pd["intent"].iloc[index[1]]
+        global_workspace_pd["intent"].iloc[index[0]]
+        != global_workspace_pd["intent"].iloc[index[1]]
     ):
         logger.info('Index started %s', index)
-        intent1 = workspace_pd["intent"].iloc[index[0]]
-        utterance1 = workspace_pd["utterance"].iloc[index[0]]
-        intent2 = workspace_pd["intent"].iloc[index[1]]
-        utterance2 = workspace_pd["utterance"].iloc[index[1]]
-        score = cos_sim_score_matrix[index[0], index[1]]
+        intent1 = global_workspace_pd["intent"].iloc[index[0]]
+        utterance1 = global_workspace_pd["utterance"].iloc[index[0]]
+        intent2 = global_workspace_pd["intent"].iloc[index[1]]
+        utterance2 = global_workspace_pd["utterance"].iloc[index[1]]
+        score = global_cos_sim_score_matrix[index[0], index[1]]
         temp_pd = pd.DataFrame(
             {
                 "name1": [intent1],
@@ -69,8 +69,10 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             "index": index,
             "logger": logger
         })
-    global workspace_pd
-    global cos_sim_score_matrix
+    global global_workspace_pd
+    global global_cos_sim_score_matrix
+    global_workspace_pd = workspace_pd
+    global_cos_sim_score_matrix = cos_sim_score_matrix
     #temp_pds = as_completed(task_data)#executer.map(pd_frame, tuple(task_data))
     temp_pds = pool.imap_unordered(pd_frame, task_data)
     for temp_pd in temp_pds:
