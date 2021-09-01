@@ -122,7 +122,7 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     classes = list()
     chi_unigrams = list()
     chi_bigrams = list()
-    pool = Pool(5)
+    pool = Pool(processes=5, context='spawn')
     args = []
     for label in label_frequency_dict.keys():
         classes.append(label)
