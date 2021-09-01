@@ -96,9 +96,9 @@ def _compute_chi2_top_feature(
     return deduplicated_unigram, deduplicated_bigram
 
 def _compute_chi2_top_feature_obj(obj):
-    return _compute_chi2_top_feature(
+    obj['list'].append(_compute_chi2_top_feature(
         obj['logger'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
-    )
+    ))
 
 def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.05):
     """
@@ -122,7 +122,9 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     classes = list()
     chi_unigrams = list()
     chi_bigrams = list()
-    pool = mp.get_context('spawn').Pool(processes=5)
+    manager = mp.Manager()
+    lst = manager.list([])
+    pool = mp.Pool(processes=5)
     args = []
     for label in label_frequency_dict.keys():
         classes.append(label)
@@ -132,10 +134,11 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
             'vectorizer': vectorizer,
             'label': label,
             'significance_level': significance_level,
-            'logger': logger
+            'logger': logger,
+            'list': lst
         })
     #print('ss')
-    results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
+    pool.map(_compute_chi2_top_feature_obj, tuple(args))
     #print('ss1')
 
     logger.info("Pool calc done")
