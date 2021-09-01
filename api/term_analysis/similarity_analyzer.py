@@ -3,7 +3,7 @@ import pandas as pd
 
 from sklearn.feature_extraction.text import CountVectorizer
 
-def ambiguous_examples_analysis(workspace_pd, threshold=0.7):
+def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     """
     Analyze the test workspace and find out similar utterances that belongs to different intent
     :param workspace_pd: pandas dataframe in format of [utterance,label]
@@ -11,11 +11,16 @@ def ambiguous_examples_analysis(workspace_pd, threshold=0.7):
     :return: pands dataframe in format of ['Intent1', 'Utterance1', 'Intent2', 'Utterance2',
                                            'similarity score']
     """
+
+    logger.info('chi2 similarity: create the feature matrix')
     # first create the feature matrix
     vectorizer = CountVectorizer(ngram_range=(1, 2))
     workspace_bow = vectorizer.fit_transform(workspace_pd["utterance"]).todense()
+
+    logger.info('chi2 similarity: calculate_cosine_similarity')
     cos_sim_score_matrix = _calculate_cosine_similarity(workspace_bow)
 
+    logger.info('chi2 similarity: remove the lower triangle of the matrix and apply threshold')
     # remove the lower triangle of the matrix and apply threshold
     similar_utterance_index = np.argwhere(
         (cos_sim_score_matrix - np.tril(cos_sim_score_matrix)) > threshold
@@ -24,6 +29,7 @@ def ambiguous_examples_analysis(workspace_pd, threshold=0.7):
         columns=["name1", "example1", "name2", "example2", "similarity"]
     )
 
+    logger.info('chi2 similarity: post processing')
     for index in similar_utterance_index:
         if (
             workspace_pd["intent"].iloc[index[0]]

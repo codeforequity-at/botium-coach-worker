@@ -81,7 +81,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
 
                 logger.info('%s: Running chi2 similarity analysis', worker_name)
-                chi2_similarity = [] #similarity_analyzer.ambiguous_examples_analysis(flattenedForChi2, filter['minsimilarity'])
+                chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(logger, flattenedForChi2, filter['minsimilarity'])
                 logger.info('%s: Returning results', worker_name)
 
                 logger.info('%s: Sending results to %s', worker_name, boxEndpoint)
