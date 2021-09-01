@@ -148,7 +148,7 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     #manager = mp.Manager()
     #lst = manager.list([])
     ctx = mp.get_context()
-    ctx.reducer = pickle4reducer.Pickle4Reducer()
+    ctx.reducer = Pickle4Reducer()
     pool = mp.Pool(processes=5)
     args = []
     for label in label_frequency_dict.keys():
