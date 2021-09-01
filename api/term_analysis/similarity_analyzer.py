@@ -62,11 +62,11 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             score = cos_sim_score_matrix[index[0], index[1]]
             temp_pd = pd.DataFrame(
                 {
-                    "name1": [intent1],
-                    "example1": [utterance1],
-                    "name2": [intent2],
-                    "example2": [utterance2],
-                    "similarity": [score],
+                    "name1": [],#[intent1],
+                    "example1": [],#[utterance1],
+                    "name2": [],#[intent2],
+                    "example2": [],#[utterance2],
+                    "similarity": [][],#[score],
                 }
             )
             logger.info('Index done %s', index)
