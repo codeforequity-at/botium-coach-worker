@@ -50,10 +50,10 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
         #    "cos_sim_score_matrix": cos_sim_score_matrix,
         #    "logger": logger
         #})
-        if (
-            workspace_pd["intent"].iloc[index[0]]
-            != workspace_pd["intent"].iloc[index[1]]
-        ):
+        if True: #(
+            #workspace_pd["intent"].iloc[index[0]]
+            #!= workspace_pd["intent"].iloc[index[1]]
+            #):
             logger.info('Index started %s', index)
             #intent1 = workspace_pd["intent"].iloc[index[0]]
             #utterance1 = workspace_pd["utterance"].iloc[index[0]]
