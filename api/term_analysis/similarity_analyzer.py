@@ -5,10 +5,13 @@ from sklearn.feature_extraction.text import CountVectorizer
 from concurrent.futures import ThreadPoolExecutor
 
 def pd_frame(obj):
+    workspace_pd = obj["workspace_pd"]
+    index = obj["index"]
     if (
         workspace_pd["intent"].iloc[index[0]]
         != workspace_pd["intent"].iloc[index[1]]
     ):
+        logger.info('Index started %s', index)
         intent1 = workspace_pd["intent"].iloc[index[0]]
         utterance1 = workspace_pd["utterance"].iloc[index[0]]
         intent2 = workspace_pd["intent"].iloc[index[1]]
@@ -23,6 +26,7 @@ def pd_frame(obj):
                 "similarity": [score],
             }
         )
+        logger.info('Index done %s', index)
         return temp_pd
     return None
 
@@ -57,7 +61,8 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     for index in similar_utterance_index:
         task_data.append({
             "workspace_pd": workspace_pd,
-            "index": index
+            "index": index,
+            "logger": logger
         })
     executer = ThreadPoolExecutor(max_workers = 3)
     temp_pds = executer.map(pd_frame, tuple(task_data))
