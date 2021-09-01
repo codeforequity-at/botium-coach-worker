@@ -77,7 +77,7 @@ def create_app():
     logging.basicConfig(format=log_format, level=log_level, datefmt=log_datefmt)
     app = connexion.App(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
-    req_queue = multiprocessing.Queue()
+    req_queue = mp.Queue()
     p = mp.Process(target=process_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
     p.start()
     with app.app.app_context():
