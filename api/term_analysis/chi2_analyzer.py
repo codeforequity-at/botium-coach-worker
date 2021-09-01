@@ -162,7 +162,7 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
             'logger': logger
         })
     #print('ss')
-    results = pool.map(_compute_chi2_top_feature_obj, tuple(args))
+    results = pool.imap(_compute_chi2_top_feature_obj, tuple(args))
     #print('ss1')
 
     logger.info("Pool calc done")
