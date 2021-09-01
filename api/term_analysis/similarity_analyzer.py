@@ -68,7 +68,7 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             "cos_sim_score_matrix": cos_sim_score_matrix,
             "logger": logger
         })
-    executer = ThreadPoolExecutor(max_workers = 3)
+    executer = ThreadPoolExecutor(max_workers = 10)
     temp_pds = executer.map(pd_frame, tuple(task_data))
     for temp_pd in temp_pds:
         if temp_pd is not None:
