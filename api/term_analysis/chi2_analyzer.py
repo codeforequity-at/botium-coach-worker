@@ -6,7 +6,7 @@ from sklearn.feature_selection import chi2
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk import word_tokenize
 from api.utils import term_data
-from multiprocessing import Pool
+import multiprocessing as mp
 
 def strip_punctuations(utterance: str):
     """
@@ -122,7 +122,7 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     classes = list()
     chi_unigrams = list()
     chi_bigrams = list()
-    pool = Pool(processes=5, context='spawn')
+    pool = mp.get_context('spawn').Pool(processes=5)
     args = []
     for label in label_frequency_dict.keys():
         classes.append(label)
