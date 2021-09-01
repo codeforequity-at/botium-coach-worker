@@ -60,15 +60,15 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             #intent2 = workspace_pd["intent"].iloc[index[1]]
             #utterance2 = workspace_pd["utterance"].iloc[index[1]]
             score = cos_sim_score_matrix[index[0], index[1]]
-            temp_pd = pd.DataFrame(
-                {
-                    "name1": [],#[intent1],
-                    "example1": [],#[utterance1],
-                    "name2": [],#[intent2],
-                    "example2": [],#[utterance2],
-                    "similarity": [],#[score],
-                }
-            )
+            temp_pd = []#pd.DataFrame(
+            #    {
+            #        "name1": [],#[intent1],
+            #        "example1": [],#[utterance1],
+            #        "name2": [],#[intent2],
+            #        "example2": [],#[utterance2],
+            #        "similarity": [],#[score],
+            #    }
+            #)
             logger.info('Index done %s', index)
             temp_pds.append(temp_pd)
     #temp_pds = executer.map(pd_frame, tuple(task_data))
