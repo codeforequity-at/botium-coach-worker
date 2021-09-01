@@ -7,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 def pd_frame(obj):
     workspace_pd = obj["workspace_pd"]
     index = obj["index"]
+    logger = obj["logger"]
     if (
         workspace_pd["intent"].iloc[index[0]]
         != workspace_pd["intent"].iloc[index[1]]
@@ -59,6 +60,7 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     logger.info('chi2 similarity: post processing')
     task_data = []
     for index in similar_utterance_index:
+        logger.info('index %s of %s', index, len(similar_utterance_index))
         task_data.append({
             "workspace_pd": workspace_pd,
             "index": index,
