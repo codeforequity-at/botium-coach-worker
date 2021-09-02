@@ -4,14 +4,6 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-def pd_frame(obj):
-    workspace_pd = obj["workspace_pd"]
-    index = obj["index"]
-    logger = obj["logger"]
-    cos_sim_score_matrix = obj["cos_sim_score_matrix"]
-
-    return None
-
 def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     """
     Analyze the test workspace and find out similar utterances that belongs to different intent
