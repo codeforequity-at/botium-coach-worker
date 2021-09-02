@@ -17,6 +17,20 @@ from flask import current_app
 import torch
 import requests
 
+from functools import singledispatch
+
+
+@singledispatch
+def to_serializable(val):
+    """Used by default."""
+    return str(val)
+
+
+@to_serializable.register(np.float32)
+def ts_float32(val):
+    """Used if *val* is an instance of numpy.float32."""
+    return np.float64(val)
+
 maxUtterancesForEmbeddings = -1
 if 'COACH_MAX_UTTERANCES_FOR_EMBEDDINGS' in os.environ:
   maxUtterancesForEmbeddings = int(os.environ['COACH_MAX_UTTERANCES_FOR_EMBEDDINGS'])
@@ -96,8 +110,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                       'chi2_similarity': chi2_similarity
                     }
                 }
-                logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
-                res = requests.post(boxEndpoint, json = response_data)
+                #logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
+                header = {"content-type": "application/json"}
+                res = requests.post(boxEndpoint, headers = header, data = json.dumps(response_data, default=to_serializable))
                 logger.info('%s: ' + str(res), worker_name)
                 calc_count += 1
             except Exception as e:

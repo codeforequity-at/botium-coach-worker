@@ -104,4 +104,4 @@ def _calculate_cosine_similarity(logger, workspace_bow):
     logger.info('2')
     cosine_similarity_matrix = workspace_bow.dot(np.transpose(workspace_bow))
     logger.info('3')
-    return np.asarray(cosine_similarity_matrix, np.float64)
+    return cosine_similarity_matrix
