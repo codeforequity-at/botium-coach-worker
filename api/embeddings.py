@@ -16,6 +16,7 @@ from api.utils import pandas_utils
 from flask import current_app
 import torch
 import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from functools import singledispatch
 
@@ -38,7 +39,13 @@ maxCalcCount = 100
 if 'COACH_MAX_CALCULATIONS_PER_WORKER' in os.environ:
   maxCalcCount = int(os.environ['COACH_MAX_CALCULATIONS_PER_WORKER'])
 
-def cosine_similarity_worker(intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2):
+def cosine_similarity_worker(w):
+  intent_1 = w[0]
+  phrase_1 = w[1]
+  embedd_1 = w[2]
+  intent_2 = w[3]
+  phrase_2 = w[4]
+  embedd_2 = w[5]
   similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
   return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
@@ -217,7 +224,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
 
                 # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
-                data = [cosine_similarity_worker(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers]
+                executer = ThreadPoolExecutor(max_workers = os.environ.get('COACH_THREADS_CHI2_ANALYSIS', 3))
+                data = list(executer.map(cosine_similarity_worker, tuple(workers)))
 
                 logger.info('%s: Ready with cosine similarity for %s pairs, preparing results', worker_name, len(data))
 
