@@ -104,13 +104,12 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     "status": "finished",
                     "coachSessionId": coachSessionId,
                     "output": {
-                      'chi2': [], #chi2,
-                      'chi2_ambiguous_unigrams': [], #chi2_ambiguous_unigrams,
-                      'chi2_ambiguous_bigrams': [], #chi2_ambiguous_bigrams,
+                      'chi2': chi2,
+                      'chi2_ambiguous_unigrams': chi2_ambiguous_unigrams,
+                      'chi2_ambiguous_bigrams': chi2_ambiguous_bigrams,
                       'chi2_similarity': chi2_similarity
                     }
                 }
-                #logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
                 header = {"content-type": "application/json"}
                 res = requests.post(boxEndpoint, headers = header, data = json.dumps(response_data, default=to_serializable))
                 logger.info('%s: ' + str(res), worker_name)
@@ -288,5 +287,5 @@ def calculate_embeddings(embeddingsRequest):
     'status': 'queued',
     'coachSessionId': coachSessionId,
     'boxEndpoint': boxEndpoint,
-    'workerEndpoint': os.environ['COACH_HOSTNAME']
+    'workerEndpoint': os.environ.get('COACH_HOSTNAME', '')
   }

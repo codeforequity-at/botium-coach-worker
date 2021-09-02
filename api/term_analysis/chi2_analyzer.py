@@ -7,30 +7,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk import word_tokenize
 from api.utils import term_data
 import multiprocessing as mp
-from multiprocessing.reduction import ForkingPickler, AbstractReducer
 from concurrent.futures import ThreadPoolExecutor
-
-class ForkingPickler4(ForkingPickler):
-    def __init__(self, *args):
-        if len(args) > 1:
-            args[1] = 2
-        else:
-            args.append(2)
-        super().__init__(*args)
-
-    @classmethod
-    def dumps(cls, obj, protocol=4):
-        return ForkingPickler.dumps(obj, protocol)
-
-
-def dump(obj, file, protocol=4):
-    ForkingPickler4(file, protocol).dump(obj)
-
-
-class Pickle4Reducer(AbstractReducer):
-    ForkingPickler = ForkingPickler4
-    register = ForkingPickler4.register
-    dump = dump
 
 def strip_punctuations(utterance: str):
     """
@@ -146,13 +123,7 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     classes = list()
     chi_unigrams = list()
     chi_bigrams = list()
-    #manager = mp.Manager()
-    #lst = manager.list([])
-    #ctx = mp.get_context()
-    #ctx.reducer = Pickle4Reducer()
-    #pool = mp.Pool(processes=5)
-    executer = ThreadPoolExecutor(max_workers = 3)
-    #results = executor.map(square, values)
+    executer = ThreadPoolExecutor(max_workers = os.environ.get('COACH_THREADS_CHI2_ANALYSIS', 3))
     args = []
     results = []
     for label in label_frequency_dict.keys():
@@ -165,17 +136,7 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
             'significance_level': significance_level,
             'logger': logger
         })
-        #results.append(_compute_chi2_top_feature(
-        #    logger, features, labels, vectorizer, label, significance_level
-        #))
-    #print('ss')
     results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
-    #results = pool.imap(_compute_chi2_top_feature_obj, tuple(args))
-    #pool.close()
-    #pool.join()
-    #print('ss1')
-
-    logger.info("Pool calc done")
 
     for r in results:
         unigrams, bigrams = r

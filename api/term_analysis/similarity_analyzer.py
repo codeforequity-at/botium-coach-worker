@@ -34,22 +34,12 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     similar_utterance_index = np.argwhere(
         (cos_sim_score_matrix - np.tril(cos_sim_score_matrix)) > threshold
     )
-    #similar_utterance_pd = pd.DataFrame(
-    #    columns=["name1", "example1", "name2", "example2", "similarity"]
-    #)
 
     logger.info('chi2 similarity: post processing')
     task_data = []
     executer = ThreadPoolExecutor(max_workers = 3)
     temp_pds = []
     for index in similar_utterance_index:
-        #logger.info('index %s of %s', index, len(similar_utterance_index))
-        #task_data.append({
-        #    "workspace_pd": workspace_pd,
-        #    "index": index,
-        #    "cos_sim_score_matrix": cos_sim_score_matrix,
-        #    "logger": logger
-        #})
         if (
             workspace_pd["intent"].iat[index[0]]
             != workspace_pd["intent"].iat[index[1]]
@@ -68,23 +58,8 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
                 "similarity": [score],
             }
             temp_pds.append(temp_pd)
-            #pd.DataFrame(
-            #    {
-            #        "name1": [],#[intent1],
-            #        "example1": [],#[utterance1],
-            #        "name2": [],#[intent2],
-            #        "example2": [],#[utterance2],
-            #        "similarity": [],#[score],
-            #    }
-            #)
             logger.info('Index done %s', index)
-    #temp_pds = executer.map(pd_frame, tuple(task_data))
     similar_utterance_pd = pd.DataFrame(temp_pds, columns=["name1", "example1", "name2", "example2", "similarity"])
-    #for temp_pd in temp_pds:
-    #    if temp_pd is not None:
-    #        similar_utterance_pd = similar_utterance_pd.append(
-    #            temp_pd, ignore_index=True
-    #        )
 
     logger.info('chi2 similarity: sorting by similarity')
     similarity_df_sorted = similar_utterance_pd.sort_values(by=["similarity"], ascending=False)
@@ -97,10 +72,9 @@ def _calculate_cosine_similarity(logger, workspace_bow):
     :return: cosine_similarity_matrix
     """
     # normalized and calculate cosine similarity
-    logger.info('1')
+    logger.info('Calculating cosine similarity: normalizing ...')
     workspace_bow = np.asarray(workspace_bow, np.float32)
     workspace_bow = workspace_bow / np.linalg.norm(workspace_bow, axis=1, keepdims=True)
-    logger.info('2')
+    logger.info('Calculating cosine similarity: dot product ...')
     cosine_similarity_matrix = workspace_bow.dot(np.transpose(workspace_bow))
-    logger.info('3')
     return cosine_similarity_matrix
