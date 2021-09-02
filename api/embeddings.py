@@ -225,7 +225,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.info('%s: Running cosine similarity for %s examples', worker_name, len(flattenedForCosine))
 
                 # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
-                executer = ThreadPoolExecutor(max_workers = os.environ.get('COACH_THREADS_CHI2_ANALYSIS', 3))
+                executer = ThreadPoolExecutor(max_workers = os.environ.get('COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
                 data = list(executer.map(cosine_similarity_worker, tuple(workers)))
 
                 logger.info('%s: Ready with cosine similarity for %s pairs, preparing results', worker_name, len(data))
