@@ -10,26 +10,6 @@ def pd_frame(obj):
     logger = obj["logger"]
     cos_sim_score_matrix = obj["cos_sim_score_matrix"]
 
-    if (
-        workspace_pd["intent"].iat[index[0]]
-        != workspace_pd["intent"].iat[index[1]]
-    ):
-        logger.info('Index started %s', index)
-        intent1 = workspace_pd["intent"].iat[index[0]]
-        utterance1 = workspace_pd["utterance"].iat[index[0]]
-        intent2 = workspace_pd["intent"].iat[index[1]]
-        utterance2 = workspace_pd["utterance"].iat[index[1]]
-        score = cos_sim_score_matrix[index[0], index[1]]
-        temp_pd = {
-            "name1": [intent1],
-            "example1": [utterance1],
-            "name2": [intent2],
-            "example2": [utterance2],
-            "similarity": [score],
-        }
-        logger.info('Index done %s', index)
-        return temp_pd
-
     return None
 
 def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
@@ -63,15 +43,31 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     executer = ThreadPoolExecutor(max_workers = 3)
     temp_pds = []
     for index in similar_utterance_index:
-        logger.info('index %s of %s', index, len(similar_utterance_index))
-        task_data.append({
-            "workspace_pd": workspace_pd,
-            "index": index,
-            "cos_sim_score_matrix": cos_sim_score_matrix,
-            "logger": logger
-        })
-
-            #temp_pds.append(temp_pd)
+        #logger.info('index %s of %s', index, len(similar_utterance_index))
+        #task_data.append({
+        #    "workspace_pd": workspace_pd,
+        #    "index": index,
+        #    "cos_sim_score_matrix": cos_sim_score_matrix,
+        #    "logger": logger
+        #})
+        if (
+            workspace_pd["intent"].iat[index[0]]
+            != workspace_pd["intent"].iat[index[1]]
+        ):
+            logger.info('Index started %s', index)
+            intent1 = workspace_pd["intent"].iat[index[0]]
+            utterance1 = workspace_pd["utterance"].iat[index[0]]
+            intent2 = workspace_pd["intent"].iat[index[1]]
+            utterance2 = workspace_pd["utterance"].iat[index[1]]
+            score = cos_sim_score_matrix[index[0], index[1]]
+            temp_pd = {
+                "name1": [intent1],
+                "example1": [utterance1],
+                "name2": [intent2],
+                "example2": [utterance2],
+                "similarity": [score],
+            }
+            temp_pds.append(temp_pd)
             #pd.DataFrame(
             #    {
             #        "name1": [],#[intent1],
@@ -81,9 +77,10 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             #        "similarity": [],#[score],
             #    }
             #)
-    temp_pds = list(executer.map(pd_frame, tuple(task_data)))
+            logger.info('Index done %s', index)
+    #temp_pds = executer.map(pd_frame, tuple(task_data))
     similar_utterance_pd = pd.DataFrame(temp_pds, columns=["name1", "example1", "name2", "example2", "similarity"])
-    f#or temp_pd in temp_pds:
+    #for temp_pd in temp_pds:
     #    if temp_pd is not None:
     #        similar_utterance_pd = similar_utterance_pd.append(
     #            temp_pd, ignore_index=True
