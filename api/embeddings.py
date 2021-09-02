@@ -277,7 +277,7 @@ def ping():
 def calculate_embeddings(embeddingsRequest):
   with current_app.app_context():
       req_queue = current_app.req_queue
-      #req_queue.put((embeddingsRequest, "calculate_embeddings"))
+      req_queue.put((embeddingsRequest, "calculate_embeddings"))
       req_queue.put((embeddingsRequest, "calculate_chi2"))
 
   coachSessionId = embeddingsRequest['coachSessionId']
