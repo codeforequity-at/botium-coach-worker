@@ -148,8 +148,8 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     chi_bigrams = list()
     #manager = mp.Manager()
     #lst = manager.list([])
-    ctx = mp.get_context()
-    ctx.reducer = Pickle4Reducer()
+    #ctx = mp.get_context()
+    #ctx.reducer = Pickle4Reducer()
     #pool = mp.Pool(processes=5)
     executer = ThreadPoolExecutor(max_workers = 3)
     #results = executor.map(square, values)
@@ -157,19 +157,19 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     results = []
     for label in label_frequency_dict.keys():
         classes.append(label)
-        #args.append({
-        #    'features': features,
-        #    'labels': labels,
-        #    'vectorizer': vectorizer,
-        #    'label': label,
-        #    'significance_level': significance_level,
-        #    'logger': logger
-        #})
-        results.append(_compute_chi2_top_feature(
-            logger, features, labels, vectorizer, label, significance_level
-        ))
+        args.append({
+            'features': features,
+            'labels': labels,
+            'vectorizer': vectorizer,
+            'label': label,
+            'significance_level': significance_level,
+            'logger': logger
+        })
+        #results.append(_compute_chi2_top_feature(
+        #    logger, features, labels, vectorizer, label, significance_level
+        #))
     #print('ss')
-    #results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
+    results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
     #results = pool.imap(_compute_chi2_top_feature_obj, tuple(args))
     #pool.close()
     #pool.join()
