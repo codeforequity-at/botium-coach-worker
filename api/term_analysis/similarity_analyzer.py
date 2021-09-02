@@ -28,15 +28,12 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     )
 
     logger.info('chi2 similarity: post processing')
-    task_data = []
-    executer = ThreadPoolExecutor(max_workers = 3)
     temp_pds = []
     for index in similar_utterance_index:
         if (
             workspace_pd["intent"].iat[index[0]]
             != workspace_pd["intent"].iat[index[1]]
         ):
-            logger.info('Index started %s', index)
             intent1 = workspace_pd["intent"].iat[index[0]]
             utterance1 = workspace_pd["utterance"].iat[index[0]]
             intent2 = workspace_pd["intent"].iat[index[1]]
@@ -50,7 +47,6 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
                 "similarity": [score],
             }
             temp_pds.append(temp_pd)
-            logger.info('Index done %s', index)
     similar_utterance_pd = pd.DataFrame(temp_pds, columns=["name1", "example1", "name2", "example2", "similarity"])
 
     logger.info('chi2 similarity: sorting by similarity')
