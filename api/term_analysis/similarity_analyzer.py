@@ -34,9 +34,9 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
     similar_utterance_index = np.argwhere(
         (cos_sim_score_matrix - np.tril(cos_sim_score_matrix)) > threshold
     )
-    similar_utterance_pd = pd.DataFrame(
-        columns=["name1", "example1", "name2", "example2", "similarity"]
-    )
+    #similar_utterance_pd = pd.DataFrame(
+    #    columns=["name1", "example1", "name2", "example2", "similarity"]
+    #)
 
     logger.info('chi2 similarity: post processing')
     task_data = []
@@ -60,7 +60,15 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             intent2 = workspace_pd["intent"].iat[index[1]]
             utterance2 = workspace_pd["utterance"].iat[index[1]]
             score = cos_sim_score_matrix[index[0], index[1]]
-            temp_pd = []#pd.DataFrame(
+            temp_pd = {
+                "name1": [intent1],
+                "example1": [utterance1],
+                "name2": [intent2],
+                "example2": [utterance2],
+                "similarity": [score],
+            }
+            temp_pds.append(temp_pd)
+            #pd.DataFrame(
             #    {
             #        "name1": [],#[intent1],
             #        "example1": [],#[utterance1],
@@ -72,11 +80,12 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             logger.info('Index done %s', index)
             temp_pds.append(temp_pd)
     #temp_pds = executer.map(pd_frame, tuple(task_data))
-    for temp_pd in temp_pds:
-        if temp_pd is not None:
-            similar_utterance_pd = similar_utterance_pd.append(
-                temp_pd, ignore_index=True
-            )
+    similar_utterance_pd = pd.DataFrame(temp_pds.items(), columns=["name1", "example1", "name2", "example2", "similarity"])
+    #for temp_pd in temp_pds:
+    #    if temp_pd is not None:
+    #        similar_utterance_pd = similar_utterance_pd.append(
+    #            temp_pd, ignore_index=True
+    #        )
 
     logger.info('chi2 similarity: sorting by similarity')
     similarity_df_sorted = similar_utterance_pd.sort_values(by=["similarity"], ascending=False)
