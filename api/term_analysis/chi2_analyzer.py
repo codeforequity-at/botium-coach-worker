@@ -154,18 +154,22 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
     executer = ThreadPoolExecutor(max_workers = 3)
     #results = executor.map(square, values)
     args = []
+    results = []
     for label in label_frequency_dict.keys():
         classes.append(label)
-        args.append({
-            'features': features,
-            'labels': labels,
-            'vectorizer': vectorizer,
-            'label': label,
-            'significance_level': significance_level,
-            'logger': logger
-        })
+        #args.append({
+        #    'features': features,
+        #    'labels': labels,
+        #    'vectorizer': vectorizer,
+        #    'label': label,
+        #    'significance_level': significance_level,
+        #    'logger': logger
+        #})
+        results.append(_compute_chi2_top_feature(
+            logger, features, labels, vectorizer, label, significance_level
+        ))
     #print('ss')
-    results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
+    #results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
     #results = pool.imap(_compute_chi2_top_feature_obj, tuple(args))
     #pool.close()
     #pool.join()
