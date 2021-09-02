@@ -93,7 +93,7 @@ def _compute_chi2_top_feature(
         if bigram not in deduplicated_bigram:
             deduplicated_bigram.append(bigram)
 
-    logger.info("compute_chi2_top_feature done for label %s", cls)
+    logger.info("%s: compute_chi2_top_feature done for label %s", worker_name, cls)
 
     return deduplicated_unigram, deduplicated_bigram
 
