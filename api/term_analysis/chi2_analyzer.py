@@ -52,7 +52,7 @@ def _preprocess_chi2(workspace_pd):
 
 
 def _compute_chi2_top_feature(
-    logger, features, labels, vectorizer, cls, significance_level=0.05
+    logger, worker_name, features, labels, vectorizer, cls, significance_level=0.05
 ):
     """
     Perform chi2 analysis, punctuation filtering and deduplication
@@ -99,7 +99,7 @@ def _compute_chi2_top_feature(
 
 def _compute_chi2_top_feature_obj(obj):
     return _compute_chi2_top_feature(
-        obj['logger'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
+        obj['logger'], obj['worker_name'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
     )
 
 def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significance_level=0.05):
@@ -135,7 +135,8 @@ def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significa
             'vectorizer': vectorizer,
             'label': label,
             'significance_level': significance_level,
-            'logger': logger
+            'logger': logger,
+            'worker_name': worker_name
         })
     results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
 
