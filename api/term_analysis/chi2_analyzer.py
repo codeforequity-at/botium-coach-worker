@@ -65,11 +65,11 @@ def _compute_chi2_top_feature(
     :return deduplicated_bigram:
     """
 
-    logger.info("Pool calculation agent started for label %s", cls)
+    logger.info("%s: Pool calculation agent started for label %s", worker_name, cls)
 
     features_chi2, pval = chi2(features, labels == cls)
 
-    logger.info("Chi2 calculated for label %s", cls)
+    logger.info("%s: Chi2 calculated for label %s", worker_name, cls)
 
     feature_names = np.array(vectorizer.get_feature_names())
 
@@ -102,7 +102,7 @@ def _compute_chi2_top_feature_obj(obj):
         obj['logger'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
     )
 
-def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.05):
+def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significance_level=0.05):
     """
     find correlated unigram and bigram of each intent with Chi2 analysis
     :param workspace_pd: dataframe, workspace data
@@ -168,7 +168,7 @@ def get_chi2_analysis(logger, workspace_pd, num_xgrams=5, significance_level=0.0
 
     chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 
-    logger.info("get_chi2_analysis done")
+    logger.info("%s: get_chi2_analysis done", worker_name)
 
     return chi_df, unigram_intent_dict, bigram_intent_dict
 
