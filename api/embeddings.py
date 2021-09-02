@@ -86,13 +86,13 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
                 flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
                 logger.info('%s: Running chi2 analysis', worker_name)
-                #chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(logger, flattenedForChi2, num_xgrams=filter['maxxgrams'])
+                chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(logger, flattenedForChi2, num_xgrams=filter['maxxgrams'])
 
                 logger.info('%s: Running chi2 ambiguous unigrams analysis', worker_name)
-                #chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
+                chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
 
                 logger.info('%s: Running chi2 ambiguous bigrams analysis', worker_name)
-                #chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
+                chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
 
                 logger.info('%s: Running chi2 similarity analysis', worker_name)
                 chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(logger, flattenedForChi2, filter['minsimilarity'])
