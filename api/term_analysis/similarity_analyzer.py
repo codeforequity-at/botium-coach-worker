@@ -78,7 +78,6 @@ def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
             #    }
             #)
             logger.info('Index done %s', index)
-            temp_pds.append(temp_pd)
     #temp_pds = executer.map(pd_frame, tuple(task_data))
     similar_utterance_pd = pd.DataFrame(temp_pds, columns=["name1", "example1", "name2", "example2", "similarity"])
     #for temp_pd in temp_pds:
