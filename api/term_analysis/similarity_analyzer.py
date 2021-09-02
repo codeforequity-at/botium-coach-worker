@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-def ambiguous_examples_analysis(logger, workspace_pd, threshold=0.7):
+def ambiguous_examples_analysis(logger, worker_name, workspace_pd, threshold=0.7):
     """
     Analyze the test workspace and find out similar utterances that belongs to different intent
     :param workspace_pd: pandas dataframe in format of [utterance,label]
