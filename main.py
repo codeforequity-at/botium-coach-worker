@@ -3,7 +3,7 @@ import os
 import connexion
 import logging
 from flask import current_app
-import multiprocessing
+import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
@@ -30,16 +30,16 @@ def process_scheduler(req_queue,log_format,log_level,log_datefmt):
     logger.info('Worker scheduler started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
-        p.daemon = True
+        p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
+        p.daemon = False
         p.start()
         processes.append(p)
     while True:
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
-                p.daemon = True
+                p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
+                p.daemon = False
                 p.start()
                 processes[i] = p
 
@@ -51,8 +51,8 @@ def create_app():
     logging.basicConfig(format=log_format, level=log_level, datefmt=log_datefmt)
     app = connexion.App(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
-    req_queue = multiprocessing.Queue()
-    p = Process(target=process_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
+    req_queue = mp.Queue()
+    p = mp.Process(target=process_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
     p.start()
     with app.app.app_context():
         current_app.req_queue = req_queue

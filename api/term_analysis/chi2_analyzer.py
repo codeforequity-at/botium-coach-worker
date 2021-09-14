@@ -1,4 +1,5 @@
 import re
+import os
 from collections import Counter
 import pandas as pd
 import numpy as np
@@ -6,6 +7,8 @@ from sklearn.feature_selection import chi2
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk import word_tokenize
 from api.utils import term_data
+import multiprocessing as mp
+from concurrent.futures import ThreadPoolExecutor
 
 def strip_punctuations(utterance: str):
     """
@@ -49,7 +52,7 @@ def _preprocess_chi2(workspace_pd):
 
 
 def _compute_chi2_top_feature(
-    features, labels, vectorizer, cls, significance_level=0.05
+    logger, worker_name, features, labels, vectorizer, cls, significance_level=0.05
 ):
     """
     Perform chi2 analysis, punctuation filtering and deduplication
@@ -61,7 +64,12 @@ def _compute_chi2_top_feature(
     :return deduplicated_unigram:
     :return deduplicated_bigram:
     """
+
+    logger.info("%s: Pool calculation agent started for label %s", worker_name, cls)
+
     features_chi2, pval = chi2(features, labels == cls)
+
+    logger.info("%s: Chi2 calculated for label %s", worker_name, cls)
 
     feature_names = np.array(vectorizer.get_feature_names())
 
@@ -85,9 +93,16 @@ def _compute_chi2_top_feature(
         if bigram not in deduplicated_bigram:
             deduplicated_bigram.append(bigram)
 
+    logger.info("%s: compute_chi2_top_feature done for label %s", worker_name, cls)
+
     return deduplicated_unigram, deduplicated_bigram
 
-def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
+def _compute_chi2_top_feature_obj(obj):
+    return _compute_chi2_top_feature(
+        obj['logger'], obj['worker_name'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
+    )
+
+def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significance_level=0.05):
     """
     find correlated unigram and bigram of each intent with Chi2 analysis
     :param workspace_pd: dataframe, workspace data
@@ -109,12 +124,24 @@ def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
     classes = list()
     chi_unigrams = list()
     chi_bigrams = list()
+    executer = ThreadPoolExecutor(max_workers = os.environ.get('COACH_THREADS_CHI2_ANALYSIS', 3))
+    args = []
+    results = []
     for label in label_frequency_dict.keys():
-
-        unigrams, bigrams = _compute_chi2_top_feature(
-            features, labels, vectorizer, label, significance_level
-        )
         classes.append(label)
+        args.append({
+            'features': features,
+            'labels': labels,
+            'vectorizer': vectorizer,
+            'label': label,
+            'significance_level': significance_level,
+            'logger': logger,
+            'worker_name': worker_name
+        })
+    results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
+
+    for r in results:
+        unigrams, bigrams = r
 
         if unigrams:
             chi_unigrams.append(unigrams[-N:])
@@ -141,6 +168,8 @@ def get_chi2_analysis(workspace_pd, num_xgrams=5, significance_level=0.05):
                 bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
 
     chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
+
+    logger.info("%s: get_chi2_analysis done", worker_name)
 
     return chi_df, unigram_intent_dict, bigram_intent_dict
 
