@@ -3,10 +3,10 @@ services:
   coach:
     build:
       context: .
-    image: botium/botium-coach-worker:latest
+    image: botium/botium-coach-worker:develop
     restart: always
     ports:
      - "4002:8080"
     environment:
       WEB_CONCURRENCY: 1
-
+      COACH_DEV_BOX_ENDPOINT: "http://192.168.0.143:4000/api/coach"
