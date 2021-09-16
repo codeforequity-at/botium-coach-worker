@@ -17,6 +17,7 @@ from flask import current_app
 import torch
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
 
 from functools import singledispatch
 
@@ -61,14 +62,78 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
     calc_count = 0
     while calc_count < maxCalcCount:
         embeddingsRequest, method = req_queue.get()
-        logger.debug(json.dumps(embeddingsRequest, indent=2))
-        coachSessionId = embeddingsRequest['coachSessionId']
+        logger.debug(json.dumps(embeddingsRequest, indent=2, default=to_serializable))
+        coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
         boxEndpoint = embeddingsRequest['boxEndpoint']
-        filter = embeddingsRequest['filter']
-        intents = embeddingsRequest['intents']
-            # for testing purposes on local environment
-        if 'localhost' in boxEndpoint or '127.0.0.1' in boxEndpoint:
-            boxEndpoint = boxEndpoint.replace('3000', '4000')
+        filter = embeddingsRequest['filter'] if 'filter' in embeddingsRequest else None
+        intents = embeddingsRequest['intents'] if 'intents' in embeddingsRequest else None
+        # for testing purposes on local environment
+        if 'COACH_DEV_BOX_ENDPOINT' in os.environ:
+            boxEndpoint = os.environ.get('COACH_DEV_BOX_ENDPOINT')
+        if method == "retryRequest":
+            seconds = int(os.environ.get('COACH_RETRY_REQUEST_DELAY', 10))
+            max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
+            if 'retry' in embeddingsRequest:
+                retry = int(embeddingsRequest["retry"]) + 1
+            else:
+                retry = 1
+            logger.info('%s: next retry request for %s ( %s of %s ) in %s seconds',
+                worker_name,
+                embeddingsRequest["retry_method"],
+                retry,
+                max_retries,
+                seconds
+            )
+            time.sleep(seconds)
+            try:
+                if 'header' in embeddingsRequest.keys():
+                    if 'json' in embeddingsRequest.keys():
+                        res = requests.post(boxEndpoint, headers = embeddingsRequest["header"], json = embeddingsRequest["json"])
+                    else:
+                        res = requests.post(boxEndpoint, headers = embeddingsRequest["header"], data = embeddingsRequest["data"])
+                else:
+                    if 'json' in embeddingsRequest.keys():
+                        res = requests.post(boxEndpoint, json = embeddingsRequest["json"])
+                    else:
+                        res = requests.post(boxEndpoint, data = embeddingsRequest["data"])
+                logger.info('%s: ' + str(res), worker_name)
+                logger.info('%s: retry request for %s ( %s of %s ) to %s successfully sent',
+                    worker_name,
+                    embeddingsRequest["retry_method"],
+                    retry,
+                    max_retries,
+                    boxEndpoint
+                )
+            except Exception as e:
+                logger.info('%s: %s', worker_name, e)
+                if retry <= max_retries:
+                    logger.info('%s: retry request for %s ( %s of %s ) to %s failed, trying again',
+                        worker_name,
+                        embeddingsRequest["retry_method"],
+                        retry,
+                        max_retries,
+                        boxEndpoint
+                    )
+                    retry_request = {
+                        "retry": retry,
+                        "boxEndpoint": boxEndpoint,
+                        "retry_method": embeddingsRequest['retry_method']
+                    }
+                    if 'json' in embeddingsRequest:
+                        retry_request["json"] = embeddingsRequest['json']
+                    else:
+                        retry_request["data"] = embeddingsRequest['data']
+                    if 'header' in embeddingsRequest:
+                        retry_request["header"] = embeddingsRequest['header']
+                    req_queue.put((retry_request, "retryRequest"))
+                else:
+                    logger.info('%s: retry request for %s ( %s of %s ) to %s failed, no tries anymore',
+                        worker_name,
+                        embeddingsRequest["retry_method"],
+                        retry,
+                        max_retries,
+                        boxEndpoint
+                    )
         if method == "calculate_chi2":
             try:
                 if len(intents) == 0:
@@ -84,8 +149,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         }
                     }
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
-                    res = requests.post(boxEndpoint, json = response_data)
-                    logger.info('%s: ' + str(res), worker_name)
+                    try:
+                        res = requests.post(boxEndpoint, json = response_data)
+                        logger.info('%s: ' + str(res), worker_name)
+                    except Exception as e:
+                        req_queue.put(({
+                            "boxEndpoint": boxEndpoint,
+                            "json": response_data,
+                            "retry_method": "calculate_chi2"
+                        }, "retryRequest"))
                     continue
 
                 if not 'maxxgrams' in filter:
@@ -118,8 +190,17 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     }
                 }
                 header = {"content-type": "application/json"}
-                res = requests.post(boxEndpoint, headers = header, data = json.dumps(response_data, default=to_serializable))
-                logger.info('%s: ' + str(res), worker_name)
+                data = json.dumps(response_data, default=to_serializable)
+                try:
+                    res = requests.post(boxEndpoint, headers = header, data = data)
+                    logger.info('%s: ' + str(res), worker_name)
+                except Exception as e:
+                    req_queue.put(({
+                        "boxEndpoint": boxEndpoint,
+                        "header": header,
+                        "data": data,
+                        "retry_method": "calculate_chi2"
+                    }, "retryRequest"))
                 calc_count += 1
             except Exception as e:
                 logger.error('%s: Calculating chi2 failed: ' + str(e), worker_name)
@@ -130,8 +211,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     "err": 'Calculating chi2 failed: ' + str(e)
                 }
                 logger.debug(json.dumps(response_data, indent=2))
-                res = requests.post(boxEndpoint, json = response_data)
-                logger.info('%s: ' + str(res), worker_name)
+                try:
+                    res = requests.post(boxEndpoint, json = response_data)
+                    logger.info('%s: ' + str(res), worker_name)
+                except Exception as e:
+                    req_queue.put(({
+                        "boxEndpoint": boxEndpoint,
+                        "json": response_data,
+                        "retry_method": "calculate_chi2"
+                    }, "retryRequest"))
         if method == "calculate_embeddings":
             try:
                 if len(intents) == 0:
@@ -147,8 +235,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         }
                     }
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
-                    res = requests.post(boxEndpoint, json = response_data)
-                    logger.info('%s: ' + str(res), worker_name)
+                    try:
+                        res = requests.post(boxEndpoint, json = response_data)
+                        logger.info('%s: ' + str(res), worker_name)
+                    except Exception as e:
+                        req_queue.put(({
+                            "boxEndpoint": boxEndpoint,
+                            "json": response_data,
+                            "retry_method": "calculate_embeddings"
+                        }, "retryRequest"))
                     continue
 
                 if not 'maxxgrams' in filter:
@@ -264,8 +359,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     }
                 }
                 logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
-                res = requests.post(boxEndpoint, json = response_data)
-                logger.info('%s: ' + str(res), worker_name)
+                try:
+                    res = requests.post(boxEndpoint, json = response_data)
+                    logger.info('%s: ' + str(res), worker_name)
+                except Exception as e:
+                    req_queue.put(({
+                        "boxEndpoint": boxEndpoint,
+                        "json": response_data,
+                        "retry_method": "calculate_embeddings"
+                    }, "retryRequest"))
                 calc_count += 1
             except Exception as e:
                 logger.error('%s: Calculating embeddings failed: ' + str(e), worker_name)
@@ -276,8 +378,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     "err": 'Calculating embeddings failed: ' + str(e)
                 }
                 logger.debug(json.dumps(response_data, indent=2))
-                res = requests.post(boxEndpoint, json = response_data)
-                logger.info('%s: ' + str(res), worker_name)
+                try:
+                    res = requests.post(boxEndpoint, json = response_data)
+                    logger.info('%s: ' + str(res), worker_name)
+                except Exception as e:
+                    req_queue.put(({
+                        "boxEndpoint": boxEndpoint,
+                        "json": response_data,
+                        "retry_method": "calculate_embeddings"
+                    }, "retryRequest"))
 
 def ping():
   return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
