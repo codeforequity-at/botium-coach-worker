@@ -95,7 +95,7 @@ def _compute_chi2_top_feature(
 
     logger.info("%s: compute_chi2_top_feature done for label %s", worker_name, cls)
 
-    return deduplicated_unigram, deduplicated_bigram
+    return deduplicated_unigram, deduplicated_bigram, cls
 
 def _compute_chi2_top_feature_obj(obj):
     return _compute_chi2_top_feature(
@@ -141,7 +141,7 @@ def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significa
     results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
 
     for r in results:
-        unigrams, bigrams = r
+        unigrams, bigrams, label = r
 
         if unigrams:
             chi_unigrams.append(unigrams[-N:])
