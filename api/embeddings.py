@@ -96,6 +96,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         res = requests.post(boxEndpoint, json = embeddingsRequest["json"])
                     else:
                         res = requests.post(boxEndpoint, data = embeddingsRequest["data"])
+                if res.status_code != 200:
+                    raise Exception('Wrong status code ' + str(res.status_code))
                 logger.info('%s: ' + str(res), worker_name)
                 logger.info('%s: retry request for %s ( %s of %s ) to %s successfully sent',
                     worker_name,
@@ -151,6 +153,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
                     try:
                         res = requests.post(boxEndpoint, json = response_data)
+                        if res.status_code != 200:
+                            raise Exception('Wrong status code ' + str(res.status_code))
                         logger.info('%s: ' + str(res), worker_name)
                     except Exception as e:
                         req_queue.put(({
@@ -193,6 +197,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 data = json.dumps(response_data, default=to_serializable)
                 try:
                     res = requests.post(boxEndpoint, headers = header, data = data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
                     req_queue.put(({
@@ -213,6 +219,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.debug(json.dumps(response_data, indent=2))
                 try:
                     res = requests.post(boxEndpoint, json = response_data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
                     req_queue.put(({
@@ -237,6 +245,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
                     try:
                         res = requests.post(boxEndpoint, json = response_data)
+                        if res.status_code != 200:
+                            raise Exception('Wrong status code ' + str(res.status_code))
                         logger.info('%s: ' + str(res), worker_name)
                     except Exception as e:
                         req_queue.put(({
@@ -361,6 +371,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
                 try:
                     res = requests.post(boxEndpoint, json = response_data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
                     req_queue.put(({
@@ -380,6 +392,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.debug(json.dumps(response_data, indent=2))
                 try:
                     res = requests.post(boxEndpoint, json = response_data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
                     req_queue.put(({
