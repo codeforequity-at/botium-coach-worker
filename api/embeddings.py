@@ -157,6 +157,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                             raise Exception('Wrong status code ' + str(res.status_code))
                         logger.info('%s: ' + str(res), worker_name)
                     except Exception as e:
+                        logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
                         req_queue.put(({
                             "boxEndpoint": boxEndpoint,
                             "json": response_data,
@@ -201,6 +202,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "header": header,
@@ -223,6 +225,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
@@ -249,6 +252,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                             raise Exception('Wrong status code ' + str(res.status_code))
                         logger.info('%s: ' + str(res), worker_name)
                     except Exception as e:
+                        logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
                         req_queue.put(({
                             "boxEndpoint": boxEndpoint,
                             "json": response_data,
@@ -375,6 +379,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
@@ -396,6 +401,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
