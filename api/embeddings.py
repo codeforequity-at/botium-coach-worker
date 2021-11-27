@@ -393,13 +393,34 @@ def ping():
     tfVersion=tf.__version__, ptVersion=torch.__version__, ptCuda=str(torch.cuda.is_available()))
 
 def calculate_embeddings(embeddingsRequest):
+
+  coachSessionId = embeddingsRequest['coachSessionId']
+  boxEndpoint = embeddingsRequest['boxEndpoint']
+  if 'COACH_DEV_BOX_ENDPOINT' in os.environ:
+      boxEndpoint = os.environ.get('COACH_DEV_BOX_ENDPOINT')
+
+  try:
+      print('Checking callback url availability (' + boxEndpoint + ') ...')
+      response_data = {
+        "method": "ping"
+      }
+      res = requests.post(boxEndpoint, json = response_data)
+      if res.status_code != 200 and res.status_code != 400:
+          raise Exception('Ping check for callback url failed: Status Code ' + str(res.status_code))
+  except Exception as e:
+      print('Error: Checking callback url availability: ' + str(e))
+      return {
+        'status': 'rejected',
+        'coachSessionId': coachSessionId,
+        'boxEndpoint': boxEndpoint,
+        'workerEndpoint': os.environ.get('COACH_HOSTNAME', ''),
+        'error_message': str(e)
+      }
+
   with current_app.app_context():
       req_queue = current_app.req_queue
       req_queue.put((embeddingsRequest, "calculate_embeddings"))
       req_queue.put((embeddingsRequest, "calculate_chi2"))
-
-  coachSessionId = embeddingsRequest['coachSessionId']
-  boxEndpoint = embeddingsRequest['boxEndpoint']
 
   return {
     'status': 'queued',
