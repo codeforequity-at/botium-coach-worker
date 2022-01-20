@@ -96,6 +96,8 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         res = requests.post(boxEndpoint, json = embeddingsRequest["json"])
                     else:
                         res = requests.post(boxEndpoint, data = embeddingsRequest["data"])
+                if res.status_code != 200:
+                    raise Exception('Wrong status code ' + str(res.status_code))
                 logger.info('%s: ' + str(res), worker_name)
                 logger.info('%s: retry request for %s ( %s of %s ) to %s successfully sent',
                     worker_name,
@@ -151,8 +153,11 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
                     try:
                         res = requests.post(boxEndpoint, json = response_data)
+                        if res.status_code != 200:
+                            raise Exception('Wrong status code ' + str(res.status_code))
                         logger.info('%s: ' + str(res), worker_name)
                     except Exception as e:
+                        logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
                         req_queue.put(({
                             "boxEndpoint": boxEndpoint,
                             "json": response_data,
@@ -193,8 +198,11 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 data = json.dumps(response_data, default=to_serializable)
                 try:
                     res = requests.post(boxEndpoint, headers = header, data = data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "header": header,
@@ -213,8 +221,11 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.debug(json.dumps(response_data, indent=2))
                 try:
                     res = requests.post(boxEndpoint, json = response_data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
@@ -237,8 +248,11 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
                     try:
                         res = requests.post(boxEndpoint, json = response_data)
+                        if res.status_code != 200:
+                            raise Exception('Wrong status code ' + str(res.status_code))
                         logger.info('%s: ' + str(res), worker_name)
                     except Exception as e:
+                        logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
                         req_queue.put(({
                             "boxEndpoint": boxEndpoint,
                             "json": response_data,
@@ -361,8 +375,11 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
                 try:
                     res = requests.post(boxEndpoint, json = response_data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
@@ -380,8 +397,11 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.debug(json.dumps(response_data, indent=2))
                 try:
                     res = requests.post(boxEndpoint, json = response_data)
+                    if res.status_code != 200:
+                        raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
+                    logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
@@ -393,13 +413,34 @@ def ping():
     tfVersion=tf.__version__, ptVersion=torch.__version__, ptCuda=str(torch.cuda.is_available()))
 
 def calculate_embeddings(embeddingsRequest):
-  with current_app.app_context():
-      req_queue = current_app.req_queue
-      req_queue.put((embeddingsRequest, "calculate_embeddings"))
-      req_queue.put((embeddingsRequest, "calculate_chi2"))
 
   coachSessionId = embeddingsRequest['coachSessionId']
   boxEndpoint = embeddingsRequest['boxEndpoint']
+  if 'COACH_DEV_BOX_ENDPOINT' in os.environ:
+      boxEndpoint = os.environ.get('COACH_DEV_BOX_ENDPOINT')
+
+  try:
+      print('Checking callback url availability (' + boxEndpoint + ') ...')
+      response_data = {
+        "method": "ping"
+      }
+      res = requests.post(boxEndpoint, json = response_data)
+      if res.status_code != 200 and res.status_code != 400:
+          raise Exception('Ping check for callback url failed: Status Code ' + str(res.status_code))
+  except Exception as e:
+      print('Error: Checking callback url availability: ' + str(e))
+      return {
+        'status': 'rejected',
+        'coachSessionId': coachSessionId,
+        'boxEndpoint': boxEndpoint,
+        'workerEndpoint': os.environ.get('COACH_HOSTNAME', ''),
+        'error_message': str(e)
+      }
+
+  with current_app.app_context():
+      req_queue = current_app.req_queue
+      req_queue.put((embeddingsRequest, "calculate_chi2"))
+      req_queue.put((embeddingsRequest, "calculate_embeddings"))
 
   return {
     'status': 'queued',
