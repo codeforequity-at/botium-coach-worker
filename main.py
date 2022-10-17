@@ -23,6 +23,20 @@ import torch
 import requests
 import gc
 import inspect
+import redis
+
+def redis_scheduler(req_queue,log_format,log_level,log_datefmt):
+    in_queue = []
+    red = redis.Redis(host='localhost', port=6379, db=0) 
+    while True:
+        for k in red.scan_iter("coachworker_req*"):
+            #print(red.get(k))
+            if k not in in_queue:
+                if k.decode("utf-8").startswith('coachworker_req_chi2'):
+                    req_queue.put((json.loads(red.get(k)), "calculate_chi2"))
+                if k.decode("utf-8").startswith('coachworker_req_embeddings'):
+                    req_queue.put((json.loads(red.get(k)), "calculate_embeddings"))
+                in_queue.append(k)
 
 def process_scheduler(req_queue,log_format,log_level,log_datefmt):
     logger = logging.getLogger('Worker scheduler')
@@ -54,6 +68,8 @@ def create_app():
     req_queue = mp.Queue()
     p = mp.Process(target=process_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
     p.start()
+    p = mp.Process(target=redis_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
+    p.start()
     with app.app.app_context():
         current_app.req_queue = req_queue
 
@@ -62,6 +78,6 @@ def create_app():
 if os.environ.get('GUNICORN_MODE', 0) == 0:
     if __name__ == '__main__':
       app = create_app()
-      app.run(port=int(os.environ.get('PORT', 4002)))
+      app.run(port=int(os.environ.get('PORT', 4444)))
 else:
     app = create_app()

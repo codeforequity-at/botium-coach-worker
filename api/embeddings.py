@@ -18,6 +18,7 @@ import torch
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
+import redis
 
 from functools import singledispatch
 
@@ -51,6 +52,7 @@ def cosine_similarity_worker(w):
   return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
 def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log_datefmt):
+    red = redis.Redis(host='localhost', port=6379, db=0) 
     worker_name = 'Worker ' + str(processId)
     logging.basicConfig(format=log_format, level=log_level, datefmt=log_datefmt)
     logger = logging.getLogger(worker_name)
@@ -64,9 +66,27 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
         embeddingsRequest, method = req_queue.get()
         logger.debug(json.dumps(embeddingsRequest, indent=2, default=to_serializable))
         coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
-        boxEndpoint = embeddingsRequest['boxEndpoint']
+        clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
+        testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
+        testSetName = embeddingsRequest['testSetName'] if 'testSetName' in embeddingsRequest else None
+        if 'boxEndpoint' in embeddingsRequest:
+            boxEndpoint = embeddingsRequest['boxEndpoint']
+        else:
+            boxEndpoint = None
         filter = embeddingsRequest['filter'] if 'filter' in embeddingsRequest else None
         intents = embeddingsRequest['intents'] if 'intents' in embeddingsRequest else None
+        stat = {
+            "embeddings": [],
+            "chi2": []
+        }
+        def sendStatus(method, status):
+            stat[method].append(status)
+            red.set('coachworker_status_' + method + '_' + coachSessionId, json.dumps({
+                "method": "calculate_" + method,
+                "clientId": clientId,
+                "coachSessionId": coachSessionId,
+                "status": stat[method]
+            }))
         # for testing purposes on local environment
         if 'COACH_DEV_BOX_ENDPOINT' in os.environ:
             boxEndpoint = os.environ.get('COACH_DEV_BOX_ENDPOINT')
@@ -143,6 +163,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         "method": "calculate_chi2",
                         "status": "finished",
                         "coachSessionId": coachSessionId,
+                        "clientId": clientId,
+                        "testSetId": testSetId,
+                        "testSetName": testSetName,
                         "output": {
                           'chi2': [],
                           'chi2_ambiguous_unigrams': [],
@@ -151,42 +174,55 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         }
                     }
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
-                    try:
-                        res = requests.post(boxEndpoint, json = response_data)
-                        if res.status_code != 200:
-                            raise Exception('Wrong status code ' + str(res.status_code))
-                        logger.info('%s: ' + str(res), worker_name)
-                    except Exception as e:
-                        logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
-                        req_queue.put(({
-                            "boxEndpoint": boxEndpoint,
-                            "json": response_data,
-                            "retry_method": "calculate_chi2"
-                        }, "retryRequest"))
+                    if boxEndpoint is not None:
+                        try:
+                            res = requests.post(boxEndpoint, json = response_data)
+                            if res.status_code != 200:
+                                raise Exception('Wrong status code ' + str(res.status_code))
+                            logger.info('%s: ' + str(res), worker_name)
+                        except Exception as e:
+                            logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
+                            req_queue.put(({
+                                "boxEndpoint": boxEndpoint,
+                                "json": response_data,
+                                "retry_method": "calculate_chi2"
+                            }, "retryRequest"))
+                    else:
+                        red.set('coachworker_res_chi2_' + coachSessionId, json.dumps(response_data))
+                        red.delete('coachworker_req_chi2_' + coachSessionId)
                     continue
 
                 if not 'maxxgrams' in filter:
                   filter['maxxgrams'] = 5
 
                 flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
+
                 logger.info('%s: Running chi2 analysis', worker_name)
+                sendStatus('chi2', 'Step 1 / 4: Running chi2 analysis')
                 chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(logger, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
 
                 logger.info('%s: Running chi2 ambiguous unigrams analysis', worker_name)
+                sendStatus('chi2', 'Step 2 / 4: Running chi2 ambiguous unigrams analysis')
                 chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
 
                 logger.info('%s: Running chi2 ambiguous bigrams analysis', worker_name)
+                sendStatus('chi2', 'Step 3 / 4: Running chi2 ambiguous bigrams analysis')
                 chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
 
                 logger.info('%s: Running chi2 similarity analysis', worker_name)
+                sendStatus('chi2', 'Step 4 / 4: Running chi2 similarity analysis')
                 chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(logger, worker_name, flattenedForChi2, filter['minsimilarity'])
                 logger.info('%s: Returning results', worker_name)
+                sendStatus('chi2', 'done')
 
                 logger.info('%s: Sending results to %s', worker_name, boxEndpoint)
                 response_data = {
                     "method": "calculate_chi2",
                     "status": "finished",
                     "coachSessionId": coachSessionId,
+                    "clientId": clientId,
+                    "testSetId": testSetId,
+                    "testSetName": testSetName,
                     "output": {
                       'chi2': chi2,
                       'chi2_ambiguous_unigrams': chi2_ambiguous_unigrams,
@@ -194,21 +230,26 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                       'chi2_similarity': chi2_similarity
                     }
                 }
-                header = {"content-type": "application/json"}
-                data = json.dumps(response_data, default=to_serializable)
-                try:
-                    res = requests.post(boxEndpoint, headers = header, data = data)
-                    if res.status_code != 200:
-                        raise Exception('Wrong status code ' + str(res.status_code))
-                    logger.info('%s: ' + str(res), worker_name)
-                except Exception as e:
-                    logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
-                    req_queue.put(({
-                        "boxEndpoint": boxEndpoint,
-                        "header": header,
-                        "data": data,
-                        "retry_method": "calculate_chi2"
-                    }, "retryRequest"))
+                if boxEndpoint is not None:
+                    header = {"content-type": "application/json"}
+                    data = json.dumps(response_data, default=to_serializable)
+                    try:
+                        res = requests.post(boxEndpoint, headers = header, data = data)
+                        if res.status_code != 200:
+                            raise Exception('Wrong status code ' + str(res.status_code))
+                        logger.info('%s: ' + str(res), worker_name)
+                    except Exception as e:
+                        logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
+                        req_queue.put(({
+                            "boxEndpoint": boxEndpoint,
+                            "header": header,
+                            "data": data,
+                            "retry_method": "calculate_chi2"
+                        }, "retryRequest"))
+                else:
+                    data = json.dumps(response_data, default=to_serializable)
+                    red.set('coachworker_res_chi2_' + coachSessionId, data)
+                    red.delete('coachworker_req_chi2_' + coachSessionId)
                 calc_count += 1
             except Exception as e:
                 logger.error('%s: Calculating chi2 failed: ' + str(e), worker_name)
@@ -216,6 +257,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     "method": "calculate_chi2",
                     "status": "failed",
                     "coachSessionId": coachSessionId,
+                    "clientId": clientId,
+                    "testSetId": testSetId,
+                    "testSetName": testSetName,
                     "err": 'Calculating chi2 failed: ' + str(e)
                 }
                 logger.debug(json.dumps(response_data, indent=2))
@@ -238,6 +282,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         "method": "calculate_embeddings",
                         "status": "finished",
                         "coachSessionId": coachSessionId,
+                        "clientId": clientId,
+                        "testSetId": testSetId,
+                        "testSetName": testSetName,
                         "output": {
                           'embeddings': embeddings_coords,
                           'similarity': similarity,
@@ -246,24 +293,31 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         }
                     }
                     logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
-                    try:
-                        res = requests.post(boxEndpoint, json = response_data)
-                        if res.status_code != 200:
-                            raise Exception('Wrong status code ' + str(res.status_code))
-                        logger.info('%s: ' + str(res), worker_name)
-                    except Exception as e:
-                        logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
-                        req_queue.put(({
-                            "boxEndpoint": boxEndpoint,
-                            "json": response_data,
-                            "retry_method": "calculate_embeddings"
-                        }, "retryRequest"))
+                    if boxEndpoint is not None:
+                        try:
+                            res = requests.post(boxEndpoint, json = response_data)
+                            if res.status_code != 200:
+                                raise Exception('Wrong status code ' + str(res.status_code))
+                            logger.info('%s: ' + str(res), worker_name)
+                        except Exception as e:
+                            logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
+                            req_queue.put(({
+                                "boxEndpoint": boxEndpoint,
+                                "json": response_data,
+                                "retry_method": "calculate_embeddings"
+                            }, "retryRequest"))
+                    else:
+                        red.set('coachworker_res_embeddings_' + coachSessionId, json.dumps(response_data))
+                        red.delete('coachworker_req_embeddings_' + coachSessionId)
                     continue
 
                 if not 'maxxgrams' in filter:
                   filter['maxxgrams'] = 5
 
+                
+
                 logger.info('%s: Calculating embeddings for %s intents', worker_name, len(intents))
+                sendStatus('embeddings', 'Step 1 / 4: Calculating embeddings for intents')
                 for intent in intents:
                   logger.info('%s: Calculating embeddings for intent "%s" with %s: examples', worker_name, intent['name'], len(intent['examples']))
 
@@ -285,6 +339,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
                 embedding_vectors = np.asarray(embedding_vectors)
 
+                sendStatus('embeddings', 'Step 2 / 4: Starting principal component analysis')
                 logger.info('%s: Starting principal component analysis for %s examples', worker_name, len(embedding_vectors))
 
                 pca = PCA(n_components=2)
@@ -316,6 +371,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                   for phrase in phrases:
                     flattenedForCosine.append((intent, phrase, training_phrases_with_embeddings[intent][phrase]))
 
+                sendStatus('embeddings', 'Step 3 / 4: Preparing cosine similarity')
                 logger.info('%s: Preparing cosine similarity for %s examples', worker_name, len(flattenedForCosine))
 
                 workers = []
@@ -331,6 +387,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
                     workers.append((intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2))
 
+                sendStatus('embeddings', 'Step 4 / 4: Running cosine similarity')
                 logger.info('%s: Running cosine similarity for %s examples', worker_name, len(flattenedForCosine))
 
                 # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
@@ -359,12 +416,16 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 logger.debug('%s: ' + json.dumps(separation, indent=2), worker_name)
 
                 logger.info('%s: Returning results', worker_name)
+                sendStatus('embeddings', 'done')
 
                 logger.info('%s: Sending results to %s', worker_name, boxEndpoint)
                 response_data = {
                     "method": "calculate_embeddings",
                     "status": "finished",
                     "coachSessionId": coachSessionId,
+                    "clientId": clientId,
+                    "testSetId": testSetId,
+                    "testSetName": testSetName,
                     "output": {
                       'embeddings': embeddings_coords,
                       'similarity': similarity,
@@ -373,18 +434,22 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     }
                 }
                 logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
-                try:
-                    res = requests.post(boxEndpoint, json = response_data)
-                    if res.status_code != 200:
-                        raise Exception('Wrong status code ' + str(res.status_code))
-                    logger.info('%s: ' + str(res), worker_name)
-                except Exception as e:
-                    logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
-                    req_queue.put(({
-                        "boxEndpoint": boxEndpoint,
-                        "json": response_data,
-                        "retry_method": "calculate_embeddings"
-                    }, "retryRequest"))
+                if boxEndpoint is not None:
+                    try:
+                        res = requests.post(boxEndpoint, json = response_data)
+                        if res.status_code != 200:
+                            raise Exception('Wrong status code ' + str(res.status_code))
+                        logger.info('%s: ' + str(res), worker_name)
+                    except Exception as e:
+                        logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
+                        req_queue.put(({
+                            "boxEndpoint": boxEndpoint,
+                            "json": response_data,
+                            "retry_method": "calculate_embeddings"
+                        }, "retryRequest"))
+                else:
+                    red.set('coachworker_res_embeddings_' + coachSessionId, json.dumps(response_data))
+                    red.delete('coachworker_req_embeddings_' + coachSessionId)
                 calc_count += 1
             except Exception as e:
                 logger.error('%s: Calculating embeddings failed: ' + str(e), worker_name)
@@ -414,7 +479,10 @@ def ping():
 
 def calculate_embeddings(embeddingsRequest):
 
-  coachSessionId = embeddingsRequest['coachSessionId']
+  coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
+  clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
+  testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
+  testSetName = embeddingsRequest['testSetName'] if 'testSetName' in embeddingsRequest else None
   boxEndpoint = embeddingsRequest['boxEndpoint']
   if 'COACH_DEV_BOX_ENDPOINT' in os.environ:
       boxEndpoint = os.environ.get('COACH_DEV_BOX_ENDPOINT')
@@ -432,6 +500,9 @@ def calculate_embeddings(embeddingsRequest):
       return {
         'status': 'rejected',
         'coachSessionId': coachSessionId,
+        "clientId": clientId,
+        "testSetId": testSetId,
+        "testSetName": testSetName,
         'boxEndpoint': boxEndpoint,
         'workerEndpoint': os.environ.get('COACH_HOSTNAME', ''),
         'error_message': str(e)
@@ -445,6 +516,9 @@ def calculate_embeddings(embeddingsRequest):
   return {
     'status': 'queued',
     'coachSessionId': coachSessionId,
+    "clientId": clientId,
+    "testSetId": testSetId,
+    "testSetName": testSetName,
     'boxEndpoint': boxEndpoint,
     'workerEndpoint': os.environ.get('COACH_HOSTNAME', '')
   }
