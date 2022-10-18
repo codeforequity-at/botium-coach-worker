@@ -38,7 +38,7 @@ def redis_scheduler(req_queue):
                         "method": "calculate_chi2",
                         "clientId": req_obj['clientId'],
                         "coachSessionId": req_obj['coachSessionId'],
-                        "status": ['Calculation queued']
+                        "status": ['Request for for chi2 analysis is queued']
                     }))
                 if k.decode("utf-8").startswith('coachworker_req_embeddings'):
                     req_obj = json.loads(red.get(k))
@@ -47,7 +47,7 @@ def redis_scheduler(req_queue):
                         "method": "calculate_embeddings",
                         "clientId": req_obj['clientId'],
                         "coachSessionId": req_obj['coachSessionId'],
-                        "status": ['Calculation queued']
+                        "status": ['Request for embeddings analysis is queued']
                     }))
                 in_queue.append(k)
 
