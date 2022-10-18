@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 import connexion
-import logging
 from flask import current_app
 import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
@@ -24,27 +23,40 @@ import requests
 import gc
 import inspect
 import redis
+from api.utils.log import getLogger
 
-def redis_scheduler(req_queue,log_format,log_level,log_datefmt):
+def redis_scheduler(req_queue):
     in_queue = []
     red = redis.Redis(host='localhost', port=6379, db=0) 
     while True:
         for k in red.scan_iter("coachworker_req*"):
-            #print(red.get(k))
             if k not in in_queue:
                 if k.decode("utf-8").startswith('coachworker_req_chi2'):
-                    req_queue.put((json.loads(red.get(k)), "calculate_chi2"))
+                    req_obj = json.loads(red.get(k))
+                    req_queue.put((req_obj, "calculate_chi2"))
+                    red.set('coachworker_status_chi2_' + req_obj['coachSessionId'], json.dumps({
+                        "method": "calculate_chi2",
+                        "clientId": req_obj['clientId'],
+                        "coachSessionId": req_obj['coachSessionId'],
+                        "status": ['Calculation queued']
+                    }))
                 if k.decode("utf-8").startswith('coachworker_req_embeddings'):
-                    req_queue.put((json.loads(red.get(k)), "calculate_embeddings"))
+                    req_obj = json.loads(red.get(k))
+                    req_queue.put((req_obj, "calculate_embeddings"))
+                    red.set('coachworker_status_embeddings_' + req_obj['coachSessionId'], json.dumps({
+                        "method": "calculate_embeddings",
+                        "clientId": req_obj['clientId'],
+                        "coachSessionId": req_obj['coachSessionId'],
+                        "status": ['Calculation queued']
+                    }))
                 in_queue.append(k)
 
-def process_scheduler(req_queue,log_format,log_level,log_datefmt):
-    logger = logging.getLogger('Worker scheduler')
-    logger.setLevel(log_level)
+def process_scheduler(req_queue):
+    logger = getLogger('Worker scheduler')
     logger.info('Worker scheduler started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
+        p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i))
         p.daemon = False
         p.start()
         processes.append(p)
@@ -52,23 +64,18 @@ def process_scheduler(req_queue,log_format,log_level,log_datefmt):
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i,log_format,log_level,log_datefmt))
+                p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
 
 def create_app():
-    LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
-    log_datefmt = '%Y-%m-%d %H:%M:%S'
-    log_level = LOGLEVEL
-    log_format = '%(asctime)-15s %(message)s'
-    logging.basicConfig(format=log_format, level=log_level, datefmt=log_datefmt)
     app = connexion.App(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
     req_queue = mp.Queue()
-    p = mp.Process(target=process_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
+    p = mp.Process(target=process_scheduler, args=(req_queue,))
     p.start()
-    p = mp.Process(target=redis_scheduler, args=(req_queue,log_format,log_level,log_datefmt))
+    p = mp.Process(target=redis_scheduler, args=(req_queue,))
     p.start()
     with app.app.app_context():
         current_app.req_queue = req_queue

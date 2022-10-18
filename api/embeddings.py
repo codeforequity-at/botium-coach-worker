@@ -1,8 +1,8 @@
 import os
 import json
-import logging
-import tensorflow as tf
+from .utils.log import getLogger 
 import tensorflow_hub as hub
+import tensorflow as tf
 import tensorflow_text
 import numpy as np
 import pandas as pd
@@ -51,16 +51,15 @@ def cosine_similarity_worker(w):
   similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
   return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
-def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log_datefmt):
+def calculate_embeddings_worker(req_queue, processId):
     red = redis.Redis(host='localhost', port=6379, db=0) 
     worker_name = 'Worker ' + str(processId)
-    logging.basicConfig(format=log_format, level=log_level, datefmt=log_datefmt)
-    logger = logging.getLogger(worker_name)
-    logger.info('%s: Initialize worker ...', worker_name)
-    logger.info('%s: Loading word embeddings model from tfhub ...', worker_name)
+    logger = getLogger(worker_name)
+    logger.info('Initialize worker ...')
+    logger.info('Loading word embeddings model from tfhub ...')
     generate_embeddings = hub.load('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
-    logger.info('%s: Word embeddings model ready.', worker_name)
-    logger.info('%s: Worker started!', worker_name)
+    logger.info('Word embeddings model ready.')
+    logger.info('Worker started!')
     calc_count = 0
     while calc_count < maxCalcCount:
         embeddingsRequest, method = req_queue.get()
@@ -69,6 +68,12 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
         clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
         testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
         testSetName = embeddingsRequest['testSetName'] if 'testSetName' in embeddingsRequest else None
+        log_extras = {
+            "clientId": clientId,
+            "testSetId": testSetId,
+            "testSetName": testSetName,
+            "coachSessionId": coachSessionId
+        }
         if 'boxEndpoint' in embeddingsRequest:
             boxEndpoint = embeddingsRequest['boxEndpoint']
         else:
@@ -81,6 +86,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
         }
         def sendStatus(method, status):
             stat[method].append(status)
+            logger.info('Sending %s to redis', status, extra=log_extras)
             red.set('coachworker_status_' + method + '_' + coachSessionId, json.dumps({
                 "method": "calculate_" + method,
                 "clientId": clientId,
@@ -97,12 +103,12 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 retry = int(embeddingsRequest["retry"]) + 1
             else:
                 retry = 1
-            logger.info('%s: next retry request for %s ( %s of %s ) in %s seconds',
-                worker_name,
+            logger.info('next retry request for %s ( %s of %s ) in %s seconds',
                 embeddingsRequest["retry_method"],
                 retry,
                 max_retries,
-                seconds
+                seconds,
+                extra=log_extras
             )
             time.sleep(seconds)
             try:
@@ -118,24 +124,22 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         res = requests.post(boxEndpoint, data = embeddingsRequest["data"])
                 if res.status_code != 200:
                     raise Exception('Wrong status code ' + str(res.status_code))
-                logger.info('%s: ' + str(res), worker_name)
-                logger.info('%s: retry request for %s ( %s of %s ) to %s successfully sent',
-                    worker_name,
+                logger.info(str(res), extra=log_extras)
+                logger.info('retry request for %s ( %s of %s ) to %s successfully sent',
                     embeddingsRequest["retry_method"],
                     retry,
                     max_retries,
-                    boxEndpoint
-                )
+                    boxEndpoint, 
+                    extra=log_extras)
             except Exception as e:
                 logger.info('%s: %s', worker_name, e)
                 if retry <= max_retries:
-                    logger.info('%s: retry request for %s ( %s of %s ) to %s failed, trying again',
-                        worker_name,
+                    logger.info('retry request for %s ( %s of %s ) to %s failed, trying again',
                         embeddingsRequest["retry_method"],
                         retry,
                         max_retries,
-                        boxEndpoint
-                    )
+                        boxEndpoint,
+                        extra=log_extras)
                     retry_request = {
                         "retry": retry,
                         "boxEndpoint": boxEndpoint,
@@ -149,12 +153,12 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         retry_request["header"] = embeddingsRequest['header']
                     req_queue.put((retry_request, "retryRequest"))
                 else:
-                    logger.info('%s: retry request for %s ( %s of %s ) to %s failed, no tries anymore',
-                        worker_name,
+                    logger.info('retry request for %s ( %s of %s ) to %s failed, no tries anymore',
                         embeddingsRequest["retry_method"],
                         retry,
                         max_retries,
-                        boxEndpoint
+                        boxEndpoint,
+                        extra=log_extras
                     )
         if method == "calculate_chi2":
             try:
@@ -173,15 +177,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                           'chi2_similarity': []
                         }
                     }
-                    logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
+                    logger.debug(json.dumps(response_data, indent=2), extra=log_extras)
                     if boxEndpoint is not None:
                         try:
                             res = requests.post(boxEndpoint, json = response_data)
                             if res.status_code != 200:
                                 raise Exception('Wrong status code ' + str(res.status_code))
-                            logger.info('%s: ' + str(res), worker_name)
+                            logger.info(str(res), extra=log_extras)
                         except Exception as e:
-                            logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
+                            logger.error('Sending chi2 failed: ' + str(e), extra=log_extras)
                             req_queue.put(({
                                 "boxEndpoint": boxEndpoint,
                                 "json": response_data,
@@ -197,25 +201,24 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
                 flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
 
-                logger.info('%s: Running chi2 analysis', worker_name)
+                logger.info('Running chi2 analysis', extra=log_extras)
                 sendStatus('chi2', 'Step 1 / 4: Running chi2 analysis')
                 chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(logger, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
 
-                logger.info('%s: Running chi2 ambiguous unigrams analysis', worker_name)
+                logger.info('Running chi2 ambiguous unigrams analysis', extra=log_extras)
                 sendStatus('chi2', 'Step 2 / 4: Running chi2 ambiguous unigrams analysis')
                 chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
 
-                logger.info('%s: Running chi2 ambiguous bigrams analysis', worker_name)
+                logger.info('Running chi2 ambiguous bigrams analysis', extra=log_extras)
                 sendStatus('chi2', 'Step 3 / 4: Running chi2 ambiguous bigrams analysis')
                 chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
 
-                logger.info('%s: Running chi2 similarity analysis', worker_name)
+                logger.info('Running chi2 similarity analysis', extra=log_extras)
                 sendStatus('chi2', 'Step 4 / 4: Running chi2 similarity analysis')
                 chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(logger, worker_name, flattenedForChi2, filter['minsimilarity'])
-                logger.info('%s: Returning results', worker_name)
-                sendStatus('chi2', 'done')
+                logger.info('Returning results', extra=log_extras)
 
-                logger.info('%s: Sending results to %s', worker_name, boxEndpoint)
+                logger.info('Sending results to %s', boxEndpoint, extra=log_extras)
                 response_data = {
                     "method": "calculate_chi2",
                     "status": "finished",
@@ -237,9 +240,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         res = requests.post(boxEndpoint, headers = header, data = data)
                         if res.status_code != 200:
                             raise Exception('Wrong status code ' + str(res.status_code))
-                        logger.info('%s: ' + str(res), worker_name)
+                        logger.info(str(res), extra=log_extras)
                     except Exception as e:
-                        logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
+                        logger.error('Sending chi2 failed: ' + str(e), extra=log_extras)
                         req_queue.put(({
                             "boxEndpoint": boxEndpoint,
                             "header": header,
@@ -252,7 +255,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     red.delete('coachworker_req_chi2_' + coachSessionId)
                 calc_count += 1
             except Exception as e:
-                logger.error('%s: Calculating chi2 failed: ' + str(e), worker_name)
+                logger.error('Calculating chi2 failed: ' + str(e), extra=log_extras)
                 response_data = {
                     "method": "calculate_chi2",
                     "status": "failed",
@@ -269,7 +272,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                         raise Exception('Wrong status code ' + str(res.status_code))
                     logger.info('%s: ' + str(res), worker_name)
                 except Exception as e:
-                    logger.error('%s: Sending chi2 failed: ' + str(e), worker_name)
+                    logger.error('Sending chi2 failed: ' + str(e), extra=log_extras)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
@@ -292,15 +295,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                           'separation': separation,
                         }
                     }
-                    logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
+                    logger.debug(json.dumps(response_data, indent=2), extra=log_extras)
                     if boxEndpoint is not None:
                         try:
                             res = requests.post(boxEndpoint, json = response_data)
                             if res.status_code != 200:
                                 raise Exception('Wrong status code ' + str(res.status_code))
-                            logger.info('%s: ' + str(res), worker_name)
+                            logger.info(str(res), extra=log_extras)
                         except Exception as e:
-                            logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
+                            logger.error('Sending embeddings failed: ' + str(e), extra=log_extras)
                             req_queue.put(({
                                 "boxEndpoint": boxEndpoint,
                                 "json": response_data,
@@ -316,10 +319,10 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
                 
 
-                logger.info('%s: Calculating embeddings for %s intents', worker_name, len(intents))
+                logger.info('Calculating embeddings for %s intents', len(intents), extra=log_extras)
                 sendStatus('embeddings', 'Step 1 / 4: Calculating embeddings for intents')
                 for intent in intents:
-                  logger.info('%s: Calculating embeddings for intent "%s" with %s: examples', worker_name, intent['name'], len(intent['examples']))
+                  logger.info('Calculating embeddings for intent "%s" with %s: examples', intent['name'], len(intent['examples']), extra=log_extras)
 
                 training_phrases_with_embeddings = defaultdict(list)
                 for intent in intents:
@@ -329,7 +332,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
 
                 for intent_name, _ in training_phrases_with_embeddings.items():
                   training_phrase, embeddings = next(iter(training_phrases_with_embeddings[intent_name].items()))
-                  logger.info('{}: Calculated embeddings for intent {}, example: {{\'{}\':{}}}'.format(worker_name, intent_name, training_phrase, embeddings[:5]))
+                  logger.info('Calculated embeddings for intent {}, example: {{\'{}\':{}}}'.format(intent_name, training_phrase, embeddings[:5]), extra=log_extras)
 
                 embedding_vectors = []
 
@@ -340,7 +343,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 embedding_vectors = np.asarray(embedding_vectors)
 
                 sendStatus('embeddings', 'Step 2 / 4: Starting principal component analysis')
-                logger.info('%s: Starting principal component analysis for %s examples', worker_name, len(embedding_vectors))
+                logger.info('Starting principal component analysis for %s examples', len(embedding_vectors), extra=log_extras)
 
                 pca = PCA(n_components=2)
                 pca.fit(embedding_vectors)
@@ -357,7 +360,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                   })
 
                 logger.debug(json.dumps(embeddings_coords, indent=2))
-                logger.info('%s: Ready with principal component analysis for %s examples', worker_name, len(embedding_vectors))
+                logger.info('Ready with principal component analysis for %s examples', len(embedding_vectors), extra=log_extras)
 
                 flattenedForCosine = []
 
@@ -366,13 +369,13 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                   if maxUtterancesForEmbeddings > 0:
                     utterancesForIntent = math.ceil(len(phrases) * maxUtterancesForEmbeddings / len(embedding_vectors))
                     if utterancesForIntent < len(phrases):
-                      logger.info('%s: Randomly selecting %s: examples for intent %s: for cosine similarity', worker_name, utterancesForIntent, intent)
+                      logger.info('Randomly selecting %s: examples for intent %s: for cosine similarity', utterancesForIntent, intent, extra=log_extras)
                       phrases = np.random.choice(phrases, utterancesForIntent, replace=False)
                   for phrase in phrases:
                     flattenedForCosine.append((intent, phrase, training_phrases_with_embeddings[intent][phrase]))
 
                 sendStatus('embeddings', 'Step 3 / 4: Preparing cosine similarity')
-                logger.info('%s: Preparing cosine similarity for %s examples', worker_name, len(flattenedForCosine))
+                logger.info('Preparing cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
 
                 workers = []
                 for i in range(len(flattenedForCosine)):
@@ -388,13 +391,13 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     workers.append((intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2))
 
                 sendStatus('embeddings', 'Step 4 / 4: Running cosine similarity')
-                logger.info('%s: Running cosine similarity for %s examples', worker_name, len(flattenedForCosine))
+                logger.info('Running cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
 
                 # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
                 executer = ThreadPoolExecutor(max_workers = os.environ.get('COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
                 data = list(executer.map(cosine_similarity_worker, tuple(workers)))
 
-                logger.info('%s: Ready with cosine similarity for %s pairs, preparing results', worker_name, len(data))
+                logger.info('Ready with cosine similarity for %s pairs, preparing results', len(data), extra=log_extras)
 
                 similarity_df = pd.DataFrame(data, columns=['name1', 'example1', 'name2', 'example2', 'similarity'])
                 similarity_different_intent = similarity_df['name1'] != similarity_df['name2']
@@ -403,22 +406,21 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                 similarity_different_intent_filtered = (similarity_df['name1'] != similarity_df['name2']) & (similarity_df['similarity'] > filter['minsimilarity'])
                 similarity_df_sorted = similarity_df[similarity_different_intent_filtered].sort_values('similarity', ascending=False)
                 similarity = [ { 'name1': name1, 'example1': example1, 'name2': name2, 'example2': example2, 'similarity': similarity } for name1, example1, name2, example2, similarity in zip(similarity_df_sorted['name1'], similarity_df_sorted['example1'], similarity_df_sorted['name2'], similarity_df_sorted['example2'], similarity_df_sorted['similarity'])]
-                logger.debug('%s: ' + json.dumps(similarity, indent=2), worker_name)
+                logger.debug(json.dumps(similarity, indent=2), extra=log_extras)
 
                 cohesion_df_sorted = pd.DataFrame(similarity_df[similarity_same_intent].groupby('name1', as_index=False)['similarity'].mean()).sort_values('similarity', ascending=False)
                 cohesion_df_sorted.columns = ['name', 'cohesion']
                 cohesion = [ { 'name': name, 'cohesion': cohesion } for name, cohesion in zip(cohesion_df_sorted['name'], cohesion_df_sorted['cohesion'])]
-                logger.debug('%s: ' + json.dumps(cohesion, indent=2), worker_name)
+                logger.debug(json.dumps(cohesion, indent=2), extra=log_extras)
 
                 separation_df_sorted = pd.DataFrame(similarity_df[similarity_different_intent].groupby(['name1', 'name2'], as_index=False)['similarity'].mean()).sort_values('similarity', ascending=True)
                 separation_df_sorted['separation'] = 1 - separation_df_sorted['similarity']
                 separation = [ { 'name1': name1, 'name2': name2, 'separation': separation } for name1, name2, separation in zip(separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
-                logger.debug('%s: ' + json.dumps(separation, indent=2), worker_name)
+                logger.debug(json.dumps(separation, indent=2), extra=log_extras)
 
-                logger.info('%s: Returning results', worker_name)
-                sendStatus('embeddings', 'done')
+                logger.info('Returning results', extra=log_extras)
 
-                logger.info('%s: Sending results to %s', worker_name, boxEndpoint)
+                logger.info('Sending results to %s', boxEndpoint, extra=log_extras)
                 response_data = {
                     "method": "calculate_embeddings",
                     "status": "finished",
@@ -433,15 +435,15 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                       'separation': separation
                     }
                 }
-                logger.debug('%s: ' + json.dumps(response_data, indent=2), worker_name)
+                logger.debug(json.dumps(response_data, indent=2), extra=log_extras)
                 if boxEndpoint is not None:
                     try:
                         res = requests.post(boxEndpoint, json = response_data)
                         if res.status_code != 200:
                             raise Exception('Wrong status code ' + str(res.status_code))
-                        logger.info('%s: ' + str(res), worker_name)
+                        logger.info(str(res), extra=log_extras)
                     except Exception as e:
-                        logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
+                        logger.error('Sending embeddings failed: ' + str(e), extra=log_extras)
                         req_queue.put(({
                             "boxEndpoint": boxEndpoint,
                             "json": response_data,
@@ -452,7 +454,7 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     red.delete('coachworker_req_embeddings_' + coachSessionId)
                 calc_count += 1
             except Exception as e:
-                logger.error('%s: Calculating embeddings failed: ' + str(e), worker_name)
+                logger.error('Calculating embeddings failed: ' + str(e), extra=log_extras)
                 response_data = {
                     "method": "calculate_embeddings",
                     "status": "failed",
@@ -464,9 +466,9 @@ def calculate_embeddings_worker(req_queue, processId, log_format, log_level, log
                     res = requests.post(boxEndpoint, json = response_data)
                     if res.status_code != 200:
                         raise Exception('Wrong status code ' + str(res.status_code))
-                    logger.info('%s: ' + str(res), worker_name)
+                    logger.info(str(res), extra=log_extras)
                 except Exception as e:
-                    logger.error('%s: Sending embeddings failed: ' + str(e), worker_name)
+                    logger.error('Sending embeddings failed: ' + str(e), extra=log_extras)
                     req_queue.put(({
                         "boxEndpoint": boxEndpoint,
                         "json": response_data,
