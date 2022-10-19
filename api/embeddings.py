@@ -52,7 +52,7 @@ def cosine_similarity_worker(w):
   return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
 def calculate_embeddings_worker(req_queue, processId):
-    red = redis.Redis(host='localhost', port=6379, db=0) 
+    red = redis.Redis(host=os.environ.get('REDIS_HOST', 'localhost'), port=6379, db=0) 
     worker_name = 'Worker ' + str(processId)
     logger = getLogger(worker_name)
     logger.info('Initialize worker ...')
