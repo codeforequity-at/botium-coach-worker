@@ -203,7 +203,7 @@ def calculate_embeddings_worker(req_queue, processId):
 
                 logger.info('Running chi2 analysis', extra=log_extras)
                 sendStatus('chi2', 'Step 1 / 4: Running chi2 analysis')
-                chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(logger, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
+                chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(logger, log_extras, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
 
                 logger.info('Running chi2 ambiguous unigrams analysis', extra=log_extras)
                 sendStatus('chi2', 'Step 2 / 4: Running chi2 ambiguous unigrams analysis')
@@ -215,7 +215,7 @@ def calculate_embeddings_worker(req_queue, processId):
 
                 logger.info('Running chi2 similarity analysis', extra=log_extras)
                 sendStatus('chi2', 'Step 4 / 4: Running chi2 similarity analysis')
-                chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(logger, worker_name, flattenedForChi2, filter['minsimilarity'])
+                chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(logger, log_extras, worker_name, flattenedForChi2, filter['minsimilarity'])
                 logger.info('Returning results', extra=log_extras)
 
                 logger.info('Sending results to %s', boxEndpoint, extra=log_extras)

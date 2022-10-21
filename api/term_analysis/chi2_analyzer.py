@@ -53,7 +53,7 @@ def _preprocess_chi2(workspace_pd):
 
 
 def _compute_chi2_top_feature(
-    logger, worker_name, features, labels, vectorizer, cls, significance_level=0.05
+    logger, log_extras, worker_name, features, labels, vectorizer, cls, significance_level=0.05
 ):
     """
     Perform chi2 analysis, punctuation filtering and deduplication
@@ -66,11 +66,11 @@ def _compute_chi2_top_feature(
     :return deduplicated_bigram:
     """
 
-    logger.info("Pool calculation agent started for label %s", cls)
+    logger.info("Pool calculation agent started for label %s", cls, extra=log_extras)
 
     features_chi2, pval = chi2(features, labels == cls)
 
-    logger.info("Chi2 calculated for label %s", cls)
+    logger.info("Chi2 calculated for label %s", cls, extra=log_extras)
 
     feature_names = np.array(vectorizer.get_feature_names())
 
@@ -94,16 +94,16 @@ def _compute_chi2_top_feature(
         if bigram not in deduplicated_bigram:
             deduplicated_bigram.append(bigram)
 
-    logger.info("compute_chi2_top_feature done for label %s", cls)
+    logger.info("compute_chi2_top_feature done for label %s", cls, extra=log_extras)
 
     return deduplicated_unigram, deduplicated_bigram, cls
 
 def _compute_chi2_top_feature_obj(obj):
     return _compute_chi2_top_feature(
-        obj['logger'], obj['worker_name'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
+        obj['logger'], obj['log_extras'], obj['worker_name'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
     )
 
-def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significance_level=0.05):
+def get_chi2_analysis(logger, log_extras, worker_name, workspace_pd, num_xgrams=5, significance_level=0.05):
     """
     find correlated unigram and bigram of each intent with Chi2 analysis
     :param workspace_pd: dataframe, workspace data
@@ -138,6 +138,7 @@ def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significa
             'label': label,
             'significance_level': significance_level,
             'logger': logger,
+            'log_extras': log_extras,
             'worker_name': worker_name
         })
     results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
@@ -171,7 +172,7 @@ def get_chi2_analysis(logger, worker_name, workspace_pd, num_xgrams=5, significa
 
     chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 
-    logger.info("get_chi2_analysis done")
+    logger.info("get_chi2_analysis done", extra=log_extras)
 
     return chi_df, unigram_intent_dict, bigram_intent_dict
 
