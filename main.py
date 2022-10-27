@@ -25,9 +25,11 @@ import inspect
 import redis
 from api.utils.log import getLogger
 
+
 def redis_scheduler(req_queue):
     in_queue = []
-    red = redis.Redis(host=os.environ.get('REDIS_HOST', 'localhost'), port=6379, db=os.environ.get('REDIS_DB', 0)) 
+    red = redis.Redis(host=os.environ.get('REDIS_HOST', 'localhost'),
+                      port=os.environ.get('REDIS_PORT', 6379), db=os.environ.get('REDIS_DB', 0))
     while True:
         for k in red.scan_iter("coachworker_req*"):
             if k not in in_queue:
@@ -38,7 +40,8 @@ def redis_scheduler(req_queue):
                         "method": "calculate_chi2",
                         "clientId": req_obj['clientId'],
                         "coachSessionId": req_obj['coachSessionId'],
-                        "status": ['Request for for chi2 analysis is queued']
+                        "status": 'QUEUED',
+                        'statusDescription': 'Request for Chi2 Analysis is queued'
                     }))
                 if k.decode("utf-8").startswith('coachworker_req_embeddings'):
                     req_obj = json.loads(red.get(k))
@@ -47,16 +50,18 @@ def redis_scheduler(req_queue):
                         "method": "calculate_embeddings",
                         "clientId": req_obj['clientId'],
                         "coachSessionId": req_obj['coachSessionId'],
-                        "status": ['Request for embeddings analysis is queued']
+                        "status": 'QUEUED',
+                        'statusDescription': 'Request for Embeddings Analysis is queued'
                     }))
                 in_queue.append(k)
+
 
 def process_scheduler(req_queue):
     logger = getLogger('Worker scheduler')
     logger.info('Worker scheduler started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i))
+        p = mp.Process(target=calculate_embeddings_worker, args=(req_queue, i))
         p.daemon = False
         p.start()
         processes.append(p)
@@ -64,10 +69,12 @@ def process_scheduler(req_queue):
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = mp.Process(target=calculate_embeddings_worker, args=(req_queue,i))
+                p = mp.Process(target=calculate_embeddings_worker,
+                               args=(req_queue, i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
+
 
 def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')
@@ -75,16 +82,18 @@ def create_app():
     req_queue = mp.Queue()
     p = mp.Process(target=process_scheduler, args=(req_queue,))
     p.start()
-    p = mp.Process(target=redis_scheduler, args=(req_queue,))
-    p.start()
+    if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
+        p = mp.Process(target=redis_scheduler, args=(req_queue,))
+        p.start()
     with app.app.app_context():
         current_app.req_queue = req_queue
 
     return app
 
+
 if os.environ.get('GUNICORN_MODE', 0) == 0:
     if __name__ == '__main__':
-      app = create_app()
-      app.run(port=int(os.environ.get('PORT', 4444)))
+        app = create_app()
+        app.run(port=int(os.environ.get('PORT', 4444)))
 else:
     app = create_app()
