@@ -29,7 +29,7 @@ from api.utils.log import getLogger
 def redis_scheduler(req_queue):
     in_queue = []
     red = redis.Redis(host=os.environ.get('REDIS_HOST', 'localhost'),
-                      port=os.environ.get('REDIS_PORT', 6379), db=os.environ.get('REDIS_DB', 0))
+                      port=int(os.environ.get('REDIS_PORT', 6379)), db=int(os.environ.get('REDIS_DB', 0)))
     while True:
         for k in red.scan_iter("coachworker_req*"):
             if k not in in_queue:

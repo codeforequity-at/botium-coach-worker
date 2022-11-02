@@ -88,7 +88,7 @@ def calculate_embeddings_worker(req_queue, processId):
     red = None
     if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
         red = redis.Redis(host=os.environ.get('REDIS_HOST', 'localhost'),
-                          port=os.environ.get('REDIS_PORT', 6379), db=os.environ.get('REDIS_DB', 0))
+                          port=int(os.environ.get('REDIS_PORT', 6379)), db=int(os.environ.get('REDIS_DB', 0)))
     worker_name = 'Worker ' + str(processId)
     logger = getLogger(worker_name)
     logger.info('Initialize worker ...')
