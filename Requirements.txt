@@ -67,4 +67,5 @@ Werkzeug==1.0.1
 wrapt==1.12.1
 redis==4.3.4
 python-json-logger==2.0.4
+flask-healthz==0.0.3
 git+https://github.com/huggingface/transformers.git
