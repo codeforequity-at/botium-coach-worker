@@ -24,12 +24,12 @@ import gc
 import inspect
 import redis
 from api.utils.log import getLogger
+from api.redis_client import getRedis
 
 
 def redis_scheduler(req_queue):
     in_queue = []
-    red = redis.Redis(host=os.environ.get('REDIS_HOST', 'localhost'),
-                      port=int(os.environ.get('REDIS_PORT', 6379)), db=int(os.environ.get('REDIS_DB', 0)))
+    red = getRedis()
     while True:
         for k in red.scan_iter("coachworker_req*"):
             if k not in in_queue:
