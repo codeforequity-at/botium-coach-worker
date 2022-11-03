@@ -2,6 +2,7 @@
 import os
 import connexion
 from flask import current_app
+from flask_healthz import healthz
 import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
 from sklearn.decomposition import PCA
@@ -79,6 +80,13 @@ def process_scheduler(req_queue):
 def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
+    app.app.register_blueprint(healthz, url_prefix="/healthz")
+    app.app.config.update(
+        HEALTHZ={
+            "live": "api.health.liveness",
+            "ready": "api.health.readiness",
+        }
+    )
     req_queue = mp.Queue()
     p = mp.Process(target=process_scheduler, args=(req_queue,))
     p.start()
