@@ -14,11 +14,12 @@ from joblib import Parallel, delayed
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
 from flask import current_app
+from flask_healthz import healthz
 import torch
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
-import redis
+from .redis_client import getRedis
 
 from functools import singledispatch
 
@@ -87,8 +88,8 @@ def cosine_similarity_worker(w):
 def calculate_embeddings_worker(req_queue, processId):
     red = None
     if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
-        red = redis.Redis(host=os.environ.get('REDIS_HOST', 'localhost'),
-                          port=int(os.environ.get('REDIS_PORT', 6379)), db=int(os.environ.get('REDIS_DB', 0)))
+        red = getRedis()
+        red.ping()
     worker_name = 'Worker ' + str(processId)
     logger = getLogger(worker_name)
     logger.info('Initialize worker ...')
