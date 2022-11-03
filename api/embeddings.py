@@ -85,19 +85,22 @@ def cosine_similarity_worker(w):
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
 
-def calculate_embeddings_worker(req_queue, processId):
+def calculate_embeddings_worker(req_queue, err_queue, processId):
     red = None
     if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
         red = getRedis()
-        red.ping()
     worker_name = 'Worker ' + str(processId)
     logger = getLogger(worker_name)
     logger.info('Initialize worker ...')
     logger.info('Loading word embeddings model from tfhub ...')
-    generate_embeddings = hub.load(
-        'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
+    try:
+        generate_embeddings = hub.load(
+            'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
+    except Exception as e:
+        err_queue.put(str(e))
     logger.info('Word embeddings model ready.')
     logger.info('Worker started!')
+    ready_queue.put(1)
     calc_count = 0
     while calc_count < maxCalcCount:
         embeddingsRequest, method = req_queue.get()

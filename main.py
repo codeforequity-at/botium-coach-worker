@@ -57,12 +57,13 @@ def redis_scheduler(req_queue):
                 in_queue.append(k)
 
 
-def process_scheduler(req_queue):
+def process_scheduler(req_queue, err_queue):
     logger = getLogger('Worker scheduler')
     logger.info('Worker scheduler started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = mp.Process(target=calculate_embeddings_worker, args=(req_queue, i))
+        p = mp.Process(target=calculate_embeddings_worker,
+                       args=(req_queue, err_queue, i))
         p.daemon = False
         p.start()
         processes.append(p)
@@ -88,13 +89,15 @@ def create_app():
         }
     )
     req_queue = mp.Queue()
-    p = mp.Process(target=process_scheduler, args=(req_queue,))
+    err_queue = mp.Queue()
+    p = mp.Process(target=process_scheduler, args=(req_queue, err_queue,))
     p.start()
     if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
         p = mp.Process(target=redis_scheduler, args=(req_queue,))
         p.start()
     with app.app.app_context():
         current_app.req_queue = req_queue
+        current_app.err_queue = err_queue
 
     return app
 
