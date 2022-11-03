@@ -100,7 +100,6 @@ def calculate_embeddings_worker(req_queue, err_queue, processId):
         err_queue.put(str(e))
     logger.info('Word embeddings model ready.')
     logger.info('Worker started!')
-    ready_queue.put(1)
     calc_count = 0
     while calc_count < maxCalcCount:
         embeddingsRequest, method = req_queue.get()
