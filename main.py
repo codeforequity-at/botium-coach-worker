@@ -72,7 +72,7 @@ def process_scheduler(req_queue, err_queue):
             p = processes[i]
             if not p.is_alive():
                 p = mp.Process(target=calculate_embeddings_worker,
-                               args=(req_queue, i))
+                               args=(req_queue, err_queue, i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
