@@ -17,9 +17,17 @@ def getRedis(timeout=600):
         return sentinel.master_for(redis_sentinel_name, socket_timeout=timeout)
     else:
         if redis_url is not None:
-            red = redis.from_url(redis_url, socket_timeout=timeout)
-            red.ping()
-            return red
+            try:
+                red = redis.from_url(redis_url, socket_timeout=timeout)
+                red.ping()
+                return red
+            except Exception as e:
+                raise Exception('Redis error: {}'.format(str(e)))
         else:
-            return redis.Redis(host=redis_host,
-                               port=redis_port, db=redis_db, password=redis_password, socket_timeout=timeout)
+            try:
+                red = redis.Redis(host=redis_host, port=redis_port, db=redis_db,
+                                  password=redis_password, socket_timeout=timeout)
+                red.ping()
+                return red
+            except Exception as e:
+                raise Exception('Redis error: {}'.format(str(e)))
