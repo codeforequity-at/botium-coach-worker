@@ -1,0 +1,14 @@
+version: '3'
+services:
+  coach:
+    build:
+      context: .
+    image: botium/botium-coach-worker:develop
+    ports:
+     - "11000:8080"
+    environment:
+      WEB_CONCURRENCY: 1
+      COACH_DEV_BOX_ENDPOINT: "http://192.168.46.224:4000/api/coach"
+    volumes:
+     - ./test_data:/app/test_data
+    command: "python3 -m unittest test_python/test_chi2.py"

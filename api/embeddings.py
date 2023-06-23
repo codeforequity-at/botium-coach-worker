@@ -25,6 +25,8 @@ from functools import singledispatch
 
 from enum import Enum
 
+import json
+import pickle
 
 class CalcStatus(str, Enum):
     CHI2_ANALYSIS_RUNNING = 'CHI2_ANALYSIS_RUNNING'
@@ -57,6 +59,11 @@ class CalcStatus(str, Enum):
 def to_serializable(val):
     """Used by default."""
     return str(val)
+
+# to generate test data
+def objtofile(data, filename, logger):
+    with open('test_data/' + filename + '.obj', 'wb') as outfile:
+        pickle.dump(data, outfile)
 
 
 @to_serializable.register(np.float32)
@@ -121,6 +128,8 @@ def calculate_embeddings_worker(req_queue, err_queue, processId):
             boxEndpoint = None
         filter = embeddingsRequest['filter'] if 'filter' in embeddingsRequest else None
         intents = embeddingsRequest['intents'] if 'intents' in embeddingsRequest else None
+
+        logger.info('Filter is %s', filter, extra=log_extras)
 
         def sendStatus(category, calc_status, step, max_steps, message):
             logger.info(message, extra=log_extras)
@@ -254,12 +263,16 @@ def calculate_embeddings_worker(req_queue, err_queue, processId):
                     filter['maxxgrams'] = 5
 
                 flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
+                #objtofile(flattenedForChi2, 'flattenedForChi2', logger)
 
                 sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_RUNNING, 1, 4,
                            'Chi2 Analysis running')
                 try:
                     chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(
                         logger, log_extras, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
+                    #objtofile(chi2, 'chi2', logger)
+                    #objtofile(unigram_intent_dict, 'unigram_intent_dict', logger)
+                    #objtofile(bigram_intent_dict, 'bigram_intent_dict', logger)
                 except Exception as e:
                     sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_FAILED, 1, 4,
                                'Chi2 analysis failed - {}'.format(e))
@@ -271,6 +284,7 @@ def calculate_embeddings_worker(req_queue, err_queue, processId):
                 try:
                     chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(
                         unigram_intent_dict)
+                    #objtofile(chi2_ambiguous_unigrams, 'chi2_ambiguous_unigrams', logger)
                 except Exception as e:
                     sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_UNIGRAMS_FAILED, 2, 4,
                                'Chi2 Ambiguous Unigrams Analysis failed - {}'.format(e))
@@ -282,6 +296,7 @@ def calculate_embeddings_worker(req_queue, err_queue, processId):
                 try:
                     chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(
                         bigram_intent_dict)
+                    #objtofile(chi2_ambiguous_bigrams, 'chi2_ambiguous_bigrams', logger)
                 except Exception as e:
                     sendStatus(
                         'chi2', CalcStatus.CHI2_AMBIGUOS_BIGRAMS_FAILED, 3, 4, 'Chi2 Ambiguous Bigrams Analysis failed - {}'.format(e))
@@ -293,6 +308,7 @@ def calculate_embeddings_worker(req_queue, err_queue, processId):
                 try:
                     chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(
                         logger, log_extras, worker_name, flattenedForChi2, filter['minsimilarity'])
+                    #objtofile(chi2_similarity, 'chi2_similarity', logger)
                 except Exception as e:
                     sendStatus(
                         'chi2', CalcStatus.CHI2_SIMILARITY_ANALYSIS_FAILED, 4, 4, 'Chi2 Similarity Analysis failed - {}'.format(e))

@@ -14,6 +14,8 @@ RUN python -m nltk.downloader -d /app/nltk_data stopwords
 COPY ./main.py /app/main.py
 COPY ./api /app/api
 COPY ./openapi /app/openapi
+COPY ./test_python /app/test_python
+COPY ./test_data /app/test_data 
 #RUN rm /app/prestart.sh
 
 RUN groupadd -r -g 1000 coach && useradd -r -u 1000 -g 1000 -d /app -s /bin/bash coach

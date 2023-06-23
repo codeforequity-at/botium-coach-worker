@@ -16,6 +16,9 @@ docker_run:
 docker_run_dev:
 	docker run --rm -p 4002:8080 --name botium-coach-worker botium/botium-coach-worker:develop
 
+docker_run_dev_test:
+	docker run --entrypoint '/bin/bash' --rm --name botium-coach-worker botium/botium-coach-worker:develop -c "python3 -m unittest test_python/tests.py"
+
 docker_bash:
 	docker exec -it botium-coach-worker bash
 
