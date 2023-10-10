@@ -52,6 +52,86 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /static/fact_check/create_pinecone_index:
+    post:
+      summary: Create Pinceone index to store word embeddings
+      operationId: api.embeddings.create_pinecone_index
+      security:
+        - api_key: []
+      requestBody:
+        description: Create Pinceone index
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: CreatePineconeIndexRequest
+              $ref: "#/components/schemas/CreatePineconeIndexRequest"
+            example:
+              name: test
+              environment: asia-southeast1-gcp-free
+      responses:
+        '200':
+          description: Returns True/False if index has been successfully created on Pinecone with message
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /static/fact_check/upload_document:
+    post:
+      summary: Store embeddings for "ground truth" documentation in Pinceone
+      operationId: api.embeddings.upload_factcheck_documents
+      security:
+        - api_key: []
+      requestBody:
+        description: Store embeddings for "ground truth" documentation in Pinceone
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: UploadFactcheckDocumentRequest
+              $ref: "#/components/schemas/UploadFactcheckDocumentRequest"
+            example:
+              index: test
+              environment: asia-southeast1-gcp-free
+              filepath: docs
+      responses:
+        '200':
+          description: Returns True or False if documents have been successfully uploaded to Pinecone with message
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /static/fact_check:
+    post:
+      summary: Fact-check a statement
+      operationId: api.embeddings.factcheck
+      security:
+        - api_key: []
+      requestBody:
+        description: Statement to be fact checked
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: factcheckRequest
+              $ref: "#/components/schemas/FactcheckRequest"
+            example:
+              statement: The sky is blue
+              index: test
+              environment: asia-southeast1-gcp-free
+      responses:
+        '200':
+          description: Returns Ture/False on fact checked with edited statement and reasoning
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /static/calculate_embeddings:
     post:
       summary: Calculate word embedding statistics on a data set
@@ -322,6 +402,39 @@ components:
         model:
           type: string
         sentence:
+          type: string
+    CreatePineconeIndexRequest:
+      required:
+        - name
+        - environment
+      properties:
+        name:
+          type: string
+        environment:
+          type: string
+    UploadFactcheckDocumentRequest:
+      required:
+        - index
+        - environment
+        - filepath
+      properties:
+        index:
+          type: string
+        environment:
+          type: string
+        filepath:
+          type: string
+    FactcheckRequest:
+      required:
+        - index
+        - environment
+        - statement
+      properties:
+        index:
+          type: string
+        environment:
+          type: string
+        statement:
           type: string
     Translations:
       properties:
