@@ -16,6 +16,8 @@ import tensorflow_hub as hub
 import tensorflow as tf
 import tensorflow_text
 import torch
+import multiprocessing as mp
+import uuid
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -58,7 +60,7 @@ def create_pinecone_index(CreatePineconeIndexRequest):
     return result
 
 
-def upload_factcheck_documents(UploadFactcheckDocumentRequest):
+def upload_factcheck_documents_process(UploadFactcheckDocumentRequest):
     """
         Uploads embeddings to Pinecone index.
 
@@ -77,10 +79,41 @@ def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     index = UploadFactcheckDocumentRequest['index']
     pine_env = UploadFactcheckDocumentRequest['environment']
     filepath= UploadFactcheckDocumentRequest['filepath']
+    job_id = UploadFactcheckDocumentRequest['job_id']
+    boxEndpoint = UploadFactcheckDocumentRequest['boxEndpoint']
 
     pineindex=pinecone_init(pine_api_key,pine_env,index)
     content=document_upsert_pinecone(openai, embedding_model, pineindex, index, filepath)
-    return content
+    if boxEndpoint != None:
+        res = requests.post(boxEndpoint, data=content)
+    if bool(os.environ.get('REDIS_ENABLE', False)) == True:
+        red = getRedis()
+        red.set('coachworker_status_factcheck_documents_upload_' + job_id, json.dumps(content), ex=600)
+
+def upload_factcheck_documents(UploadFactcheckDocumentRequest):
+    """
+        Uploads embeddings to Pinecone index.
+
+        inputs: index (string) - name of pinecone index to store embeddings
+                environment (string) - pincone environment where index is stored
+                fileptah (string) - filepath of where documents to be uploaded are stored
+
+        output: content - Dict with 2 keys: 
+                        status - confirms if index was successfully uploaded or not (True/False)
+                        message - contains string stating if documents were sucessfully uploaded or failed with failure message.
+    """
+
+    UploadFactcheckDocumentRequest['job_id'] = str(uuid.uuid4())
+
+    try:
+        p = mp.Process(target=upload_factcheck_documents_process, args=(UploadFactcheckDocumentRequest,))
+        p.start()
+        result = {  'status': True, 'message': "Started uploading documents to index.", "job_id": UploadFactcheckDocumentRequest['job_id'] }
+    except Exception as error:
+    # handle the exception
+        result = {'status': False,
+                  'message': "Failed: an exception occurred: {0}".format(error)}
+    return result
 
 def factcheck(factcheckRequest):
     """
