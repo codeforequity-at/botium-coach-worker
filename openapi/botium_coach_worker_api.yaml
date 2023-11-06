@@ -55,7 +55,7 @@ paths:
   /static/fact_check/create_pinecone_index:
     post:
       summary: Create Pinceone index to store word embeddings
-      operationId: api.embeddings.create_pinecone_index
+      operationId: api.factcheck.create_pinecone_index
       security:
         - api_key: []
       requestBody:
@@ -81,7 +81,7 @@ paths:
   /static/fact_check/upload_document:
     post:
       summary: Store embeddings for "ground truth" documentation in Pinceone
-      operationId: api.embeddings.upload_factcheck_documents
+      operationId: api.factcheck.upload_factcheck_documents
       security:
         - api_key: []
       requestBody:
@@ -108,7 +108,7 @@ paths:
   /static/fact_check:
     post:
       summary: Fact-check a statement
-      operationId: api.embeddings.factcheck
+      operationId: api.factcheck.factcheck
       security:
         - api_key: []
       requestBody:
