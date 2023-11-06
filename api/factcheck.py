@@ -1,3 +1,37 @@
+from ast import Return
+import json
+import math
+import numpy as np
+import openai
+import os
+import pandas as pd
+import pickle
+import pinecone
+import PyPDF2
+import re
+import requests
+import sys
+import time
+import tensorflow_hub as hub
+import tensorflow as tf
+import tensorflow_text
+import torch
+
+from api.term_analysis import chi2_analyzer, similarity_analyzer
+from api.utils import pandas_utils
+from enum import Enum
+from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from flask import current_app
+from flask_healthz import healthz
+from functools import singledispatch
+from joblib import Parallel, delayed
+from .redis_client import getRedis
+from sklearn.decomposition import PCA
+from sklearn.metrics.pairwise import cosine_similarity
+from .utils.log import getLogger
+from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init
+
 def create_pinecone_index(CreatePineconeIndexRequest):
     """
         Creates a Pinecone index to upload embeddings to

@@ -1,6 +1,21 @@
-
+from ast import Return
+import json
+import math
+import numpy as np
+import openai
+import os
+import pandas as pd
+import pickle
 import pinecone
 import PyPDF2
+import re
+import requests
+import sys
+import time
+import tensorflow_hub as hub
+import tensorflow as tf
+import tensorflow_text
+import torch
 
 def create_query(openai,response_llm):
     """ Create query/facts which are required to be verified
