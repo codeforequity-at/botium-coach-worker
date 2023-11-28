@@ -6,7 +6,7 @@ from flask import current_app
 
 
 def check_redis():
-    if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
+    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
         try:
             red = getRedis(timeout=0.5)
             red.ping()

@@ -67,8 +67,8 @@ paths:
               x-body-name: CreatePineconeIndexRequest
               $ref: "#/components/schemas/CreatePineconeIndexRequest"
             example:
-              name: test
-              environment: asia-southeast1-gcp-free
+              name: botium-box-index
+              environment: gcp-starter
       responses:
         '200':
           description: Returns True/False if index has been successfully created on Pinecone with message
@@ -93,8 +93,8 @@ paths:
               x-body-name: UploadFactcheckDocumentRequest
               $ref: "#/components/schemas/UploadFactcheckDocumentRequest"
             example:
-              index: test
-              environment: asia-southeast1-gcp-free
+              index: botium-box-index
+              environment: gcp-starter
               filepath: docs
       responses:
         '200':
@@ -121,8 +121,8 @@ paths:
               $ref: "#/components/schemas/FactcheckRequest"
             example:
               statement: The sky is blue
-              index: test
-              environment: asia-southeast1-gcp-free
+              index: botium-box-index
+              environment: gcp-starter
       responses:
         '200':
           description: Returns Ture/False on fact checked with edited statement and reasoning

@@ -49,12 +49,14 @@ def create_pinecone_index(CreatePineconeIndexRequest):
     pine_api_key = os.environ.get('PINECONE_API')
     pine_env = CreatePineconeIndexRequest['environment']
     try :
+        print('using pine api key: ', pine_api_key, ' environment: ', pine_env)
         pinecone.init(api_key=pine_api_key, environment=pine_env)
         pinecone.create_index(index, dimension=1536, metric='cosine', pods=1, replicas=1)
         result = {'status': True,
                   'message': "Successfully created index."}
     except Exception as error:
-    # handle the exception
+        print(error)
+        # handle the exception
         result = {'status': False,
                   'message': "Failed: an exception occurred: {0}".format(error)}
     return result
@@ -86,7 +88,7 @@ def upload_factcheck_documents_process(UploadFactcheckDocumentRequest):
     content=document_upsert_pinecone(openai, embedding_model, pineindex, index, filepath)
     if boxEndpoint != None:
         res = requests.post(boxEndpoint, data=content)
-    if bool(os.environ.get('REDIS_ENABLE', False)) == True:
+    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
         red = getRedis()
         red.set('coachworker_status_factcheck_documents_upload_' + job_id, json.dumps(content), ex=600)
 

@@ -96,7 +96,7 @@ def cosine_similarity_worker(w):
 
 def calculate_embeddings_worker(req_queue, err_queue, processId):
     red = None
-    if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
+    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
         red = getRedis()
     worker_name = 'Worker ' + str(processId)
     logger = getLogger(worker_name)
@@ -135,7 +135,7 @@ def calculate_embeddings_worker(req_queue, err_queue, processId):
 
         def sendStatus(category, calc_status, step, max_steps, message):
             logger.info(message, extra=log_extras)
-            if bool(os.environ.get('REDIS_ENABLE', False)) == True:
+            if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
                 logger.info('Sending "%s" to redis', message, extra=log_extras)
                 red.set('coachworker_status_' + category + '_' + coachSessionId, json.dumps({
                     "method": "calculate_" + category,

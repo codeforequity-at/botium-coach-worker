@@ -92,7 +92,7 @@ def create_app():
     err_queue = mp.Queue()
     p = mp.Process(target=process_scheduler, args=(req_queue, err_queue,))
     p.start()
-    if bool(os.environ.get('REDIS_ENABLE', 0)) == True:
+    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
         p = mp.Process(target=redis_scheduler, args=(req_queue,))
         p.start()
     with app.app.app_context():
@@ -101,9 +101,9 @@ def create_app():
 
     return app
 
-
 if os.environ.get('GUNICORN_MODE', 0) == 0:
     if __name__ == '__main__':
+        print(f'Swagger-UI available at http://127.0.0.1:{os.environ.get("PORT", 4444)}/1.0/ui')
         app = create_app()
         app.run(port=int(os.environ.get('PORT', 4444)))
 else:
