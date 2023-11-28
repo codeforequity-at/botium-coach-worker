@@ -34,6 +34,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init
 
+logger = getLogger('Fact Checker')
+
 def create_pinecone_index(CreatePineconeIndexRequest):
     """
         Creates a Pinecone index to upload embeddings to
@@ -45,21 +47,31 @@ def create_pinecone_index(CreatePineconeIndexRequest):
                         status  - confirms if index was successfully created or not (True/False)
                         message - contains string stating if it was successfully created or failed with failure message
     """
-    index = CreatePineconeIndexRequest['name']
+    index_name = CreatePineconeIndexRequest['name']
     pine_api_key = os.environ.get('PINECONE_API')
     pine_env = CreatePineconeIndexRequest['environment']
     try :
-        print('using pine api key: ', pine_api_key, ' environment: ', pine_env)
         pinecone.init(api_key=pine_api_key, environment=pine_env)
-        pinecone.create_index(index, dimension=1536, metric='cosine', pods=1, replicas=1)
-        result = {'status': True,
-                  'message': "Successfully created index."}
+        active_indexes = pinecone.list_indexes()
+        if index_name in active_indexes:
+          return {
+            'status': True,
+            'message': f'Index {index_name} in environment {pine_env} already active'
+          }
+
+        pinecone.create_index(index_name, dimension=1536, metric='cosine', pods=1, replicas=1)
+        logger.info(f'Created Pinecone index {index_name} in environment {pine_env}')
+        return {
+          'status': True,
+          'message': f'Successfully created index {index_name} in environment {pine_env}'
+        }
     except Exception as error:
-        print(error)
+        logger.error(f'Creating Pinecone index {index_name} in environment {pine_env} failed: {format(error)}')
         # handle the exception
-        result = {'status': False,
-                  'message': "Failed: an exception occurred: {0}".format(error)}
-    return result
+        return {
+          'status': False,
+          'message': f'Creating index {index_name} in environment {pine_env} failed: {format(error)}'
+        }
 
 
 def upload_factcheck_documents_process(UploadFactcheckDocumentRequest):
