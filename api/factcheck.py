@@ -40,37 +40,37 @@ def create_pinecone_index(CreatePineconeIndexRequest):
     """
         Creates a Pinecone index to upload embeddings to
         
-        inputs: name (string) - name specified to call index on pinecone
+        inputs: index (string) - name specified to call index on pinecone
                 environment (string) - pincone environment where index is stored
 
         output: result - Dict with 2 keys: 
                         status  - confirms if index was successfully created or not (True/False)
                         message - contains string stating if it was successfully created or failed with failure message
     """
-    index_name = CreatePineconeIndexRequest['name']
+    index = CreatePineconeIndexRequest['index']
     pine_api_key = os.environ.get('PINECONE_API')
     pine_env = CreatePineconeIndexRequest['environment']
     try :
         pinecone.init(api_key=pine_api_key, environment=pine_env)
         active_indexes = pinecone.list_indexes()
-        if index_name in active_indexes:
+        if index in active_indexes:
           return {
             'status': True,
-            'message': f'Index {index_name} in environment {pine_env} already active'
+            'message': f'Index {index} in environment {pine_env} already active'
           }
 
-        pinecone.create_index(index_name, dimension=1536, metric='cosine', pods=1, replicas=1)
-        logger.info(f'Created Pinecone index {index_name} in environment {pine_env}')
+        pinecone.create_index(index, dimension=1536, metric='cosine', pods=1, replicas=1)
+        logger.info(f'Created Pinecone index {index} in environment {pine_env}')
         return {
           'status': True,
-          'message': f'Successfully created index {index_name} in environment {pine_env}'
+          'message': f'Successfully created index {index} in environment {pine_env}'
         }
     except Exception as error:
-        logger.error(f'Creating Pinecone index {index_name} in environment {pine_env} failed: {format(error)}')
+        logger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {format(error)}')
         # handle the exception
         return {
           'status': False,
-          'message': f'Creating index {index_name} in environment {pine_env} failed: {format(error)}'
+          'message': f'Creating index {index} in environment {pine_env} failed: {format(error)}'
         }
 
 
@@ -79,8 +79,9 @@ def upload_factcheck_documents_process(UploadFactcheckDocumentRequest):
         Uploads embeddings to Pinecone index.
 
         inputs: index (string) - name of pinecone index to store embeddings
-                environment (string) - pincone environment where index is stored
-                fileptah (string) - filepath of where documents to be uploaded are stored
+                environment (string) - pinecone environment where index is stored
+                namespace (string) - pinecone namespace
+                filepath (string) - filepath of where documents to be uploaded are stored
 
         output: content - Dict with 2 keys: 
                         status - confirms if index was successfully uploaded or not (True/False)
@@ -92,7 +93,8 @@ def upload_factcheck_documents_process(UploadFactcheckDocumentRequest):
 
     index = UploadFactcheckDocumentRequest['index']
     pine_env = UploadFactcheckDocumentRequest['environment']
-    filepath= UploadFactcheckDocumentRequest['filepath']
+    namespace = UploadFactcheckDocumentRequest['namespace']
+    filepath = UploadFactcheckDocumentRequest['filepath']
     job_id = UploadFactcheckDocumentRequest['job_id']
     boxEndpoint = UploadFactcheckDocumentRequest['boxEndpoint']
 
@@ -122,7 +124,7 @@ def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     try:
         p = mp.Process(target=upload_factcheck_documents_process, args=(UploadFactcheckDocumentRequest,))
         p.start()
-        result = {  'status': True, 'message': "Started uploading documents to index.", "job_id": UploadFactcheckDocumentRequest['job_id'] }
+        result = { 'status': True, 'message': "Started uploading documents to index.", "job_id": UploadFactcheckDocumentRequest['job_id'] }
     except Exception as error:
     # handle the exception
         result = {'status': False,

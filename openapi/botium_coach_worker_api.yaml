@@ -67,7 +67,9 @@ paths:
               x-body-name: CreatePineconeIndexRequest
               $ref: "#/components/schemas/CreatePineconeIndexRequest"
             example:
-              name: botium-box-index
+              factcheckSessionId: test-factcheck-session-id
+              boxEndpoint: 'http://localhost:4000/api/coach'
+              index: botium-box-index
               environment: gcp-starter
       responses:
         '200':
@@ -93,8 +95,11 @@ paths:
               x-body-name: UploadFactcheckDocumentRequest
               $ref: "#/components/schemas/UploadFactcheckDocumentRequest"
             example:
+              factcheckSessionId: test-factcheck-session-id
+              boxEndpoint: 'http://localhost:4000/api/coach'
               index: botium-box-index
               environment: gcp-starter
+              namespace: client1-project1
               filepath: docs
       responses:
         '200':
@@ -120,9 +125,12 @@ paths:
               x-body-name: factcheckRequest
               $ref: "#/components/schemas/FactcheckRequest"
             example:
-              statement: The sky is blue
+              factcheckSessionId: test-factcheck-session-id
+              boxEndpoint: 'http://localhost:4000/api/coach'
               index: botium-box-index
               environment: gcp-starter
+              namespace: client1-project1
+              statement: The sky is blue
       responses:
         '200':
           description: Returns Ture/False on fact checked with edited statement and reasoning
@@ -405,34 +413,58 @@ components:
           type: string
     CreatePineconeIndexRequest:
       required:
-        - name
+        - factcheckSessionId
+        - boxEndpoint
+        - index
         - environment
       properties:
-        name:
+        factcheckSessionId:
+          type: string      
+        boxEndpoint:
+          type: string
+        index:
           type: string
         environment:
           type: string
     UploadFactcheckDocumentRequest:
       required:
+        - factcheckSessionId
+        - boxEndpoint
         - index
         - environment
+        - namespace
         - filepath
       properties:
+        factcheckSessionId:
+          type: string
+        boxEndpoint:
+          type: string
         index:
           type: string
         environment:
+          type: string
+        namespace:
           type: string
         filepath:
           type: string
     FactcheckRequest:
       required:
+        - factcheckSessionId
+        - boxEndpoint
         - index
         - environment
+        - namespace
         - statement
       properties:
+        factcheckSessionId:
+          type: string      
+        boxEndpoint:
+          type: string
         index:
           type: string
         environment:
+          type: string
+        namespace:
           type: string
         statement:
           type: string
