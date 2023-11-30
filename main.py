@@ -6,6 +6,7 @@ from flask import current_app
 from flask_healthz import healthz
 import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
+from api.factcheck import upload_factcheck_documents_worker
 from multiprocessing import Process, RawValue, Lock
 import json
 import time
@@ -158,7 +159,8 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data, method)
-
+        elif method == 'upload_factcheck_documents':
+            upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data)
         else:
             logger.error(f'No worker method for {method}, ignoring.')
 

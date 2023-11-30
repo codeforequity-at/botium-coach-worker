@@ -52,28 +52,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /static/fact_check/create_pinecone_index:
+  /static/fact_check/create_index:
     post:
-      summary: Create Pinceone index to store word embeddings
-      operationId: api.factcheck.create_pinecone_index
+      summary: Create index to store word embeddings
+      operationId: api.factcheck.create_index
       security:
         - api_key: []
       requestBody:
-        description: Create Pinceone index
+        description: Create index
         required: true
         content:
           application/json:
             schema:
-              x-body-name: CreatePineconeIndexRequest
-              $ref: "#/components/schemas/CreatePineconeIndexRequest"
+              x-body-name: CreateIndexRequest
+              $ref: "#/components/schemas/CreateIndexRequest"
             example:
-              factcheckSessionId: test-factcheck-session-id
-              boxEndpoint: 'http://localhost:4000/api/coach'
               index: botium-box-index
               environment: gcp-starter
       responses:
         '200':
-          description: Returns True/False if index has been successfully created on Pinecone with message
+          description: Returns True/False if index has been successfully created with message
         default:
           description: unexpected error
           content:
@@ -103,7 +101,7 @@ paths:
               filepath: docs
       responses:
         '200':
-          description: Returns True or False if documents have been successfully uploaded to Pinecone with message
+          description: Returns True or False if documents have been successfully uploaded with message
         default:
           description: unexpected error
           content:
@@ -125,8 +123,6 @@ paths:
               x-body-name: factcheckRequest
               $ref: "#/components/schemas/FactcheckRequest"
             example:
-              factcheckSessionId: test-factcheck-session-id
-              boxEndpoint: 'http://localhost:4000/api/coach'
               index: botium-box-index
               environment: gcp-starter
               namespace: client1-project1
@@ -256,7 +252,6 @@ components:
     EmbeddingsRequest:
       required:
         - coachSessionId
-        - boxEndpoint
         - filter
         - intents
       properties:
@@ -411,17 +406,11 @@ components:
           type: string
         sentence:
           type: string
-    CreatePineconeIndexRequest:
+    CreateIndexRequest:
       required:
-        - factcheckSessionId
-        - boxEndpoint
         - index
         - environment
       properties:
-        factcheckSessionId:
-          type: string      
-        boxEndpoint:
-          type: string
         index:
           type: string
         environment:
@@ -429,7 +418,6 @@ components:
     UploadFactcheckDocumentRequest:
       required:
         - factcheckSessionId
-        - boxEndpoint
         - index
         - environment
         - namespace
@@ -449,17 +437,11 @@ components:
           type: string
     FactcheckRequest:
       required:
-        - factcheckSessionId
-        - boxEndpoint
         - index
         - environment
         - namespace
         - statement
       properties:
-        factcheckSessionId:
-          type: string      
-        boxEndpoint:
-          type: string
         index:
           type: string
         environment:
@@ -473,16 +455,6 @@ components:
         translation:
           type: string
         provider:
-          type: string
-    JobAdded:
-      properties:
-        status:
-          type: string
-        coachSessionId:
-          type: string
-        boxEndpoint:
-          type: string
-        workerEndpoint:
           type: string
     Error:
       required:

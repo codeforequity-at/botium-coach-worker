@@ -36,7 +36,7 @@ from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init
 
 logger = getLogger('Fact Checker')
 
-def create_pinecone_index(CreatePineconeIndexRequest):
+def create_index(CreateIndexRequest):
     """
         Creates a Pinecone index to upload embeddings to
         
@@ -47,9 +47,9 @@ def create_pinecone_index(CreatePineconeIndexRequest):
                         status  - confirms if index was successfully created or not (True/False)
                         message - contains string stating if it was successfully created or failed with failure message
     """
-    index = CreatePineconeIndexRequest['index']
+    index = CreateIndexRequest['index']
     pine_api_key = os.environ.get('PINECONE_API')
-    pine_env = CreatePineconeIndexRequest['environment']
+    pine_env = CreateIndexRequest['environment']
     try :
         pinecone.init(api_key=pine_api_key, environment=pine_env)
         active_indexes = pinecone.list_indexes()
@@ -73,8 +73,7 @@ def create_pinecone_index(CreatePineconeIndexRequest):
           'message': f'Creating index {index} in environment {pine_env} failed: {format(error)}'
         }
 
-
-def upload_factcheck_documents_process(UploadFactcheckDocumentRequest):
+def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     """
         Uploads embeddings to Pinecone index.
 
@@ -91,45 +90,53 @@ def upload_factcheck_documents_process(UploadFactcheckDocumentRequest):
     openai.api_key = os.environ.get('OPEN_API')
     embedding_model = "text-embedding-ada-002"
 
+    sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
     index = UploadFactcheckDocumentRequest['index']
     pine_env = UploadFactcheckDocumentRequest['environment']
     namespace = UploadFactcheckDocumentRequest['namespace']
     filepath = UploadFactcheckDocumentRequest['filepath']
-    job_id = UploadFactcheckDocumentRequest['job_id']
-    boxEndpoint = UploadFactcheckDocumentRequest['boxEndpoint']
 
-    pineindex=pinecone_init(pine_api_key,pine_env,index)
-    content=document_upsert_pinecone(openai, embedding_model, pineindex, index, filepath)
-    if boxEndpoint != None:
-        res = requests.post(boxEndpoint, data=content)
-    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
-        red = getRedis()
-        red.set('coachworker_status_factcheck_documents_upload_' + job_id, json.dumps(content), ex=600)
+    response_data = {}
+    if 'boxEndpoint' in UploadFactcheckDocumentRequest:
+        response_data['boxEndpoint'] = UploadFactcheckDocumentRequest['boxEndpoint']
+        response_data['header'] = { "content-type": "application/json" }
 
-def upload_factcheck_documents(UploadFactcheckDocumentRequest):
-    """
-        Uploads embeddings to Pinecone index.
-
-        inputs: index (string) - name of pinecone index to store embeddings
-                environment (string) - pincone environment where index is stored
-                fileptah (string) - filepath of where documents to be uploaded are stored
-
-        output: content - Dict with 2 keys: 
-                        status - confirms if index was successfully uploaded or not (True/False)
-                        message - contains string stating if documents were sucessfully uploaded or failed with failure message.
-    """
-
-    UploadFactcheckDocumentRequest['job_id'] = str(uuid.uuid4())
+    response_data['redisKey'] = 'coachworker_res_factcheckupload_' + sessionId
+    response_data['deleteRedisKey'] = 'coachworker_req_factcheckupload_' + sessionId
 
     try:
-        p = mp.Process(target=upload_factcheck_documents_process, args=(UploadFactcheckDocumentRequest,))
-        p.start()
-        result = { 'status': True, 'message': "Started uploading documents to index.", "job_id": UploadFactcheckDocumentRequest['job_id'] }
+        pineindex = pinecone_init(pine_api_key,pine_env,index)
+        content = document_upsert_pinecone(openai, embedding_model, pineindex, namespace, filepath)
+        logger.info(content['message'])
+        response_data['json'] = {
+            "method": "upload_factcheck_documents",
+            "status": "finished",
+            "factcheckSessionId": sessionId,
+            "content": content
+        }
+        res_queue.put((response_data,))
     except Exception as error:
-    # handle the exception
-        result = {'status': False,
-                  'message': "Failed: an exception occurred: {0}".format(error)}
-    return result
+        logger.error(f'Uploading to Pinecone index {index} in environment {pine_env}/{namespace} failed: {format(error)}')
+        response_data['json'] = {
+            "method": "upload_factcheck_documents",
+            "status": "failed",
+            "factcheckSessionId": sessionId,
+            "err": f'Uploading to index {index} in environment {pine_env}/{namespace} failed: {format(error)}'
+        }
+        res_queue.put((response_data,))
+
+def upload_factcheck_documents(UploadFactcheckDocumentRequest):
+    sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
+
+    with current_app.app_context():
+        req_queue = current_app.req_queue
+        req_queue.put((UploadFactcheckDocumentRequest, "upload_factcheck_documents"))
+
+    return {
+      'status': 'queued',
+      'message': "Started uploading documents to index.",
+      'factcheckSessionId': sessionId
+    }
 
 def factcheck(factcheckRequest):
     """

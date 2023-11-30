@@ -52,12 +52,12 @@ def create_query(openai,response_llm):
         
     return questions
 # gets context passages from the pinecone index
-def get_context(question, index, indexname, top_k):
+def get_context(question, index, namespace, top_k):
     """ Generate embeddings for the question
 
         Input:  question (string) - question used to gather evidence on statement from documents stored on pinecone
                 index (class) - Pinecone API client
-                indexname (string) - name of index used to store embeddings in pinecone
+                namespace (string) - name of index used to store embeddings in pinecone
                 top_k (int) - sets The number of results to return for each query
 
         Output: context (dict) - returns most relevant contect based on questions asked and retrieval score from pineocne
@@ -65,18 +65,18 @@ def get_context(question, index, indexname, top_k):
     result = openai.Embedding.create(model="text-embedding-ada-002",input=question)
     embedding=result["data"][0]["embedding"]
     # search pinecone index for context passage with the answer
-    context = index.query(namespace=indexname, vector = embedding, top_k=top_k, include_metadata=True)
+    context = index.query(namespace=namespace, vector = embedding, top_k=top_k, include_metadata=True)
     return context
 
 
 # For each question retrieve the most relvant part of document 
-def retrieval_passage(openai, response_llm, pineindex, indexname) :
+def retrieval_passage(openai, response_llm, pineindex, namespace) :
     """ Generate embeddings for the question
 
         Input:  openai (class) - OpenAI API client 
                 response_llms (string) - statement to be fact checked
                 pineindex (class) - Pinecone API client
-                indexname (string) - name of index specified by user to be created
+                namespace (string) - name of index specified by user to be created
 
 
         Output: used_evidences (list) - list of evidence to support if statement is true or false
@@ -93,7 +93,7 @@ def retrieval_passage(openai, response_llm, pineindex, indexname) :
         print('Retrieving relevant passage for query:', query )
         retrieved_passages = []
         #gets context passages from the pinecone index
-        context = get_context(query, pineindex, indexname, top_k=1)
+        context = get_context(query, pineindex, namespace, top_k=1)
 
         for passage in context["matches"]:
                retrieved_passages.append(
@@ -122,13 +122,13 @@ def retrieval_passage(openai, response_llm, pineindex, indexname) :
     used_evidences=[e for cur_evids in query_search for e in cur_evids[:1]]
     return used_evidences
 
-def agreement_gate(openai,response_llm,pineindex, indexname):
+def agreement_gate(openai,response_llm,pineindex, namespace):
     """ Generate embeddings for the question
 
         Input:  openai (class) - OpenAI API client 
                 response_llms (string) - statement to be fact checked
                 pineindex (class) - Pinecone API client
-                indexname (string) - name of index specified by user to be created
+                namespace (string) - name of index specified by user to be created
 
         Output: agreement_gates (list) - contains reasoning, decision and is_open flag of query based on statemment  
                 used_evidences (list) - list of evidence to support if statment is true or false
@@ -136,7 +136,7 @@ def agreement_gate(openai,response_llm,pineindex, indexname):
     """
 
     #Calling retrieval stage before agreement stage
-    used_evidences=retrieval_passage(openai,response_llm, pineindex, indexname)
+    used_evidences=retrieval_passage(openai,response_llm, pineindex, namespace)
     agreement_responses=[]
     agreement_gates=[]
     
@@ -192,20 +192,20 @@ def agreement_gate(openai,response_llm,pineindex, indexname):
     return agreement_gates,used_evidences,relevance
 
 
-def editor(openai,response_llm, pineindex, indexname):
+def editor(openai,response_llm, pineindex, namespace):
     """
     Create the Pinecone index
 
     Inputs: openai (class) - OpenAI API client 
             response_llms (string) - statement to be fact checked
             pineindex (string) - region where index is to be stored
-            indexname (string) - name of index specified by user to be created
+            namespace (string) - name of index specified by user to be created
 
     Output: edited_response (string) - statement if edited ot not
             agreeemnet_gate (dict) - contains reason, decisions and gate value 
             status (boolean) - returns True if statement has passed fact check  
     """
-    agreement_gates,used_evidences,relevance=agreement_gate(openai,response_llm, pineindex, indexname)
+    agreement_gates,used_evidences,relevance=agreement_gate(openai,response_llm, pineindex, namespace)
     edit_count=0
     edited_responses=[]
     
@@ -306,7 +306,7 @@ def document_preprocessing(text):
         print("Failed to preprocess documents: {0}".format(error))
         return False
 
-def upsert_document(openai, split_content, filename, page_num, embedding_model, pineindex, indexname):
+def upsert_document(openai, split_content, filename, page_num, embedding_model, pineindex, namespace):
     """
        Inserts managable content into pinecone index
 
@@ -315,7 +315,7 @@ def upsert_document(openai, split_content, filename, page_num, embedding_model, 
                 filename (string) - name fo file that is being processed
                 page_num (int) - page number of documnet being processed
                 embedding_model (string) - name of model used to create embeddings
-                indexname (string) - Name of Pinecone index to store embeddings from documents
+                namespace (string) - Name of Pinecone namespace to store embeddings from documents
 
         output: None
     """
@@ -331,19 +331,19 @@ def upsert_document(openai, split_content, filename, page_num, embedding_model, 
                     'values':embedding,
                     'metadata':{"filename": filename, "word_count": len(content.split()), 'context': content}
                     }]
-            pineindex.upsert(vectors=vector, namespace=indexname ) 
+            pineindex.upsert(vectors=vector, namespace=namespace ) 
             print('Uploaded content to Pinecone index. {0}'.format(vector))
     except Exception as error:
         raise Exception("Failed to upload content: {0}".format(error))
 
-def document_upsert_pinecone(openai, embedding_model, pineindex, indexname, filepath):
+def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, filepath):
     """
         Reads the documents and breaks into contents of managable size(300 words) and inserts into pinecone index
 
         Inputs: openai (class) - OpenAI API client
                 embedding_model (string) -
                 pineindex (class) - Pinecone API client
-                indexname (string) - name of Pinecone index to store embeddings
+                namespace (string) - name of Pinecone index to store embeddings
                 filepath (string) - path to where documents are located on EFS
 
         output: Dictionary with 2 keys: 
@@ -363,7 +363,7 @@ def document_upsert_pinecone(openai, embedding_model, pineindex, indexname, file
                     page = pdf_reader.pages[page_num]
                     page_text = page.extract_text()
                     content = document_preprocessing(page_text)
-                    upsert_document(openai, content, filename, page_num, embedding_model, pineindex, indexname)
+                    upsert_document(openai, content, filename, page_num, embedding_model, pineindex, namespace)
                     
             elif filename.endswith(".txt"):    
                 # Read text file
@@ -371,7 +371,7 @@ def document_upsert_pinecone(openai, embedding_model, pineindex, indexname, file
                     text = f.read()
                 page_num = 0
                 content = document_preprocessing(text)
-                upsert_document(openai, content, filename, page_num, embedding_model, pineindex, indexname)
+                upsert_document(openai, content, filename, page_num, embedding_model, pineindex, namespace)
 
             result = {  'status': True,
                         'message': "Successfully processed and uploaded all documents"}
