@@ -7,7 +7,6 @@ import os
 import pandas as pd
 import pickle
 import pinecone
-import PyPDF2
 import re
 import requests
 import sys
@@ -324,19 +323,19 @@ def upsert_document(openai, split_content, filename, page_num, embedding_model, 
         # Append the split content to the list
         for content in split_content:
             para +=1
-            iid= filename[:-4]+'_' +str(page_num)+ '_'+str(para)
-            result = openai.Embedding.create(model=embedding_model,input=content)
-            embedding=result["data"][0]["embedding"]
+            iid = filename[:-4] + '_' + str(page_num) + '_' + str(para)
+            result = openai.Embedding.create(model=embedding_model, input=content)
+            embedding = result["data"][0]["embedding"]
             vector = [{'id': iid,
-                    'values':embedding,
-                    'metadata':{"filename": filename, "word_count": len(content.split()), 'context': content}
+                    'values': embedding,
+                    'metadata': {"filename": filename, "word_count": len(content.split()), 'context': content}
                     }]
             pineindex.upsert(vectors=vector, namespace=namespace ) 
             print('Uploaded content to Pinecone index. {0}'.format(vector))
     except Exception as error:
         raise Exception("Failed to upload content: {0}".format(error))
 
-def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, filepath):
+def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, filename, text):
     """
         Reads the documents and breaks into contents of managable size(300 words) and inserts into pinecone index
 
@@ -344,7 +343,8 @@ def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, file
                 embedding_model (string) -
                 pineindex (class) - Pinecone API client
                 namespace (string) - name of Pinecone index to store embeddings
-                filepath (string) - path to where documents are located on EFS
+                filename (string) - filename
+                text (string) - text content
 
         output: Dictionary with 2 keys: 
                 status - confirms if documents were successfully uploaded to pinecone ot not (True/False)
@@ -352,29 +352,11 @@ def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, file
     """
     try:
         print('Processing documents....')
-        for filename in os.listdir(filepath):
-            if filename.endswith(".pdf"):
-                # Open PDF file
-                pdf_file = open(os.path.join(filepath, filename), "rb")
-                pdf_reader = PyPDF2.PdfReader(pdf_file)
+        content = document_preprocessing(text)
+        upsert_document(openai, content, filename, 0, embedding_model, pineindex, namespace)
 
-                # Loop through pages and split into documents of 300 tokens
-                for page_num in range(len(pdf_reader.pages)):
-                    page = pdf_reader.pages[page_num]
-                    page_text = page.extract_text()
-                    content = document_preprocessing(page_text)
-                    upsert_document(openai, content, filename, page_num, embedding_model, pineindex, namespace)
-                    
-            elif filename.endswith(".txt"):    
-                # Read text file
-                with open(os.path.join(filepath, filename), "r") as f:
-                    text = f.read()
-                page_num = 0
-                content = document_preprocessing(text)
-                upsert_document(openai, content, filename, page_num, embedding_model, pineindex, namespace)
-
-            result = {  'status': True,
-                        'message': "Successfully processed and uploaded all documents"}
+        result = {  'status': True,
+                    'message': "Successfully processed and uploaded all documents"}
     except Exception as error:
         result = {  'status': False,
                     'message': "Failed: an exception occurred: {0}".format(error)}

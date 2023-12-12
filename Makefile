@@ -1,6 +1,18 @@
 TAG_COMMIT := $(shell git rev-list --abbrev-commit --tags --max-count=1)
 COACH_WORKER_VERSION := $(shell git describe --abbrev=0 --tags ${TAG_COMMIT} 2>/dev/null || true)
 
+install:
+	pip3 install -r Requirements.txt
+	make postinstall
+
+postinstall:
+	python ./setup/download_models.py
+	python -m nltk.downloader -d ./nltk_data punkt
+	python -m nltk.downloader -d ./nltk_data stopwords
+
+freeze:
+	pip3 freeze > Requirements.txt
+
 start_dev:
 	dotenv -e .env dotenv -e .env.local python3 main.py
 
@@ -31,15 +43,3 @@ docker_publish_dev:
 docker_latest:
 	docker tag botium/botium-coach-worker:$(COACH_WORKER_VERSION) botium/botium-coach-worker:latest
 	docker push botium/botium-coach-worker:latest
-
-install:
-	pip3 install -r Requirements.txt
-	make postinstall
-
-postinstall:
-	python ./setup/download_models.py
-	python -m nltk.downloader -d ./nltk_data punkt
-	python -m nltk.downloader -d ./nltk_data stopwords
-
-freeze:
-	pip3 freeze > Requirements.txt

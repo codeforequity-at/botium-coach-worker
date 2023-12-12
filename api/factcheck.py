@@ -7,7 +7,6 @@ import os
 import pandas as pd
 import pickle
 import pinecone
-import PyPDF2
 import re
 import requests
 import sys
@@ -80,7 +79,8 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         inputs: index (string) - name of pinecone index to store embeddings
                 environment (string) - pinecone environment where index is stored
                 namespace (string) - pinecone namespace
-                filepath (string) - filepath of where documents to be uploaded are stored
+                filename (string) - filename
+                text (string) - document text
 
         output: content - Dict with 2 keys: 
                         status - confirms if index was successfully uploaded or not (True/False)
@@ -94,7 +94,8 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
     index = UploadFactcheckDocumentRequest['index']
     pine_env = UploadFactcheckDocumentRequest['environment']
     namespace = UploadFactcheckDocumentRequest['namespace']
-    filepath = UploadFactcheckDocumentRequest['filepath']
+    filename = UploadFactcheckDocumentRequest['filename']
+    text = UploadFactcheckDocumentRequest['text']
 
     response_data = {}
     if 'boxEndpoint' in UploadFactcheckDocumentRequest:
@@ -106,12 +107,13 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
 
     try:
         pineindex = pinecone_init(pine_api_key,pine_env,index)
-        content = document_upsert_pinecone(openai, embedding_model, pineindex, namespace, filepath)
+        content = document_upsert_pinecone(openai, embedding_model, pineindex, None, filename, text)
         logger.info(content['message'])
         response_data['json'] = {
             "method": "upload_factcheck_documents",
             "status": "finished",
             "factcheckSessionId": sessionId,
+            "filename": filename,
             "content": content
         }
         res_queue.put((response_data,))
@@ -121,6 +123,7 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
             "method": "upload_factcheck_documents",
             "status": "failed",
             "factcheckSessionId": sessionId,
+            "filename": filename,
             "err": f'Uploading to index {index} in environment {pine_env}/{namespace} failed: {format(error)}'
         }
         res_queue.put((response_data,))
@@ -156,10 +159,11 @@ def factcheck(factcheckRequest):
 
     index = factcheckRequest['index']
     pine_env = factcheckRequest['environment']
+    namespace = factcheckRequest['namespace']
     statement = factcheckRequest['statement']
 
     pineindex=pinecone_init(pine_api_key,pine_env,index)
-    editor_responses, agreement_gates, status =editor(openai, statement, pineindex, index)
+    editor_responses, agreement_gates, status =editor(openai, statement, pineindex, None)
    
     result = {  'status': status,
                 'reasoning': agreement_gates,

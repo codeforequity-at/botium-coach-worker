@@ -98,7 +98,8 @@ paths:
               index: botium-box-index
               environment: gcp-starter
               namespace: client1-project1
-              filepath: docs
+              filename: some-filename.txt
+              text: some text content
       responses:
         '200':
           description: Returns True or False if documents have been successfully uploaded with message
@@ -421,7 +422,8 @@ components:
         - index
         - environment
         - namespace
-        - filepath
+        - filename
+        - text
       properties:
         factcheckSessionId:
           type: string
@@ -433,7 +435,9 @@ components:
           type: string
         namespace:
           type: string
-        filepath:
+        filename:
+          type: string
+        text:
           type: string
     FactcheckRequest:
       required:
