@@ -31,7 +31,7 @@ from .redis_client import getRedis
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 from .utils.log import getLogger
-from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init
+from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
 
 logger = getLogger('Fact Checker')
 
@@ -147,10 +147,12 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
     current_filename = None
 
     try:
-        sample_queries = ["query1", "query2"]
+        sample_queries = []
         for document in documents:
           current_filename = document["filename"]
-          logger.info(f'Created sample queries for {current_filename}: {sample_queries}')
+          questions = create_sample_questions(openai, document["text"])
+          logger.info(f'Created sample queries for {current_filename}: {questions}')
+          sample_queries = sample_queries + questions
 
         response_data['json'] = {
             "method": "create_sample_queries",

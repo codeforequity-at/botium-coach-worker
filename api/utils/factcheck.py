@@ -25,9 +25,9 @@ def create_query(openai,response_llm):
         Output: questions (List) - list of questions to gather evidence to fact check statement
     """
     response_llm='Statement:= '+ response_llm
-    print(response_llm)
+    #print(response_llm)
     # Creating queries from the statement 
-    print('-------------------------------------------------------------------------------------------------------')
+    #print('-------------------------------------------------------------------------------------------------------')
     response=openai.ChatCompletion.create(
       model="gpt-4",messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
@@ -50,6 +50,34 @@ def create_query(openai,response_llm):
         questions.append(question)
         
     return questions
+
+def create_sample_questions(openai,text):
+    text='Statement:= '+ text
+    # Creating queries from the statement 
+    #print('-------------------------------------------------------------------------------------------------------')
+    response=openai.ChatCompletion.create(
+      model="gpt-4",messages=[
+            {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
+            {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd"},
+            {"role": "assistant", "content": "Query generation \n Question:= Who sings the song Time of My Life? \n Question:= Is the song writer American?\n Question:= Which year the song was sung?\n Question:= Which film is the song Time of My Life from? \n Question:= Who produced the song Time of My Life?"},
+            {"role": "user", "content": "Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 45 minutes. This is to prevent a buildup of mucus. It’s called the nasal cycle."},
+            {"role": "assistant", "content": "Query generation \n Question:= Does your nose switch between nostrils? \n Question:= How often does your nostrils switch? \n Question:= Why does your nostril switch? \n Question:= What is nasal cycle?"},
+          {"role": "user", "content":text }
+        ]
+    )
+    
+    api_response=response['choices'][0]['message']['content']
+    questions = []
+    search_string='Question:='
+    for question in api_response.split("\n"):
+            # Remove the search string from each question
+        if search_string not in question:
+            continue
+        question = question.split(search_string)[1].strip()
+        questions.append(question)
+        
+    return questions
+    
 # gets context passages from the pinecone index
 def get_context(question, index, namespace, top_k):
     """ Generate embeddings for the question
