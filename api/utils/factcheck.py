@@ -29,7 +29,7 @@ def create_query(openai,response_llm):
     # Creating queries from the statement 
     print('-------------------------------------------------------------------------------------------------------')
     response=openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",messages=[
+      model="gpt-4",messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
             {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd"},
             {"role": "assistant", "content": "Query generation \n Verify:= 1.Who sings the song Time of My Life? \n Verify:= 2.Is the song writer American?\n Verify:= 3.Which year the song was sung?\n Verify:= 4.Which film is the song Time of My Life from? \n Verify:= 5.Who produced the song Time of My Life?"},
@@ -37,7 +37,7 @@ def create_query(openai,response_llm):
             {"role": "assistant", "content": "Query generation \n Verify:= 1.Does your nose switch between nostrils? \n Verify:= 2.How often does your nostrils switch? \n Verify:= 3.Why does your nostril switch? \n Verify:= 4.What is nasal cycle?"},
           {"role": "user", "content":response_llm }
         ]
-        )
+    )
     
     api_response=response['choices'][0]['message']['content']
     questions = []
@@ -331,7 +331,7 @@ def upsert_document(openai, split_content, filename, page_num, embedding_model, 
                     'metadata': {"filename": filename, "word_count": len(content.split()), 'context': content}
                     }]
             pineindex.upsert(vectors=vector, namespace=namespace ) 
-            print('Uploaded content to Pinecone index. {0}'.format(vector))
+            print('Uploaded content to Pinecone index. {0} {1}'.format(iid, vector[0]["metadata"]))
     except Exception as error:
         raise Exception("Failed to upload content: {0}".format(error))
 

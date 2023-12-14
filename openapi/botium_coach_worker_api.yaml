@@ -71,7 +71,11 @@ paths:
               environment: gcp-starter
       responses:
         '200':
-          description: Returns True/False if index has been successfully created with message
+          description: Factcheck response if index has been successfully created with message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FactcheckResponse"      
         default:
           description: unexpected error
           content:
@@ -80,12 +84,12 @@ paths:
                 $ref: "#/components/schemas/Error"
   /static/fact_check/upload_document:
     post:
-      summary: Store embeddings for "ground truth" documentation in Pinceone
+      summary: Store embeddings for "ground truth" documentation in index
       operationId: api.factcheck.upload_factcheck_documents
       security:
         - api_key: []
       requestBody:
-        description: Store embeddings for "ground truth" documentation in Pinceone
+        description: Store embeddings for "ground truth" documentation in index
         required: true
         content:
           application/json:
@@ -98,17 +102,55 @@ paths:
               index: botium-box-index
               environment: gcp-starter
               namespace: client1-project1
-              filename: some-filename.txt
-              text: some text content
+              documents:
+                - filename: yeti.txt
+                  text: The Yeti is an ape-like creature purported to inhabit the Himalayan mountain range in Asia. In Western popular culture, the creature is commonly referred to as the Abominable Snowman. Many dubious articles have been offered in an attempt to prove the existence of the Yeti, including anecdotal visual sightings, disputed video recordings, photographs, and plaster casts of large footprints. Some of these are speculated or known to be hoaxes.
       responses:
         '200':
-          description: Returns True or False if documents have been successfully uploaded with message
+          description: Upload queue response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FactcheckResponse"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /static/fact_check/create_sample_queries:
+    post:
+      summary: Create sample queries from "ground truth" documents
+      operationId: api.factcheck.create_sample_queries
+      security:
+        - api_key: []
+      requestBody:
+        description: Create sample queries from "ground truth" documents
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: CreateFactcheckSampleQueriesRequest
+              $ref: "#/components/schemas/CreateFactcheckSampleQueriesRequest"
+            example:
+              factcheckSessionId: test-factcheck-session-id
+              boxEndpoint: 'http://localhost:4000/api/coach'
+              documents:
+                - filename: yeti.txt
+                  text: The Yeti is an ape-like creature purported to inhabit the Himalayan mountain range in Asia. In Western popular culture, the creature is commonly referred to as the Abominable Snowman. Many dubious articles have been offered in an attempt to prove the existence of the Yeti, including anecdotal visual sightings, disputed video recordings, photographs, and plaster casts of large footprints. Some of these are speculated or known to be hoaxes.
+      responses:
+        '200':
+          description: Sample queries queue response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FactcheckResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"                
   /static/fact_check:
     post:
       summary: Fact-check a statement
@@ -127,7 +169,7 @@ paths:
               index: botium-box-index
               environment: gcp-starter
               namespace: client1-project1
-              statement: The sky is blue
+              statement: The yeti is a real thing
       responses:
         '200':
           description: Returns Ture/False on fact checked with edited statement and reasoning
@@ -416,14 +458,21 @@ components:
           type: string
         environment:
           type: string
+    FactcheckDocument:
+      required:
+        - filename
+        - text
+      properties:
+        filename:
+          type: string
+        text:
+          type: string
     UploadFactcheckDocumentRequest:
       required:
         - factcheckSessionId
         - index
         - environment
-        - namespace
-        - filename
-        - text
+        - documents
       properties:
         factcheckSessionId:
           type: string
@@ -435,15 +484,27 @@ components:
           type: string
         namespace:
           type: string
-        filename:
+        documents:          
+          type: array
+          items:
+            $ref: "#/components/schemas/FactcheckDocument"
+    CreateFactcheckSampleQueriesRequest:
+      required:
+        - factcheckSessionId
+        - documents
+      properties:
+        factcheckSessionId:
           type: string
-        text:
+        boxEndpoint:
           type: string
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactcheckDocument"
     FactcheckRequest:
       required:
         - index
         - environment
-        - namespace
         - statement
       properties:
         index:
@@ -454,6 +515,16 @@ components:
           type: string
         statement:
           type: string
+    FactcheckResponse:
+      properties:
+        status:
+          type: string
+        factcheckSessionId:
+          type: string
+        message:
+          type: string
+        err:
+          type: string          
     Translations:
       properties:
         translation:
