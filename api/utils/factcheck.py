@@ -272,7 +272,7 @@ def editor(openai,response_llm, pineindex, namespace):
         
     if edit_count==0:
         print('Nothing to edit as the statement seems to be factually correct')
-        edited_responses = "Sucessfully fact checked and statement appears to be correct"
+        edited_responses = "Successfully fact checked and statement appears to be correct"
         status = True
     else:
         print('Edited Statements Based of the disagreement of facts in documentation found and statement made')
