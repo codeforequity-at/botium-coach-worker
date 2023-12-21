@@ -1,22 +1,12 @@
-from ast import Return
-import json
-import math
-import numpy as np
 import openai
-import os
-import pandas as pd
-import pickle
 import pinecone
 import re
-import requests
-import sys
-import time
-import tensorflow_hub as hub
-import tensorflow as tf
-import tensorflow_text
 import torch
+from .log import getLogger
 
-def create_query(openai,response_llm):
+logger = getLogger('Fact Checker Utils')
+
+def create_query(openai, response_llm):
     """ Create query/facts which are required to be verified
 
         Input:  openai (class) - OpenAI API client 
@@ -24,61 +14,64 @@ def create_query(openai,response_llm):
 
         Output: questions (List) - list of questions to gather evidence to fact check statement
     """
-    response_llm='Statement:= '+ response_llm
-    #print(response_llm)
-    # Creating queries from the statement 
-    #print('-------------------------------------------------------------------------------------------------------')
-    response=openai.ChatCompletion.create(
-      model="gpt-4",messages=[
+    response_llm = 'Statement:= ' + response_llm
+    # logger.info(response_llm)
+    # Creating queries from the statement
+    # logger.info('-------------------------------------------------------------------------------------------------------')
+    response = openai.ChatCompletion.create(
+        model="gpt-4", messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
             {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd"},
             {"role": "assistant", "content": "Query generation \n Verify:= 1.Who sings the song Time of My Life? \n Verify:= 2.Is the song writer American?\n Verify:= 3.Which year the song was sung?\n Verify:= 4.Which film is the song Time of My Life from? \n Verify:= 5.Who produced the song Time of My Life?"},
             {"role": "user", "content": "Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 45 minutes. This is to prevent a buildup of mucus. It’s called the nasal cycle."},
             {"role": "assistant", "content": "Query generation \n Verify:= 1.Does your nose switch between nostrils? \n Verify:= 2.How often does your nostrils switch? \n Verify:= 3.Why does your nostril switch? \n Verify:= 4.What is nasal cycle?"},
-          {"role": "user", "content":response_llm }
+            {"role": "user", "content": response_llm}
         ]
     )
-    
-    api_response=response['choices'][0]['message']['content']
+
+    api_response = response['choices'][0]['message']['content']
     questions = []
-    search_string='Verify'
+    search_string = 'Verify'
     for question in api_response.split("\n"):
-            # Remove the search string from each question
+        # Remove the search string from each question
         if search_string not in question:
             continue
         question = question.split(search_string)[1].strip()
         questions.append(question)
-        
+
     return questions
 
-def create_sample_questions(openai,text):
-    text='Statement:= '+ text
-    # Creating queries from the statement 
-    #print('-------------------------------------------------------------------------------------------------------')
-    response=openai.ChatCompletion.create(
-      model="gpt-4",messages=[
+
+def create_sample_questions(openai, text):
+    text = 'Statement:= ' + text
+    # Creating queries from the statement
+    # logger.info('-------------------------------------------------------------------------------------------------------')
+    response = openai.ChatCompletion.create(
+        model="gpt-4", messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
             {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd"},
             {"role": "assistant", "content": "Query generation \n Question:= Who sings the song Time of My Life? \n Question:= Is the song writer American?\n Question:= Which year the song was sung?\n Question:= Which film is the song Time of My Life from? \n Question:= Who produced the song Time of My Life?"},
             {"role": "user", "content": "Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 45 minutes. This is to prevent a buildup of mucus. It’s called the nasal cycle."},
             {"role": "assistant", "content": "Query generation \n Question:= Does your nose switch between nostrils? \n Question:= How often does your nostrils switch? \n Question:= Why does your nostril switch? \n Question:= What is nasal cycle?"},
-          {"role": "user", "content":text }
+            {"role": "user", "content": text}
         ]
     )
-    
-    api_response=response['choices'][0]['message']['content']
+
+    api_response = response['choices'][0]['message']['content']
     questions = []
-    search_string='Question:='
+    search_string = 'Question:='
     for question in api_response.split("\n"):
-            # Remove the search string from each question
+        # Remove the search string from each question
         if search_string not in question:
             continue
         question = question.split(search_string)[1].strip()
         questions.append(question)
-        
+
     return questions
-    
+
 # gets context passages from the pinecone index
+
+
 def get_context(question, index, namespace, top_k):
     """ Generate embeddings for the question
 
@@ -89,15 +82,17 @@ def get_context(question, index, namespace, top_k):
 
         Output: context (dict) - returns most relevant contect based on questions asked and retrieval score from pineocne
     """
-    result = openai.Embedding.create(model="text-embedding-ada-002",input=question)
-    embedding=result["data"][0]["embedding"]
+    result = openai.Embedding.create(
+        model="text-embedding-ada-002", input=question)
+    embedding = result["data"][0]["embedding"]
     # search pinecone index for context passage with the answer
-    context = index.query(namespace=namespace, vector = embedding, top_k=top_k, include_metadata=True)
+    context = index.query(namespace=namespace, vector=embedding,
+                          top_k=top_k, include_metadata=True)
     return context
 
 
-# For each question retrieve the most relvant part of document 
-def retrieval_passage(openai, response_llm, pineindex, namespace) :
+# For each question retrieve the most relvant part of document
+def retrieval_passage(openai, response_llm, pineindex, namespace):
     """ Generate embeddings for the question
 
         Input:  openai (class) - OpenAI API client 
@@ -108,31 +103,31 @@ def retrieval_passage(openai, response_llm, pineindex, namespace) :
 
         Output: used_evidences (list) - list of evidence to support if statement is true or false
     """
-    questions=create_query(openai,response_llm)
-    used_evidences=[]
-    if len(questions)==0:
+    questions = create_query(openai, response_llm)
+    used_evidences = []
+    if len(questions) == 0:
         return used_evidences
-    
-    print('Queries Created from the statement',questions)
-    print('-------------------------------------------------------------------------------------------------------')
+
+    logger.info('Queries Created from the statement', questions)
+    logger.info('-------------------------------------------------------------------------------------------------------')
     query_search = []
     for query in questions:
-        print('Retrieving relevant passage for query:', query )
+        logger.info('Retrieving relevant passage for query:', query)
         retrieved_passages = []
-        #gets context passages from the pinecone index
+        # gets context passages from the pinecone index
         context = get_context(query, pineindex, namespace, top_k=1)
 
         for passage in context["matches"]:
-               retrieved_passages.append(
-                   {
-                       "text": passage['metadata']['context'],
-                       "query": query,
-                       "retrieval_score": passage['score']
-                   }
-               )
+            retrieved_passages.append(
+                {
+                    "text": passage['metadata']['context'],
+                    "query": query,
+                    "retrieval_score": passage['score']
+                }
+            )
 
-        print(retrieved_passages) 
-        ## figure conflicting articles and stop 
+        logger.info(retrieved_passages)
+        # figure conflicting articles and stop
         if retrieved_passages:
             # Sort all retrieved passages by the retrieval score.
             retrieved_passages = sorted(
@@ -141,15 +136,17 @@ def retrieval_passage(openai, response_llm, pineindex, namespace) :
 
             # Normalize the retreival scores into probabilities
             scores = [r["retrieval_score"] for r in retrieved_passages]
-            probs = torch.nn.functional.softmax(torch.Tensor(scores), dim=-1).tolist()
+            probs = torch.nn.functional.softmax(
+                torch.Tensor(scores), dim=-1).tolist()
             for prob, passage in zip(probs, retrieved_passages):
                 passage["score"] = prob
         query_search.append(retrieved_passages)
-        
-    used_evidences=[e for cur_evids in query_search for e in cur_evids[:1]]
+
+    used_evidences = [e for cur_evids in query_search for e in cur_evids[:1]]
     return used_evidences
 
-def agreement_gate(openai,response_llm,pineindex, namespace):
+
+def agreement_gate(openai, response_llm, pineindex, namespace):
     """ Generate embeddings for the question
 
         Input:  openai (class) - OpenAI API client 
@@ -162,51 +159,55 @@ def agreement_gate(openai,response_llm,pineindex, namespace):
                 relevance (int) - shows relevance of passage 
     """
 
-    #Calling retrieval stage before agreement stage
-    used_evidences=retrieval_passage(openai,response_llm, pineindex, namespace)
-    agreement_responses=[]
-    agreement_gates=[]
-    
+    # Calling retrieval stage before agreement stage
+    used_evidences = retrieval_passage(
+        openai, response_llm, pineindex, namespace)
+    agreement_responses = []
+    agreement_gates = []
+
     # Checking relevant articles are present or not in the dataset provided
-    relevance=0
-    
-    print('\n')
-    print('-------------------------------------------------------------------------------------------------------')
-    print('Evidences gathered for each query we are fact checking ')
-    print('*************************************************')
+    relevance = 0
+
+    logger.info('\n')
+    logger.info('-------------------------------------------------------------------------------------------------------')
+    logger.info('Evidences gathered for each query we are fact checking ')
+    logger.info('*************************************************')
     for i in used_evidences:
-        print(i)
-        print('*************************************************')
-    print('-------------------------------------------------------------------------------------------------------')
-    print('\n')
+        logger.info(i)
+        logger.info('*************************************************')
+    logger.info('-------------------------------------------------------------------------------------------------------')
+    logger.info('\n')
     # No evidence then return empty
-    if len(used_evidences)==0:
-        return agreement_gates,used_evidences,relevance
-    
+    if len(used_evidences) == 0:
+        return agreement_gates, used_evidences, relevance
+
     for i in range(len(used_evidences)):
-        if used_evidences[i]['retrieval_score']<0:
-            relevance+=1
-            
-    if relevance >0:
-        return agreement_gates,used_evidences,relevance
-    
+        if used_evidences[i]['retrieval_score'] < 0:
+            relevance += 1
+
+    if relevance > 0:
+        return agreement_gates, used_evidences, relevance
+
     for i in range(len(used_evidences)):
-        user_llm=  "Statement:= " + response_llm + " \n Query:= " + used_evidences[i]['query'] + " \n Article:= " + used_evidences[i]['text']
-        response=openai.ChatCompletion.create(
-                  model="gpt-4",
-                  messages=[
-                {"role": "system", "content": "You are a helpful assistant specialized in performing fact-checking between a given statement and an accompanying document based on the queries provided. Your goal is to ensure consistent and accurate results throughout the fact-checking process. For each query, you will compare both the statement and the document to determine if they agree or disagree on the specific facts presented. Any even slight agreement or disagreement between the two will be concluded as disagree. You will thoroughly provide reasoning for each conclusion reached and in therefore explicilty tell if you agree or disagree. If there are any discrepancies or inconsistencies between the statement and the article you will explicitly state disagree for clarity."  },
-                {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd. \n Query:= Who was the producer of (I’ve Had) The Time of My Life? \n Article:= On September 8, 2010, the original demo of this song, along with a remix by producer Michael Lloyd , was released as digital files in an effort to raise money for the Patrick Swayze Pancreas Cancer Resarch Foundation at Stanford University."},
+        user_llm = "Statement:= " + response_llm + " \n Query:= " + \
+            used_evidences[i]['query'] + \
+            " \n Article:= " + used_evidences[i]['text']
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant specialized in performing fact-checking between a given statement and an accompanying document based on the queries provided. Your goal is to ensure consistent and accurate results throughout the fact-checking process. For each query, you will compare both the statement and the document to determine if they agree or disagree on the specific facts presented. Any even slight agreement or disagreement between the two will be concluded as disagree. You will thoroughly provide reasoning for each conclusion reached and in therefore explicilty tell if you agree or disagree. If there are any discrepancies or inconsistencies between the statement and the article you will explicitly state disagree for clarity."},
+                {"role": "user",
+                 "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd. \n Query:= Who was the producer of (I’ve Had) The Time of My Life? \n Article:= On September 8, 2010, the original demo of this song, along with a remix by producer Michael Lloyd , was released as digital files in an effort to raise money for the Patrick Swayze Pancreas Cancer Resarch Foundation at Stanford University."},
                 {"role": "assistant", "content": "Reasoning:= The article said that a demo was produced by Michael Lloyd and you said Time of My Life was produced by Michael Lloyd. \n Therefore:= This agrees with statement claims."},
                 {"role": "user", "content": "Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 45 minutes. This is to prevent a buildup of mucus. It’s called the nasal cycle. \n Query:= How often do your nostrils switch? \n Article:= Although we don’t usually notice it, during the nasal cycle one nostril becomes congested and thus contributes less to airflow, while the other becomes decongested. On average, the congestion pattern switches about every 2 hours, according to a small 2016 study published in the journal PLOS One."},
                 {"role": "assistant", "content": "Reasoning:= The article said the nose’s switching time is about every 2 hours, and you said the nose's switching time is about every 45 minutes. \n Therefore:= This disagrees with statement claims."},
-                {"role": "user", "content":user_llm }])
+                {"role": "user", "content": user_llm}])
         agreement_responses.append(response)
-        
-    
+
     for i in range(len(agreement_responses)):
-        api_response=agreement_responses[i]['choices'][0]['message']['content'].strip().split("\n")
-        if len(api_response)<2:
+        api_response = agreement_responses[i]['choices'][0]['message']['content'].strip(
+        ).split("\n")
+        if len(api_response) < 2:
             reason = "Failed to parse."
             decision = None
             is_open = False
@@ -216,10 +217,10 @@ def agreement_gate(openai,response_llm,pineindex, namespace):
             is_open = "disagrees" in api_response[1]
             gate = {"is_open": is_open, "reason": reason, "decision": decision}
             agreement_gates.append(gate)
-    return agreement_gates,used_evidences,relevance
+    return agreement_gates, used_evidences, relevance
 
 
-def editor(openai,response_llm, pineindex, namespace):
+def editor(openai, response_llm, pineindex, namespace):
     """
     Create the Pinecone index
 
@@ -232,61 +233,68 @@ def editor(openai,response_llm, pineindex, namespace):
             agreeemnet_gate (dict) - contains reason, decisions and gate value 
             status (boolean) - returns True if statement has passed fact check  
     """
-    agreement_gates,used_evidences,relevance=agreement_gate(openai,response_llm, pineindex, namespace)
-    edit_count=0
-    edited_responses=[]
-    
-    if len(agreement_gates)==0 and len(used_evidences)==0 and relevance==0:
-        print('Not enough data in the statement for performing fact checking')
+    agreement_gates, used_evidences, relevance = agreement_gate(
+        openai, response_llm, pineindex, namespace)
+    edit_count = 0
+    edited_responses = []
+
+    if len(agreement_gates) == 0 and len(used_evidences) == 0 and relevance == 0:
+        logger.info('Not enough data in the statement for performing fact checking')
         return edited_responses, agreement_gates, False
-    
+
     if relevance == len(used_evidences):
-        print('There is no document which is relevant to any/some of the facts present in statement')
+        logger.info('There is no document which is relevant to any/some of the facts present in statement')
         return edited_responses, agreement_gates, False
-    
-    
-    print('-------------------------------------------------------------------------------------------------------')
-    print('Agreement gate for each query if the statement agrees or not')
-    print('*************************************************')
+
+    logger.info('-------------------------------------------------------------------------------------------------------')
+    logger.info('Agreement gate for each query if the statement agrees or not')
+    logger.info('*************************************************')
     for i in agreement_gates:
-        print(i)
-        print('*************************************************')
-    print('-------------------------------------------------------------------------------------------------------')
-    print('\n')
+        logger.info(i)
+        logger.info('*************************************************')
+    logger.info('-------------------------------------------------------------------------------------------------------')
+    logger.info('\n')
     for i in range(len(agreement_gates)):
         if agreement_gates[i]['is_open']:
-            user_llm=  "Statement:= " + response_llm + " \n Query:= " + used_evidences[i]['query'] + " \n Article:= " + used_evidences[i]['text'] + agreement_gates[i]['reason']
-            response=openai.ChatCompletion.create(
-                          model="gpt-4",
-                          messages=[
-                        #{"role": "system", "content": "You are a helpful assistant.Who fixes the statement using the reasoning provided as there is a disagreement between article and statement on the query."  },
-                        {"role": "system", "content": "You are a helpful assistant specializing in fixing statements based on the provided reasoning when there is a disagreement between the statement and the provided documentation on the given query. Your objective is to ensure consistent and accurate results by modifying the facts in the statement using information from the accompanying documentation, guided by the understanding provided in the reasoning."  },#Just modify the facts don't try to add any new information, try to keep as close as possible to the original statement
-                        {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd. \n Query:= Who was the producer of (I’ve Had) The Time of My Life? \n Article:= On September 8, 2010, the original demo of this song, along with a remix by producer Michael Lloyd , was released as digital files in an effort to raise money for the Patrick Swayze Pancreas Cancer Resarch Foundation at Stanford University. \n Reasoning:= Time of My Life producer name in your statement is wrong."},
-                        {"role": "assistant", "content": "Fixed Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd."},
-                        {"role": "user", "content": "Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 45 minutes. This is to prevent a buildup of mucus. It’s called the nasal cycle. \n Query:= How often do your nostrils switch? \n Article:= Although we don’t usually notice it, during the nasal cycle one nostril becomes congested and thus contributes less to airflow, while the other becomes decongested. On average, the congestion pattern switches about every 2 hours, according to a small 2016 study published in the journal PLOS One. \n Reasoning:= This suggests 45 minutes switch time in your statement is wrong."},
-                        {"role": "assistant", "content": "Fixed Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 2 hours. This is to prevent a buildup of mucus. It’s called the nasal cycle."},
-                        {"role": "user", "content":user_llm }])
-            edit_count +=1
-            edited_responses.append(response['choices'][0]['message']['content'])
-            response_llm=response['choices'][0]['message']['content']
-        
-    if edit_count==0:
-        print('Nothing to edit as the statement seems to be factually correct')
+            user_llm = "Statement:= " + response_llm + " \n Query:= " + \
+                used_evidences[i]['query'] + " \n Article:= " + \
+                used_evidences[i]['text'] + agreement_gates[i]['reason']
+            response = openai.ChatCompletion.create(
+                model="gpt-4",
+                messages=[
+                    # {"role": "system", "content": "You are a helpful assistant.Who fixes the statement using the reasoning provided as there is a disagreement between article and statement on the query."  },
+                    # Just modify the facts don't try to add any new information, try to keep as close as possible to the original statement
+                    {"role": "system", "content": "You are a helpful assistant specializing in fixing statements based on the provided reasoning when there is a disagreement between the statement and the provided documentation on the given query. Your objective is to ensure consistent and accurate results by modifying the facts in the statement using information from the accompanying documentation, guided by the understanding provided in the reasoning."},
+                    {"role": "user",
+                        "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd. \n Query:= Who was the producer of (I’ve Had) The Time of My Life? \n Article:= On September 8, 2010, the original demo of this song, along with a remix by producer Michael Lloyd , was released as digital files in an effort to raise money for the Patrick Swayze Pancreas Cancer Resarch Foundation at Stanford University. \n Reasoning:= Time of My Life producer name in your statement is wrong."},
+                    {"role": "assistant", "content": "Fixed Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd."},
+                    {"role": "user", "content": "Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 45 minutes. This is to prevent a buildup of mucus. It’s called the nasal cycle. \n Query:= How often do your nostrils switch? \n Article:= Although we don’t usually notice it, during the nasal cycle one nostril becomes congested and thus contributes less to airflow, while the other becomes decongested. On average, the congestion pattern switches about every 2 hours, according to a small 2016 study published in the journal PLOS One. \n Reasoning:= This suggests 45 minutes switch time in your statement is wrong."},
+                    {"role": "assistant", "content": "Fixed Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 2 hours. This is to prevent a buildup of mucus. It’s called the nasal cycle."},
+                    {"role": "user", "content": user_llm}])
+            edit_count += 1
+            edited_responses.append(
+                response['choices'][0]['message']['content'])
+            response_llm = response['choices'][0]['message']['content']
+
+    if edit_count == 0:
+        logger.info('Nothing to edit as the statement seems to be factually correct')
         edited_responses = "Successfully fact checked and statement appears to be correct"
         status = True
     else:
-        print('Edited Statements Based of the disagreement of facts in documentation found and statement made')
-        print('\n')
-        print('*************************************************')
+        logger.info('Edited Statements Based of the disagreement of facts in documentation found and statement made')
+        logger.info('\n')
+        logger.info('*************************************************')
         for i in edited_responses:
-            print(i)
-            print('*************************************************')
+            logger.info(i)
+            logger.info('*************************************************')
         status = False
 
     return edited_responses, agreement_gates, status
 
 # Function to initialize pinecone index
-def pinecone_init(api_key,environment,index_name):
+
+
+def pinecone_init(api_key, environment, index_name):
     """
     Create the Pinecone index
 
@@ -296,13 +304,14 @@ def pinecone_init(api_key,environment,index_name):
 
     Output: document similarities - Dict of most relevant passages from documents 
     """
-    try :
-        pinecone.init(api_key=api_key, environment=environment )
+    try:
+        pinecone.init(api_key=api_key, environment=environment)
         index = pinecone.Index(index_name)
         return index
     except Exception as error:
-    # handle the exception
-        print("An exception occurred:", error)
+        # handle the exception
+        logger.info("An exception occurred:", error)
+
 
 def document_preprocessing(text):
     """
@@ -330,8 +339,9 @@ def document_preprocessing(text):
             split_content.append(current_content.strip())
         return split_content
     except Exception as error:
-        print("Failed to preprocess documents: {0}".format(error))
+        logger.info("Failed to preprocess documents: {0}".format(error))
         return False
+
 
 def upsert_document(openai, split_content, filename, page_num, embedding_model, pineindex, namespace):
     """
@@ -346,22 +356,25 @@ def upsert_document(openai, split_content, filename, page_num, embedding_model, 
 
         output: None
     """
-    para=0
+    para = 0
     try:
         # Append the split content to the list
         for content in split_content:
-            para +=1
+            para += 1
             iid = filename[:-4] + '_' + str(page_num) + '_' + str(para)
-            result = openai.Embedding.create(model=embedding_model, input=content)
+            result = openai.Embedding.create(
+                model=embedding_model, input=content)
             embedding = result["data"][0]["embedding"]
             vector = [{'id': iid,
-                    'values': embedding,
-                    'metadata': {"filename": filename, "word_count": len(content.split()), 'context': content}
-                    }]
-            pineindex.upsert(vectors=vector, namespace=namespace ) 
-            print('Uploaded content to Pinecone index. {0} {1}'.format(iid, vector[0]["metadata"]))
+                       'values': embedding,
+                       'metadata': {"filename": filename, "word_count": len(content.split()), 'context': content}
+                       }]
+            pineindex.upsert(vectors=vector, namespace=namespace)
+            logger.info('Uploaded content to Pinecone index. {0} {1}'.format(
+                iid, vector[0]["metadata"]))
     except Exception as error:
         raise Exception("Failed to upload content: {0}".format(error))
+
 
 def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, filename, text):
     """
@@ -379,13 +392,14 @@ def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, file
                 message - contains string stating if it was successfully uploaded or failed with failure message.
     """
     try:
-        print('Processing documents....')
+        logger.info('Processing documents....')
         content = document_preprocessing(text)
-        upsert_document(openai, content, filename, 0, embedding_model, pineindex, namespace)
+        upsert_document(openai, content, filename, 0,
+                        embedding_model, pineindex, namespace)
 
-        result = {  'status': True,
-                    'message': "Successfully processed and uploaded all documents"}
+        result = {'status': True,
+                  'message': "Successfully processed and uploaded all documents"}
     except Exception as error:
-        result = {  'status': False,
-                    'message': "Failed: an exception occurred: {0}".format(error)}
+        result = {'status': False,
+                  'message': "Failed: an exception occurred: {0}".format(error)}
     return result

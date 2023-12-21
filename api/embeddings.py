@@ -23,6 +23,7 @@ from flask_healthz import healthz
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 
+
 class CalcStatus(str, Enum):
     CHI2_ANALYSIS_RUNNING = 'CHI2_ANALYSIS_RUNNING'
     CHI2_ANALYSIS_READY = 'CHI2_ANALYSIS_READY'
@@ -50,9 +51,12 @@ class CalcStatus(str, Enum):
     EMBEDDINGS_COSINE_SIMILARITY_FAILED = 'EMBEDDINGS_COSINE_SIMILARITY_FAILED'
 
 # to generate test data
+
+
 def objtofile(data, filename, logger):
     with open('test_data/' + filename + '.obj', 'wb') as outfile:
         pickle.dump(data, outfile)
+
 
 maxUtterancesForEmbeddings = -1
 if 'COACH_MAX_UTTERANCES_FOR_EMBEDDINGS' in os.environ:
@@ -95,13 +99,14 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
     status_data = {}
     if 'boxEndpoint' in embeddingsRequest:
         response_data['boxEndpoint'] = embeddingsRequest['boxEndpoint']
-        response_data['header'] = { "content-type": "application/json" }
+        response_data['header'] = {"content-type": "application/json"}
         status_data['boxEndpoint'] = response_data['boxEndpoint']
         status_data['header'] = response_data['header']
 
     def sendStatus(category, calc_status, step, max_steps, message):
         logger.info(message, extra=log_extras)
-        status_data['redisKey'] = 'coachworker_status_' + category + '_' + coachSessionId
+        status_data['redisKey'] = 'coachworker_status_' + \
+            category + '_' + coachSessionId
         status_data['json'] = {
             "method": "calculate_" + category,
             "clientId": clientId,
@@ -111,11 +116,12 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             "step": step,
             "steps": max_steps
         }
-        res_queue.put((status_data,None,None))
+        res_queue.put((status_data, None, None))
 
     if method == "calculate_chi2":
         response_data['redisKey'] = 'coachworker_res_chi2_' + coachSessionId
-        response_data['deleteRedisKey'] = 'coachworker_req_chi2_' + coachSessionId
+        response_data['deleteRedisKey'] = 'coachworker_req_chi2_' + \
+            coachSessionId
 
         if len(intents) == 0:
             response_data['json'] = {
@@ -132,7 +138,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                     'chi2_similarity': []
                 }
             }
-            logger.debug(json.dumps(response_data['json'], indent=2), extra=log_extras)
+            logger.debug(json.dumps(
+                response_data['json'], indent=2), extra=log_extras)
             res_queue.put((response_data,))
             return
 
@@ -141,42 +148,57 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                 filter['maxxgrams'] = 5
 
             flattenedForChi2 = pandas_utils.flatten_intents_list(intents)
-            #objtofile(flattenedForChi2, 'flattenedForChi2', logger)
+            # objtofile(flattenedForChi2, 'flattenedForChi2', logger)
 
-            sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_RUNNING, 1, 4, 'Chi2 Analysis running')
+            sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_RUNNING,
+                       1, 4, 'Chi2 Analysis running')
             try:
                 chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(
                     logger, log_extras, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
-                #objtofile(chi2, 'chi2', logger)
-                #objtofile(unigram_intent_dict, 'unigram_intent_dict', logger)
-                #objtofile(bigram_intent_dict, 'bigram_intent_dict', logger)
+                # objtofile(chi2, 'chi2', logger)
+                # objtofile(unigram_intent_dict, 'unigram_intent_dict', logger)
+                # objtofile(bigram_intent_dict, 'bigram_intent_dict', logger)
             except Exception as e:
-                sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_FAILED, 1, 4, 'Chi2 analysis failed - {}'.format(e))
-            sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_READY, 1, 4, 'Chi2 analysis ready')
+                sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_FAILED,
+                           1, 4, 'Chi2 analysis failed - {}'.format(e))
+            sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_READY,
+                       1, 4, 'Chi2 analysis ready')
 
-            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_UNIGRAMS_RUNNING, 2, 4, 'Chi2 Ambiguous Unigrams Analysis running')
+            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_UNIGRAMS_RUNNING,
+                       2, 4, 'Chi2 Ambiguous Unigrams Analysis running')
             try:
-                chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(unigram_intent_dict)
-                #objtofile(chi2_ambiguous_unigrams, 'chi2_ambiguous_unigrams', logger)
+                chi2_ambiguous_unigrams = chi2_analyzer.get_confusing_key_terms(
+                    unigram_intent_dict)
+                # objtofile(chi2_ambiguous_unigrams, 'chi2_ambiguous_unigrams', logger)
             except Exception as e:
-                sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_UNIGRAMS_FAILED, 2, 4, 'Chi2 Ambiguous Unigrams Analysis failed - {}'.format(e))
-            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_UNIGRAMS_READY, 2, 4, 'Chi2 Ambiguous Unigrams Analysis ready')
+                sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_UNIGRAMS_FAILED, 2,
+                           4, 'Chi2 Ambiguous Unigrams Analysis failed - {}'.format(e))
+            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_UNIGRAMS_READY,
+                       2, 4, 'Chi2 Ambiguous Unigrams Analysis ready')
 
-            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_BIGRAMS_RUNNING, 3, 4, 'Chi2 Ambiguous Bigrams Analysis running')
+            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_BIGRAMS_RUNNING,
+                       3, 4, 'Chi2 Ambiguous Bigrams Analysis running')
             try:
-                chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(bigram_intent_dict)
-                #objtofile(chi2_ambiguous_bigrams, 'chi2_ambiguous_bigrams', logger)
+                chi2_ambiguous_bigrams = chi2_analyzer.get_confusing_key_terms(
+                    bigram_intent_dict)
+                # objtofile(chi2_ambiguous_bigrams, 'chi2_ambiguous_bigrams', logger)
             except Exception as e:
-                sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_BIGRAMS_FAILED, 3, 4, 'Chi2 Ambiguous Bigrams Analysis failed - {}'.format(e))
-            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_BIGRAMS_READY, 3, 4, 'Chi2 Ambiguous Bigrams Analysis ready')
+                sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_BIGRAMS_FAILED, 3,
+                           4, 'Chi2 Ambiguous Bigrams Analysis failed - {}'.format(e))
+            sendStatus('chi2', CalcStatus.CHI2_AMBIGUOS_BIGRAMS_READY,
+                       3, 4, 'Chi2 Ambiguous Bigrams Analysis ready')
 
-            sendStatus('chi2', CalcStatus.CHI2_SIMILARITY_ANALYSIS_RUNNING, 4, 4, 'Chi2 Similarity Analysis running')
+            sendStatus('chi2', CalcStatus.CHI2_SIMILARITY_ANALYSIS_RUNNING,
+                       4, 4, 'Chi2 Similarity Analysis running')
             try:
-                chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(logger, log_extras, worker_name, flattenedForChi2, filter['minsimilarity'])
-                #objtofile(chi2_similarity, 'chi2_similarity', logger)
+                chi2_similarity = similarity_analyzer.ambiguous_examples_analysis(
+                    logger, log_extras, worker_name, flattenedForChi2, filter['minsimilarity'])
+                # objtofile(chi2_similarity, 'chi2_similarity', logger)
             except Exception as e:
-                sendStatus('chi2', CalcStatus.CHI2_SIMILARITY_ANALYSIS_FAILED, 4, 4, 'Chi2 Similarity Analysis failed - {}'.format(e))
-            sendStatus('chi2', CalcStatus.CHI2_SIMILARITY_ANALYSIS_READY, 4, 4, 'Chi2 Similarity Analysis ready')
+                sendStatus('chi2', CalcStatus.CHI2_SIMILARITY_ANALYSIS_FAILED,
+                           4, 4, 'Chi2 Similarity Analysis failed - {}'.format(e))
+            sendStatus('chi2', CalcStatus.CHI2_SIMILARITY_ANALYSIS_READY,
+                       4, 4, 'Chi2 Similarity Analysis ready')
             logger.info('Returning results', extra=log_extras)
 
             response_data['json'] = {
@@ -196,7 +218,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             res_queue.put((response_data,))
 
         except Exception as e:
-            logger.error('Calculating chi2 failed: ' + str(e), extra=log_extras)
+            logger.error('Calculating chi2 failed: ' +
+                         str(e), extra=log_extras)
             response_data['json'] = {
                 "method": "calculate_chi2",
                 "status": "failed",
@@ -209,12 +232,15 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             res_queue.put((response_data,))
 
     if method == "calculate_embeddings":
-        response_data['redisKey'] = 'coachworker_res_embeddings_' + coachSessionId
-        response_data['deleteRedisKey'] = 'coachworker_req_embeddings_' + coachSessionId
+        response_data['redisKey'] = 'coachworker_res_embeddings_' + \
+            coachSessionId
+        response_data['deleteRedisKey'] = 'coachworker_req_embeddings_' + \
+            coachSessionId
 
         logger.info('Loading word embeddings model from tfhub ...')
         try:
-            generate_embeddings = hub.load('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
+            generate_embeddings = hub.load(
+                'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
         except Exception as e:
             err_queue.put(str(e))
         logger.info('Word embeddings model ready.')
@@ -234,7 +260,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                     'separation': separation,
                 }
             }
-            logger.debug(json.dumps(response_data['json'], indent=2), extra=log_extras)
+            logger.debug(json.dumps(
+                response_data['json'], indent=2), extra=log_extras)
             res_queue.put((response_data,))
             return
 
@@ -242,20 +269,26 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             if not 'maxxgrams' in filter:
                 filter['maxxgrams'] = 5
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_RUNNING, 1, 4, "Embeddings calculation for {} intents running".format(len(intents)))
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_RUNNING, 1, 4,
+                       "Embeddings calculation for {} intents running".format(len(intents)))
             try:
                 for intent in intents:
-                    logger.info('Calculating embeddings for intent "%s" with %s: examples', intent['name'], len(intent['examples']), extra=log_extras)
+                    logger.info('Calculating embeddings for intent "%s" with %s: examples',
+                                intent['name'], len(intent['examples']), extra=log_extras)
 
                 training_phrases_with_embeddings = defaultdict(list)
                 for intent in intents:
                     if len(intent['examples']) > 0:
-                        computed_embeddings = generate_embeddings(intent['examples'])
-                        training_phrases_with_embeddings[intent['name']] = dict(zip(intent['examples'], computed_embeddings))
+                        computed_embeddings = generate_embeddings(
+                            intent['examples'])
+                        training_phrases_with_embeddings[intent['name']] = dict(
+                            zip(intent['examples'], computed_embeddings))
 
                 for intent_name, _ in training_phrases_with_embeddings.items():
-                    training_phrase, embeddings = next(iter(training_phrases_with_embeddings[intent_name].items()))
-                    logger.info('Calculated embeddings for intent {}, example: {{\'{}\':{}}}'.format(intent_name, training_phrase, embeddings[:5]), extra=log_extras)
+                    training_phrase, embeddings = next(
+                        iter(training_phrases_with_embeddings[intent_name].items()))
+                    logger.info('Calculated embeddings for intent {}, example: {{\'{}\':{}}}'.format(
+                        intent_name, training_phrase, embeddings[:5]), extra=log_extras)
 
                 embedding_vectors = []
 
@@ -265,14 +298,18 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
 
                 embedding_vectors = np.asarray(embedding_vectors)
             except Exception as e:
-                sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_FAILED, 1, 4, "Embeddings calculation for {} intents failed - {}".format(len(intents), e))
+                sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_FAILED, 1, 4,
+                           "Embeddings calculation for {} intents failed - {}".format(len(intents), e))
                 exit(1)
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_READY, 1, 4, "Embeddings calculation for {} intents ready".format(len(intents)))
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_READY, 1, 4,
+                       "Embeddings calculation for {} intents ready".format(len(intents)))
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PCA_RUNNING, 2, 4, 'Principal Component Analysis running')
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PCA_RUNNING,
+                       2, 4, 'Principal Component Analysis running')
             try:
-                logger.info('Starting principal component analysis for %s examples', len(embedding_vectors), extra=log_extras)
+                logger.info('Starting principal component analysis for %s examples', len(
+                    embedding_vectors), extra=log_extras)
 
                 pca = PCA(n_components=2)
                 pca.fit(embedding_vectors)
@@ -280,8 +317,10 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                 embeddings_coords = []
 
                 for color, intent in enumerate(training_phrases_with_embeddings.keys()):
-                    phrases = list(training_phrases_with_embeddings[intent].keys())
-                    embeddings = list(training_phrases_with_embeddings[intent].values())
+                    phrases = list(
+                        training_phrases_with_embeddings[intent].keys())
+                    embeddings = list(
+                        training_phrases_with_embeddings[intent].values())
                     points = pca.transform(embeddings)
                     embeddings_coords.append({
                         'name': intent,
@@ -289,27 +328,37 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                     })
 
                 logger.debug(json.dumps(embeddings_coords, indent=2))
-                logger.info('Ready with principal component analysis for %s examples', len(embedding_vectors), extra=log_extras)
+                logger.info('Ready with principal component analysis for %s examples', len(
+                    embedding_vectors), extra=log_extras)
 
                 flattenedForCosine = []
 
                 for intent in training_phrases_with_embeddings:
-                    phrases = list(training_phrases_with_embeddings[intent].keys())
+                    phrases = list(
+                        training_phrases_with_embeddings[intent].keys())
                     if maxUtterancesForEmbeddings > 0:
-                        utterancesForIntent = math.ceil(len(phrases) * maxUtterancesForEmbeddings / len(embedding_vectors))
+                        utterancesForIntent = math.ceil(
+                            len(phrases) * maxUtterancesForEmbeddings / len(embedding_vectors))
                         if utterancesForIntent < len(phrases):
-                            logger.info('Randomly selecting %s: examples for intent %s: for cosine similarity', utterancesForIntent, intent, extra=log_extras)
-                            phrases = np.random.choice(phrases, utterancesForIntent, replace=False)
+                            logger.info('Randomly selecting %s: examples for intent %s: for cosine similarity',
+                                        utterancesForIntent, intent, extra=log_extras)
+                            phrases = np.random.choice(
+                                phrases, utterancesForIntent, replace=False)
                     for phrase in phrases:
-                        flattenedForCosine.append((intent, phrase, training_phrases_with_embeddings[intent][phrase]))
+                        flattenedForCosine.append(
+                            (intent, phrase, training_phrases_with_embeddings[intent][phrase]))
             except Exception as e:
-                sendStatus('embeddings', CalcStatus.EMBEDDINGS_PCA_FAILED, 2, 4, 'Principal Component Analysis failed - {}'.format(e))
+                sendStatus('embeddings', CalcStatus.EMBEDDINGS_PCA_FAILED,
+                           2, 4, 'Principal Component Analysis failed - {}'.format(e))
                 exit(1)
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PCA_READY, 2, 4, 'Principal Component Analysis ready')
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PCA_READY,
+                       2, 4, 'Principal Component Analysis ready')
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_RUNNING, 3, 4, 'Preparation for Cosine Similarity Analysis running')
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_RUNNING,
+                       3, 4, 'Preparation for Cosine Similarity Analysis running')
             try:
-                logger.info('Preparing cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
+                logger.info('Preparing cosine similarity for %s examples', len(
+                    flattenedForCosine), extra=log_extras)
 
                 workers = []
                 for i in range(len(flattenedForCosine)):
@@ -322,23 +371,31 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                         phrase_2 = flattenedForCosine[j][1]
                         embedd_2 = flattenedForCosine[j][2]
 
-                        workers.append((intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2))
+                        workers.append(
+                            (intent_1, phrase_1, embedd_1, intent_2, phrase_2, embedd_2))
             except Exception as e:
-                sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_FAILED, 3, 4, 'Preparation for Cosine Similarity Analysis failed - {}'.format(e))
+                sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_FAILED,
+                           3, 4, 'Preparation for Cosine Similarity Analysis failed - {}'.format(e))
                 exit(1)
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_READY, 3, 4, 'Preparation for Cosine Similarity Analysis ready')
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_READY,
+                       3, 4, 'Preparation for Cosine Similarity Analysis ready')
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING, 4, 4, 'Cosine Similarity Analysis running')
-            logger.info('Running cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING,
+                       4, 4, 'Cosine Similarity Analysis running')
+            logger.info('Running cosine similarity for %s examples',
+                        len(flattenedForCosine), extra=log_extras)
 
             # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
-            executer = ThreadPoolExecutor(max_workers=os.environ.get('COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
+            executer = ThreadPoolExecutor(max_workers=os.environ.get(
+                'COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
             data = list(executer.map(cosine_similarity_worker, tuple(workers)))
 
-            logger.info('Ready with cosine similarity for %s pairs, preparing results', len(data), extra=log_extras)
+            logger.info('Ready with cosine similarity for %s pairs, preparing results', len(
+                data), extra=log_extras)
 
-            similarity_df = pd.DataFrame(data, columns=['name1', 'example1', 'name2', 'example2', 'similarity'])
+            similarity_df = pd.DataFrame(
+                data, columns=['name1', 'example1', 'name2', 'example2', 'similarity'])
             similarity_different_intent = similarity_df['name1'] != similarity_df['name2']
             similarity_same_intent = similarity_df['name1'] == similarity_df['name2']
 
@@ -364,7 +421,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             separation = [{'name1': name1, 'name2': name2, 'separation': separation} for name1, name2, separation in zip(
                 separation_df_sorted['name1'], separation_df_sorted['name2'], separation_df_sorted['separation'])]
             logger.debug(json.dumps(separation, indent=2), extra=log_extras)
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_READY, 4, 4, 'Cosine Similarity Analysis ready')
+            sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_READY,
+                       4, 4, 'Cosine Similarity Analysis ready')
 
             logger.info('Returning results', extra=log_extras)
 
@@ -385,7 +443,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             logger.debug(json.dumps(response_data, indent=2), extra=log_extras)
             res_queue.put((response_data,))
         except Exception as e:
-            logger.error('Calculating embeddings failed: ' + str(e), extra=log_extras)
+            logger.error('Calculating embeddings failed: ' +
+                         str(e), extra=log_extras)
             response_data['json'] = {
                 "method": "calculate_embeddings",
                 "status": "failed",
@@ -395,9 +454,11 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             logger.debug(json.dumps(response_data, indent=2))
             res_queue.put((response_data,))
 
+
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
         tfVersion=tf.__version__, ptVersion=torch.__version__, ptCuda=str(torch.cuda.is_available()))
+
 
 def calculate_embeddings(embeddingsRequest):
     coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
@@ -411,10 +472,11 @@ def calculate_embeddings(embeddingsRequest):
 
     try:
         print('Checking callback url availability (' + boxEndpoint + ') ...')
-        response_data = { "method": "ping" }
+        response_data = {"method": "ping"}
         res = requests.post(boxEndpoint, json=response_data)
         if res.status_code != 200 and res.status_code != 400:
-            raise Exception('Ping check for callback url failed: Status Code ' + str(res.status_code))
+            raise Exception(
+                'Ping check for callback url failed: Status Code ' + str(res.status_code))
     except Exception as e:
         print('Error: Checking callback url availability: ' + str(e))
         return {

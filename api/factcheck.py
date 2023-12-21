@@ -1,35 +1,8 @@
-from ast import Return
-import json
-import math
-import numpy as np
 import openai
 import os
-import pandas as pd
-import pickle
 import pinecone
-import re
-import requests
-import sys
-import time
-import tensorflow_hub as hub
-import tensorflow as tf
-import tensorflow_text
-import torch
-import multiprocessing as mp
-import uuid
 
-from api.term_analysis import chi2_analyzer, similarity_analyzer
-from api.utils import pandas_utils
-from enum import Enum
-from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from flask import current_app
-from flask_healthz import healthz
-from functools import singledispatch
-from joblib import Parallel, delayed
-from .redis_client import getRedis
-from sklearn.decomposition import PCA
-from sklearn.metrics.pairwise import cosine_similarity
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
 
@@ -38,7 +11,7 @@ logger = getLogger('Fact Checker')
 def create_index(CreateIndexRequest):
     """
         Creates a Pinecone index to upload embeddings to
-        
+
         inputs: index (string) - name specified to call index on pinecone
                 environment (string) - pincone environment where index is stored
 
@@ -49,28 +22,32 @@ def create_index(CreateIndexRequest):
     index = CreateIndexRequest['index']
     pine_api_key = os.environ.get('PINECONE_API')
     pine_env = CreateIndexRequest['environment']
-    try :
+    try:
         pinecone.init(api_key=pine_api_key, environment=pine_env)
         active_indexes = pinecone.list_indexes()
         if index in active_indexes:
-          return {
-            'status': "finished",
-            'message': f'Index {index} in environment {pine_env} already active'
-          }
+            return {
+                'status': "finished",
+                'message': f'Index {index} in environment {pine_env} already active'
+            }
 
-        pinecone.create_index(index, dimension=1536, metric='cosine', pods=1, replicas=1)
-        logger.info(f'Created Pinecone index {index} in environment {pine_env}')
+        pinecone.create_index(index, dimension=1536,
+                              metric='cosine', pods=1, replicas=1)
+        logger.info(
+            f'Created Pinecone index {index} in environment {pine_env}')
         return {
-          'status': "finished",
-          'message': f'Successfully created index {index} in environment {pine_env}'
+            'status': "finished",
+            'message': f'Successfully created index {index} in environment {pine_env}'
         }
     except Exception as error:
-        logger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {format(error)}')
+        logger.error(
+            f'Creating Pinecone index {index} in environment {pine_env} failed: {format(error)}')
         # handle the exception
         return {
-          'status': "failed",
-          'err': f'Creating index {index} in environment {pine_env} failed: {format(error)}'
+            'status': "failed",
+            'err': f'Creating index {index} in environment {pine_env} failed: {format(error)}'
         }
+
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     pine_api_key = os.environ.get('PINECONE_API')
@@ -86,7 +63,7 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
     response_data = {}
     if 'boxEndpoint' in UploadFactcheckDocumentRequest:
         response_data['boxEndpoint'] = UploadFactcheckDocumentRequest['boxEndpoint']
-        response_data['header'] = { "content-type": "application/json" }
+        response_data['header'] = {"content-type": "application/json"}
 
     response_data['redisKey'] = 'coachworker_res_factcheckupload_' + sessionId
     response_data['deleteRedisKey'] = 'coachworker_req_factcheckupload_' + sessionId
@@ -94,12 +71,17 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
     current_filename = None
 
     try:
-        pineindex = pinecone_init(pine_api_key,pine_env,index)
+        pineindex = pinecone_init(pine_api_key, pine_env, index)
+
+        logger.info(f'Deleting vectors in Pinecone index {index} in environment {pine_env}/{namespace}')
+        pineindex.delete(delete_all=True, namespace=namespace)
 
         for document in documents:
-          current_filename = document["filename"]
-          content = document_upsert_pinecone(openai, embedding_model, pineindex, namespace, current_filename, document["text"])
-          logger.info(f'Uploading {current_filename} to Pinecone index {index} in environment {pine_env}/{namespace}: {content["message"]}')
+            current_filename = document["filename"]
+            content = document_upsert_pinecone(
+                openai, embedding_model, pineindex, namespace, current_filename, document["text"])
+            logger.info(
+                f'Uploading {current_filename} to Pinecone index {index} in environment {pine_env}/{namespace}: {content["message"]}')
 
         response_data['json'] = {
             "method": "upload_factcheck_documents",
@@ -108,7 +90,8 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         }
         res_queue.put((response_data,))
     except Exception as error:
-        logger.error(f'Uploading {current_filename} to Pinecone index {index} in environment {pine_env}/{namespace} failed: {format(error)}')
+        logger.error(
+            f'Uploading {current_filename} to Pinecone index {index} in environment {pine_env}/{namespace} failed: {format(error)}')
         response_data['json'] = {
             "method": "upload_factcheck_documents",
             "status": "failed",
@@ -117,18 +100,21 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         }
         res_queue.put((response_data,))
 
+
 def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
 
     with current_app.app_context():
         req_queue = current_app.req_queue
-        req_queue.put((UploadFactcheckDocumentRequest, "upload_factcheck_documents"))
+        req_queue.put((UploadFactcheckDocumentRequest,
+                      "upload_factcheck_documents"))
 
     return {
-      'status': 'queued',
-      'message': "Started uploading documents to index.",
-      'factcheckSessionId': sessionId
+        'status': 'queued',
+        'message': "Started uploading documents to index.",
+        'factcheckSessionId': sessionId
     }
+
 
 def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_queue, CreateFactcheckSampleQueriesRequest):
     openai.api_key = os.environ.get('OPEN_API')
@@ -139,7 +125,7 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
     response_data = {}
     if 'boxEndpoint' in CreateFactcheckSampleQueriesRequest:
         response_data['boxEndpoint'] = CreateFactcheckSampleQueriesRequest['boxEndpoint']
-        response_data['header'] = { "content-type": "application/json" }
+        response_data['header'] = {"content-type": "application/json"}
 
     response_data['redisKey'] = 'coachworker_res_createsamplequeries_' + sessionId
     response_data['deleteRedisKey'] = 'coachworker_req_createsamplequeries_' + sessionId
@@ -149,10 +135,11 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
     try:
         sample_queries = []
         for document in documents:
-          current_filename = document["filename"]
-          questions = create_sample_questions(openai, document["text"])
-          logger.info(f'Created sample queries for {current_filename}: {questions}')
-          sample_queries = sample_queries + questions
+            current_filename = document["filename"]
+            questions = create_sample_questions(openai, document["text"])
+            logger.info(
+                f'Created sample queries for {current_filename}: {questions}')
+            sample_queries = sample_queries + questions
 
         response_data['json'] = {
             "method": "create_sample_queries",
@@ -162,7 +149,8 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
         }
         res_queue.put((response_data,))
     except Exception as error:
-        logger.error(f'Creating sample queries for {current_filename} failed: {format(error)}')
+        logger.error(
+            f'Creating sample queries for {current_filename} failed: {format(error)}')
         response_data['json'] = {
             "method": "create_sample_queries",
             "status": "failed",
@@ -177,13 +165,15 @@ def create_sample_queries(CreateFactcheckSampleQueriesRequest):
 
     with current_app.app_context():
         req_queue = current_app.req_queue
-        req_queue.put((CreateFactcheckSampleQueriesRequest, "create_sample_queries"))
+        req_queue.put((CreateFactcheckSampleQueriesRequest,
+                      "create_sample_queries"))
 
     return {
-      'status': 'queued',
-      'message': "Started creating sample queries.",
-      'factcheckSessionId': sessionId
-    }    
+        'status': 'queued',
+        'message': "Started creating sample queries.",
+        'factcheckSessionId': sessionId
+    }
+
 
 def factcheck(factcheckRequest):
     """
@@ -206,10 +196,11 @@ def factcheck(factcheckRequest):
     namespace = factcheckRequest.get('namespace', None)
     statement = factcheckRequest['statement']
 
-    pineindex=pinecone_init(pine_api_key,pine_env,index)
-    editor_responses, agreement_gates, status = editor(openai, statement, pineindex, namespace)
-   
-    result = {  'status': status,
-                'reasoning': agreement_gates,
-                'fixed_statement': editor_responses}
+    pineindex = pinecone_init(pine_api_key, pine_env, index)
+    editor_responses, agreement_gates, status = editor(
+        openai, statement, pineindex, namespace)
+
+    result = {'status': status,
+              'reasoning': agreement_gates,
+              'fixed_statement': editor_responses}
     return result
