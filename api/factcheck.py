@@ -9,19 +9,12 @@ from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, cr
 logger = getLogger('Fact Checker')
 
 def create_index(CreateIndexRequest):
-    """
-        Creates a Pinecone index to upload embeddings to
-
-        inputs: index (string) - name specified to call index on pinecone
-                environment (string) - pincone environment where index is stored
-
-        output: result - Dict with 2 keys: 
-                        status  - confirms if index was successfully created or not (True/False)
-                        message - contains string stating if it was successfully created or failed with failure message
-    """
-    index = CreateIndexRequest['index']
     pine_api_key = os.environ.get('PINECONE_API')
-    pine_env = CreateIndexRequest['environment']
+    pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
+    pine_index = os.environ.get('PINECONE_INDEX')
+
+    index = CreateIndexRequest.get('index', pine_index)
+    pine_env = CreateIndexRequest.get('environment', pine_environment)
     try:
         pinecone.init(api_key=pine_api_key, environment=pine_env)
         active_indexes = pinecone.list_indexes()
@@ -51,12 +44,14 @@ def create_index(CreateIndexRequest):
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     pine_api_key = os.environ.get('PINECONE_API')
+    pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
+    pine_index = os.environ.get('PINECONE_INDEX')
     openai.api_key = os.environ.get('OPEN_API')
     embedding_model = "text-embedding-ada-002"
 
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
-    index = UploadFactcheckDocumentRequest['index']
-    pine_env = UploadFactcheckDocumentRequest['environment']
+    index = UploadFactcheckDocumentRequest.get('index', pine_index)
+    pine_env = UploadFactcheckDocumentRequest.get('environment', pine_environment)
     namespace = UploadFactcheckDocumentRequest.get('namespace', None)
     documents = UploadFactcheckDocumentRequest['documents']
 
@@ -189,10 +184,12 @@ def factcheck(factcheckRequest):
                 fixed_statement - edited version of statement based on reasons 
     """
     pine_api_key = os.environ.get('PINECONE_API')
+    pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
+    pine_index = os.environ.get('PINECONE_INDEX')
     openai.api_key = os.environ.get('OPEN_API')
 
-    index = factcheckRequest['index']
-    pine_env = factcheckRequest['environment']
+    index = factcheckRequest.get('index', pine_index)
+    pine_env = factcheckRequest.get('environment', pine_environment)
     namespace = factcheckRequest.get('namespace', None)
     statement = factcheckRequest['statement']
 

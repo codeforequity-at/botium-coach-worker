@@ -68,7 +68,6 @@ paths:
               $ref: "#/components/schemas/CreateIndexRequest"
             example:
               index: botium-box-index
-              environment: gcp-starter
       responses:
         '200':
           description: Factcheck response if index has been successfully created with message
@@ -82,7 +81,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /static/fact_check/upload_document:
+  /static/fact_check/upload_documents:
     post:
       summary: Store embeddings for "ground truth" documentation in index
       operationId: api.factcheck.upload_factcheck_documents
@@ -100,7 +99,6 @@ paths:
               factcheckSessionId: test-factcheck-session-id
               boxEndpoint: 'http://localhost:4000/api/coach'
               index: botium-box-index
-              environment: gcp-starter
               namespace: client1-project1
               documents:
                 - filename: yeti.txt
@@ -167,7 +165,6 @@ paths:
               $ref: "#/components/schemas/FactcheckRequest"
             example:
               index: botium-box-index
-              environment: gcp-starter
               namespace: client1-project1
               statement: The yeti is a real thing
       responses:
@@ -450,9 +447,6 @@ components:
         sentence:
           type: string
     CreateIndexRequest:
-      required:
-        - index
-        - environment
       properties:
         index:
           type: string
@@ -470,8 +464,6 @@ components:
     UploadFactcheckDocumentRequest:
       required:
         - factcheckSessionId
-        - index
-        - environment
         - documents
       properties:
         factcheckSessionId:
@@ -503,8 +495,6 @@ components:
             $ref: "#/components/schemas/FactcheckDocument"
     FactcheckRequest:
       required:
-        - index
-        - environment
         - statement
       properties:
         index:
