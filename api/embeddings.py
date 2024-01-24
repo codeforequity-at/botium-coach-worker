@@ -659,6 +659,8 @@ def ping():
 
 def calculate_embeddings(embeddingsRequest):
 
+    logger = getLogger('calculate_embeddings')
+
     coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
     clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
     testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
@@ -668,7 +670,7 @@ def calculate_embeddings(embeddingsRequest):
         boxEndpoint = os.environ.get('COACH_DEV_BOX_ENDPOINT')
 
     try:
-        print('Checking callback url availability (' + boxEndpoint + ') ...')
+        logger.info('Checking callback url availability (' + boxEndpoint + ') ...')
         response_data = {
             "method": "ping"
         }
@@ -677,7 +679,7 @@ def calculate_embeddings(embeddingsRequest):
             raise Exception(
                 'Ping check for callback url failed: Status Code ' + str(res.status_code))
     except Exception as e:
-        print('Error: Checking callback url availability: ' + str(e))
+        logger.info('Error: Checking callback url availability: ' + str(e))
         return {
             'status': 'rejected',
             'coachSessionId': coachSessionId,
