@@ -1,6 +1,7 @@
 FROM tiangolo/meinheld-gunicorn-flask:python3.8
 
 COPY ./Requirements.txt /app/Requirements.txt
+RUN pip install --upgrade pip
 RUN pip install -r /app/Requirements.txt
 COPY ./setup /app/setup
 
@@ -17,6 +18,8 @@ COPY ./openapi /app/openapi
 COPY ./test_python /app/test_python
 COPY ./test_data /app/test_data 
 #RUN rm /app/prestart.sh
+
+COPY  ./docs /app/docs
 
 RUN groupadd -r -g 1000 coach && useradd -r -u 1000 -g 1000 -d /app -s /bin/bash coach
 RUN chown -R 1000:1000 /app

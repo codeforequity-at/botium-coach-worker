@@ -40,7 +40,7 @@ def getLogger(name):
     logger = logging.getLogger(name)
     logger.propagate = False
     logHandler = logging.StreamHandler()
-    if bool(os.environ.get('JSON_LOGGING', False)) == True:
+    if int(os.environ.get('JSON_LOGGING', 0)) == 1:
         formatter = CustomJsonFormatter()
     else:
         formatter = ExtraFormatter()
