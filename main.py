@@ -181,7 +181,7 @@ def process_requests(req_queue, res_queue, err_queue):
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{i}', args=(req_queue, err_queue, i))
+                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{i}', args=(req_queue, res_queue, err_queue, i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
