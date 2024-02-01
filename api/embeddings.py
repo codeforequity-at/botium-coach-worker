@@ -15,6 +15,7 @@ import torch
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
+from api.utils.log import getLogger
 from enum import Enum
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed

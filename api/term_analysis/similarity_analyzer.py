@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from api.utils.log import getLogger
 
 from sklearn.feature_extraction.text import CountVectorizer
 from concurrent.futures import ThreadPoolExecutor, as_completed

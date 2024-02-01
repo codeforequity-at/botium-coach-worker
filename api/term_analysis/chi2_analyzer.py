@@ -9,7 +9,6 @@ from nltk import word_tokenize
 from api.utils import term_data
 import multiprocessing as mp
 from concurrent.futures import ThreadPoolExecutor
-from api.utils.log import getLogger
 
 def strip_punctuations(utterance: str):
     """
