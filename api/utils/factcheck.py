@@ -31,13 +31,14 @@ def create_query(openai, response_llm):
 
     api_response = response['choices'][0]['message']['content']
     questions = []
-    search_string = 'Verify'
+    search_string = 'Verify:='
     for question in api_response.split("\n"):
         # Remove the search string from each question
         if search_string not in question:
             continue
-        question = question.split(search_string)[1].strip()
-        questions.append(question)
+        question = question.split(search_string)[1].strip().split('.', 1)[1]
+        if question is not None and len(question) > 0:
+          questions.append(question)
 
     return questions
 
@@ -108,11 +109,10 @@ def retrieval_passage(openai, response_llm, pineindex, namespace):
     if len(questions) == 0:
         return used_evidences
 
-    logger.info('Queries Created from the statement', questions)
-    logger.info('-------------------------------------------------------------------------------------------------------')
+    logger.info(f'Queries Created from the statement: {",".join(questions)}')
     query_search = []
     for query in questions:
-        logger.info('Retrieving relevant passage for query:', query)
+        logger.info(f'Retrieving relevant passage for query: {query}')
         retrieved_passages = []
         # gets context passages from the pinecone index
         context = get_context(query, pineindex, namespace, top_k=1)
@@ -168,15 +168,11 @@ def agreement_gate(openai, response_llm, pineindex, namespace):
     # Checking relevant articles are present or not in the dataset provided
     relevance = 0
 
-    logger.info('\n')
-    logger.info('-------------------------------------------------------------------------------------------------------')
     logger.info('Evidences gathered for each query we are fact checking ')
-    logger.info('*************************************************')
     for i in used_evidences:
         logger.info(i)
-        logger.info('*************************************************')
-    logger.info('-------------------------------------------------------------------------------------------------------')
-    logger.info('\n')
+    logger.info('*************************************************')
+
     # No evidence then return empty
     if len(used_evidences) == 0:
         return agreement_gates, used_evidences, relevance
@@ -205,15 +201,14 @@ def agreement_gate(openai, response_llm, pineindex, namespace):
         agreement_responses.append(response)
 
     for i in range(len(agreement_responses)):
-        api_response = agreement_responses[i]['choices'][0]['message']['content'].strip(
-        ).split("\n")
+        api_response = agreement_responses[i]['choices'][0]['message']['content'].strip().split("\n")
         if len(api_response) < 2:
             reason = "Failed to parse."
             decision = None
             is_open = False
         else:
-            reason = api_response[0]
-            decision = api_response[1].split("Therefore:")[-1].strip()
+            reason = api_response[0].split("Reasoning:=")[-1].strip()
+            decision = api_response[1].split("Therefore:=")[-1].strip()
             is_open = "disagrees" in api_response[1]
             gate = {"is_open": is_open, "reason": reason, "decision": decision}
             agreement_gates.append(gate)
@@ -246,14 +241,10 @@ def editor(openai, response_llm, pineindex, namespace):
         logger.info('There is no document which is relevant to any/some of the facts present in statement')
         return edited_responses, agreement_gates, False
 
-    logger.info('-------------------------------------------------------------------------------------------------------')
     logger.info('Agreement gate for each query if the statement agrees or not')
-    logger.info('*************************************************')
     for i in agreement_gates:
         logger.info(i)
-        logger.info('*************************************************')
-    logger.info('-------------------------------------------------------------------------------------------------------')
-    logger.info('\n')
+    logger.info('*************************************************')
     for i in range(len(agreement_gates)):
         if agreement_gates[i]['is_open']:
             user_llm = "Statement:= " + response_llm + " \n Query:= " + \
@@ -272,9 +263,9 @@ def editor(openai, response_llm, pineindex, namespace):
                     {"role": "assistant", "content": "Fixed Statement:= Your nose switches back and forth between nostrils. When you sleep, you switch about every 2 hours. This is to prevent a buildup of mucus. It’s called the nasal cycle."},
                     {"role": "user", "content": user_llm}])
             edit_count += 1
-            edited_responses.append(
-                response['choices'][0]['message']['content'])
-            response_llm = response['choices'][0]['message']['content']
+            api_response = response['choices'][0]['message']['content']
+            edited_responses.append(api_response.split("Fixed Statement:=")[-1].strip())
+            response_llm = api_response
 
     if edit_count == 0:
         logger.info('Nothing to edit as the statement seems to be factually correct')
@@ -282,11 +273,10 @@ def editor(openai, response_llm, pineindex, namespace):
         status = True
     else:
         logger.info('Edited Statements Based of the disagreement of facts in documentation found and statement made')
-        logger.info('\n')
-        logger.info('*************************************************')
         for i in edited_responses:
             logger.info(i)
-            logger.info('*************************************************')
+
+        logger.info('*************************************************')
         status = False
 
     return edited_responses, agreement_gates, status
