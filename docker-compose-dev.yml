@@ -9,4 +9,11 @@ services:
      - "4002:8080"
     environment:
       WEB_CONCURRENCY: 1
+      COACH_MAX_CALCULATIONS_PER_WORKER: 100
+      COACH_PARALLEL_WORKERS: 5
       COACH_DEV_BOX_ENDPOINT: "http://192.168.0.143:4000/api/coach"
+      REDIS_ENABLE: 0
+      PINECONE_API:
+      PINECONE_ENVIRONMENT:
+      PINECONE_INDEX:
+      OPEN_API:
