@@ -6,7 +6,7 @@ from flask import current_app
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
 
-logger = getLogger('Fact Checker')
+logger = getLogger('fact_checker')
 
 def create_index(CreateIndexRequest):
     pine_api_key = os.environ.get('PINECONE_API')
@@ -34,11 +34,11 @@ def create_index(CreateIndexRequest):
         }
     except Exception as error:
         logger.error(
-            f'Creating Pinecone index {index} in environment {pine_env} failed: {format(error)}')
+            f'Creating Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
         return {
             'status': "failed",
-            'err': f'Creating index {index} in environment {pine_env} failed: {format(error)}'
+            'err': f'Creating index {index} in environment {pine_env} failed: {str(error)}'
         }
 
 
@@ -86,12 +86,12 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         res_queue.put((response_data,))
     except Exception as error:
         logger.error(
-            f'Uploading {current_filename} to Pinecone index {index} in environment {pine_env}/{namespace} failed: {format(error)}')
+            f'Uploading {current_filename} to Pinecone index {index} in environment {pine_env}/{namespace} failed: {str(error)}')
         response_data['json'] = {
             "method": "upload_factcheck_documents",
             "status": "failed",
             "factcheckSessionId": sessionId,
-            "err": f'Uploading {current_filename} to index {index} in environment {pine_env}/{namespace} failed: {format(error)}'
+            "err": f'Uploading {current_filename} to index {index} in environment {pine_env}/{namespace} failed: {str(error)}'
         }
         res_queue.put((response_data,))
 
@@ -145,12 +145,12 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
         res_queue.put((response_data,))
     except Exception as error:
         logger.error(
-            f'Creating sample queries for {current_filename} failed: {format(error)}')
+            f'Creating sample queries for {current_filename} failed: {str(error)}')
         response_data['json'] = {
             "method": "create_sample_queries",
             "status": "failed",
             "factcheckSessionId": sessionId,
-            "err": f'Creating sample queries for {current_filename} failed: {format(error)}'
+            "err": f'Creating sample queries for {current_filename} failed: {str(error)}'
         }
         res_queue.put((response_data,))
 
