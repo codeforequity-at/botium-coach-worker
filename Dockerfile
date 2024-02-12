@@ -1,6 +1,7 @@
 FROM tiangolo/meinheld-gunicorn-flask:python3.8
 
 COPY ./Requirements.txt /app/Requirements.txt
+RUN pip install --upgrade pip
 RUN pip install -r /app/Requirements.txt
 COPY ./setup /app/setup
 

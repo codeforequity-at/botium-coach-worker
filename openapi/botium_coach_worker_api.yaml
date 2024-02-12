@@ -52,6 +52,130 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /static/fact_check/create_index:
+    post:
+      summary: Create index to store word embeddings
+      operationId: api.factcheck.create_index
+      security:
+        - api_key: []
+      requestBody:
+        description: Create index
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: CreateIndexRequest
+              $ref: "#/components/schemas/CreateIndexRequest"
+            example:
+              index: botium-box-index
+      responses:
+        '200':
+          description: Factcheck response if index has been successfully created with message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FactcheckResponse"      
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /static/fact_check/upload_documents:
+    post:
+      summary: Store embeddings for "ground truth" documentation in index
+      operationId: api.factcheck.upload_factcheck_documents
+      security:
+        - api_key: []
+      requestBody:
+        description: Store embeddings for "ground truth" documentation in index
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: UploadFactcheckDocumentRequest
+              $ref: "#/components/schemas/UploadFactcheckDocumentRequest"
+            example:
+              factcheckSessionId: test-factcheck-session-id
+              boxEndpoint: 'http://localhost:4000/api/coach'
+              index: botium-box-index
+              namespace: client1-project1
+              documents:
+                - filename: yeti.txt
+                  text: The Yeti is an ape-like creature purported to inhabit the Himalayan mountain range in Asia. In Western popular culture, the creature is commonly referred to as the Abominable Snowman. Many dubious articles have been offered in an attempt to prove the existence of the Yeti, including anecdotal visual sightings, disputed video recordings, photographs, and plaster casts of large footprints. Some of these are speculated or known to be hoaxes.
+      responses:
+        '200':
+          description: Upload queue response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FactcheckResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /static/fact_check/create_sample_queries:
+    post:
+      summary: Create sample queries from "ground truth" documents
+      operationId: api.factcheck.create_sample_queries
+      security:
+        - api_key: []
+      requestBody:
+        description: Create sample queries from "ground truth" documents
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: CreateFactcheckSampleQueriesRequest
+              $ref: "#/components/schemas/CreateFactcheckSampleQueriesRequest"
+            example:
+              factcheckSessionId: test-factcheck-session-id
+              boxEndpoint: 'http://localhost:4000/api/coach'
+              documents:
+                - filename: yeti.txt
+                  text: The Yeti is an ape-like creature purported to inhabit the Himalayan mountain range in Asia. In Western popular culture, the creature is commonly referred to as the Abominable Snowman. Many dubious articles have been offered in an attempt to prove the existence of the Yeti, including anecdotal visual sightings, disputed video recordings, photographs, and plaster casts of large footprints. Some of these are speculated or known to be hoaxes.
+      responses:
+        '200':
+          description: Sample queries queue response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FactcheckResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"                
+  /static/fact_check:
+    post:
+      summary: Fact-check a statement
+      operationId: api.factcheck.factcheck
+      security:
+        - api_key: []
+      requestBody:
+        description: Statement to be fact checked
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: factcheckRequest
+              $ref: "#/components/schemas/FactcheckRequest"
+            example:
+              index: botium-box-index
+              namespace: client1-project1
+              statement: The yeti is a real thing
+      responses:
+        '200':
+          description: Returns Ture/False on fact checked with edited statement and reasoning
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /static/calculate_embeddings:
     post:
       summary: Calculate word embedding statistics on a data set
@@ -168,7 +292,6 @@ components:
     EmbeddingsRequest:
       required:
         - coachSessionId
-        - boxEndpoint
         - filter
         - intents
       properties:
@@ -323,21 +446,80 @@ components:
           type: string
         sentence:
           type: string
+    CreateIndexRequest:
+      properties:
+        index:
+          type: string
+        environment:
+          type: string
+    FactcheckDocument:
+      required:
+        - filename
+        - text
+      properties:
+        filename:
+          type: string
+        text:
+          type: string
+    UploadFactcheckDocumentRequest:
+      required:
+        - factcheckSessionId
+        - documents
+      properties:
+        factcheckSessionId:
+          type: string
+        boxEndpoint:
+          type: string
+        index:
+          type: string
+        environment:
+          type: string
+        namespace:
+          type: string
+        documents:          
+          type: array
+          items:
+            $ref: "#/components/schemas/FactcheckDocument"
+    CreateFactcheckSampleQueriesRequest:
+      required:
+        - factcheckSessionId
+        - documents
+      properties:
+        factcheckSessionId:
+          type: string
+        boxEndpoint:
+          type: string
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactcheckDocument"
+    FactcheckRequest:
+      required:
+        - statement
+      properties:
+        index:
+          type: string
+        environment:
+          type: string
+        namespace:
+          type: string
+        statement:
+          type: string
+    FactcheckResponse:
+      properties:
+        status:
+          type: string
+        factcheckSessionId:
+          type: string
+        message:
+          type: string
+        err:
+          type: string          
     Translations:
       properties:
         translation:
           type: string
         provider:
-          type: string
-    JobAdded:
-      properties:
-        status:
-          type: string
-        coachSessionId:
-          type: string
-        boxEndpoint:
-          type: string
-        workerEndpoint:
           type: string
     Error:
       required:
