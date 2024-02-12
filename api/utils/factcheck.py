@@ -4,7 +4,7 @@ import re
 import torch
 from .log import getLogger
 
-logger = getLogger('Fact Checker Utils')
+logger = getLogger('fact_checker_utils')
 
 def create_query(openai, response_llm):
     """ Create query/facts which are required to be verified
@@ -36,10 +36,10 @@ def create_query(openai, response_llm):
         # Remove the search string from each question
         if search_string not in question:
             continue
-        question = question.split(search_string)[1].strip().split('.', 1)[1]
+        question = question.split(search_string, 1)[-1].strip()
+        question = question.split('.', 1)[-1].strip()
         if question is not None and len(question) > 0:
-          questions.append(question)
-
+            questions.append(question)
     return questions
 
 
@@ -65,7 +65,7 @@ def create_sample_questions(openai, text):
         # Remove the search string from each question
         if search_string not in question:
             continue
-        question = question.split(search_string)[1].strip()
+        question = question.split(search_string, 1)[-1].strip()
         questions.append(question)
 
     return questions
@@ -207,8 +207,8 @@ def agreement_gate(openai, response_llm, pineindex, namespace):
             decision = None
             is_open = False
         else:
-            reason = api_response[0].split("Reasoning:=")[-1].strip()
-            decision = api_response[1].split("Therefore:=")[-1].strip()
+            reason = api_response[0].split("Reasoning:=", 1)[-1].strip()
+            decision = api_response[1].split("Therefore:=", 1)[-1].strip()
             is_open = "disagrees" in api_response[1]
             gate = {"is_open": is_open, "reason": reason, "decision": decision}
             agreement_gates.append(gate)
@@ -264,7 +264,7 @@ def editor(openai, response_llm, pineindex, namespace):
                     {"role": "user", "content": user_llm}])
             edit_count += 1
             api_response = response['choices'][0]['message']['content']
-            edited_responses.append(api_response.split("Fixed Statement:=")[-1].strip())
+            edited_responses.append(api_response.split("Fixed Statement:=", 1)[-1].strip())
             response_llm = api_response
 
     if edit_count == 0:

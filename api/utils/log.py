@@ -24,7 +24,7 @@ class ExtraFormatter(logging.Formatter):
         default_attrs = logging.LogRecord(None, None, None, None, None, None, None).__dict__.keys()
         extras = set(record.__dict__.keys()) - default_attrs
 
-        log_items = ['%(levelname)s %(name)s: %(message)s']
+        log_items = ['%(asctime)s %(levelname)s %(name)s: %(message)s']
         for attr in extras:
             log_items.append(f'{attr}: %({attr})s')
         format_str = f'{", ".join(log_items)}'
@@ -43,7 +43,7 @@ def getLogger(name):
     if int(os.environ.get('JSON_LOGGING', 0)) == 1:
         formatter = CustomJsonFormatter()
     else:
-        formatter = ExtraFormatter()
+        formatter = ExtraFormatter(datefmt=log_datefmt)
     logHandler.setFormatter(formatter)
     logger.addHandler(logHandler)
     logger.setLevel(log_level)
