@@ -152,19 +152,22 @@ def process_responses(req_queue, res_queue, err_queue):
 def process_requests_worker(req_queue, res_queue, err_queue, processId):
     worker_name = 'process_requests_worker-' + str(processId)
     logger = getLogger(worker_name)
-    logger.info('Initialize process_requests_worker ...')
+    logger.info(f'Initialize process_requests_worker {worker_name}...')
     calc_count = 0
     while calc_count < maxCalcCount:
         request_data, method = req_queue.get()
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
-            calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data, method)
+            logger.error(f'run worker method for {worker_name}.{method}')
+            calculate_embeddings_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
-            upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data)
+            logger.error(f'run worker method for {worker_name}.{method}')
+            upload_factcheck_documents_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
         elif method == 'create_sample_queries':
-            create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data)
+            logger.error(f'run worker method for {worker_name}.{method}')
+            create_sample_queries_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
         else:
-            logger.error(f'No worker method for {method}, ignoring.')
+            logger.error(f'No worker method for {worker_name}.{method}, ignoring.')
 
         calc_count += 1
 

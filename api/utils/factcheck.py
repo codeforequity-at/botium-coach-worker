@@ -2,9 +2,6 @@ import openai
 import pinecone
 import re
 import torch
-from .log import getLogger
-
-logger = getLogger('fact_checker_utils')
 
 def create_query(openai, response_llm):
     """ Create query/facts which are required to be verified
@@ -15,9 +12,6 @@ def create_query(openai, response_llm):
         Output: questions (List) - list of questions to gather evidence to fact check statement
     """
     response_llm = 'Statement:= ' + response_llm
-    # logger.info(response_llm)
-    # Creating queries from the statement
-    # logger.info('-------------------------------------------------------------------------------------------------------')
     response = openai.ChatCompletion.create(
         model="gpt-4", messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
@@ -45,8 +39,6 @@ def create_query(openai, response_llm):
 
 def create_sample_questions(openai, text):
     text = 'Statement:= ' + text
-    # Creating queries from the statement
-    # logger.info('-------------------------------------------------------------------------------------------------------')
     response = openai.ChatCompletion.create(
         model="gpt-4", messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
@@ -93,7 +85,7 @@ def get_context(question, index, namespace, top_k):
 
 
 # For each question retrieve the most relvant part of document
-def retrieval_passage(openai, response_llm, pineindex, namespace):
+def retrieval_passage(logger, openai, response_llm, pineindex, namespace):
     """ Generate embeddings for the question
 
         Input:  openai (class) - OpenAI API client 
@@ -146,7 +138,7 @@ def retrieval_passage(openai, response_llm, pineindex, namespace):
     return used_evidences
 
 
-def agreement_gate(openai, response_llm, pineindex, namespace):
+def agreement_gate(logger, openai, response_llm, pineindex, namespace):
     """ Generate embeddings for the question
 
         Input:  openai (class) - OpenAI API client 
@@ -160,7 +152,7 @@ def agreement_gate(openai, response_llm, pineindex, namespace):
     """
 
     # Calling retrieval stage before agreement stage
-    used_evidences = retrieval_passage(
+    used_evidences = retrieval_passage(logger,
         openai, response_llm, pineindex, namespace)
     agreement_responses = []
     agreement_gates = []
@@ -215,7 +207,7 @@ def agreement_gate(openai, response_llm, pineindex, namespace):
     return agreement_gates, used_evidences, relevance
 
 
-def editor(openai, response_llm, pineindex, namespace):
+def editor(logger, openai, response_llm, pineindex, namespace):
     """
     Create the Pinecone index
 
@@ -228,7 +220,7 @@ def editor(openai, response_llm, pineindex, namespace):
             agreeemnet_gate (dict) - contains reason, decisions and gate value 
             status (boolean) - returns True if statement has passed fact check  
     """
-    agreement_gates, used_evidences, relevance = agreement_gate(
+    agreement_gates, used_evidences, relevance = agreement_gate(logger,
         openai, response_llm, pineindex, namespace)
     edit_count = 0
     edited_responses = []
@@ -284,7 +276,7 @@ def editor(openai, response_llm, pineindex, namespace):
 # Function to initialize pinecone index
 
 
-def pinecone_init(api_key, environment, index_name):
+def pinecone_init(logger, api_key, environment, index_name):
     """
     Create the Pinecone index
 
@@ -303,7 +295,7 @@ def pinecone_init(api_key, environment, index_name):
         logger.info("An exception occurred:", error)
 
 
-def document_preprocessing(text):
+def document_preprocessing(logger, text):
     """
        Breaks up texts into contents of managable size (300 words) to uplaod to Pinecone
 
@@ -333,7 +325,7 @@ def document_preprocessing(text):
         return False
 
 
-def upsert_document(openai, split_content, filename, page_num, embedding_model, pineindex, namespace):
+def upsert_document(logger, openai, split_content, filename, page_num, embedding_model, pineindex, namespace):
     """
        Inserts managable content into pinecone index
 
@@ -366,7 +358,7 @@ def upsert_document(openai, split_content, filename, page_num, embedding_model, 
         raise Exception("Failed to upload content: {0}".format(error))
 
 
-def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, filename, text):
+def document_upsert_pinecone(logger, openai, embedding_model, pineindex, namespace, filename, text):
     """
         Reads the documents and breaks into contents of managable size(300 words) and inserts into pinecone index
 
@@ -383,8 +375,8 @@ def document_upsert_pinecone(openai, embedding_model, pineindex, namespace, file
     """
     try:
         logger.info('Processing documents....')
-        content = document_preprocessing(text)
-        upsert_document(openai, content, filename, 0,
+        content = document_preprocessing(logger, text)
+        upsert_document(logger, openai, content, filename, 0,
                         embedding_model, pineindex, namespace)
 
         result = {'status': True,

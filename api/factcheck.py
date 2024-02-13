@@ -1,5 +1,6 @@
 import openai
 import os
+import uuid
 import pinecone
 
 from flask import current_app
@@ -9,6 +10,8 @@ from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, cr
 logger = getLogger('fact_checker')
 
 def create_index(CreateIndexRequest):
+    logger = getLogger(f'fact_checker.create_index.{str(uuid.uuid4())}')
+
     pine_api_key = os.environ.get('PINECONE_API')
     pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
     pine_index = os.environ.get('PINECONE_INDEX')
@@ -66,14 +69,14 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
     current_filename = None
 
     try:
-        pineindex = pinecone_init(pine_api_key, pine_env, index)
+        pineindex = pinecone_init(logger, pine_api_key, pine_env, index)
 
         logger.info(f'Deleting vectors in Pinecone index {index} in environment {pine_env}/{namespace}')
         pineindex.delete(delete_all=True, namespace=namespace)
 
         for document in documents:
             current_filename = document["filename"]
-            content = document_upsert_pinecone(
+            content = document_upsert_pinecone(logger,
                 openai, embedding_model, pineindex, namespace, current_filename, document["text"])
             logger.info(
                 f'Uploading {current_filename} to Pinecone index {index} in environment {pine_env}/{namespace}: {content["message"]}')
@@ -132,8 +135,7 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
         for document in documents:
             current_filename = document["filename"]
             questions = create_sample_questions(openai, document["text"])
-            logger.info(
-                f'Created sample queries for {current_filename}: {questions}')
+            logger.info(f'Created sample queries for {current_filename}: {questions}')
             sample_queries = sample_queries + questions
 
         response_data['json'] = {
@@ -171,6 +173,7 @@ def create_sample_queries(CreateFactcheckSampleQueriesRequest):
 
 
 def factcheck(factcheckRequest):
+    logger = getLogger(f'fact_checker.factcheck.{str(uuid.uuid4())}')
     """
         Fact checks a statment given the ground truth docs stored on pinecone index
 
@@ -193,8 +196,8 @@ def factcheck(factcheckRequest):
     namespace = factcheckRequest.get('namespace', None)
     statement = factcheckRequest['statement']
 
-    pineindex = pinecone_init(pine_api_key, pine_env, index)
-    editor_responses, agreement_gates, status = editor(
+    pineindex = pinecone_init(logger, pine_api_key, pine_env, index)
+    editor_responses, agreement_gates, status = editor(logger,
         openai, statement, pineindex, namespace)
 
     result = {'status': status,
