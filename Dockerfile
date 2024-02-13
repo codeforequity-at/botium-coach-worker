@@ -3,6 +3,7 @@ FROM tiangolo/meinheld-gunicorn-flask:python3.8
 COPY ./Requirements.txt /app/Requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r /app/Requirements.txt
+RUN pip install greenlet==0.4.17
 COPY ./setup /app/setup
 
 ENV TFHUB_CACHE_DIR /app/tfhub_modules
