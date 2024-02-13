@@ -152,19 +152,22 @@ def process_responses(req_queue, res_queue, err_queue):
 def process_requests_worker(req_queue, res_queue, err_queue, processId):
     worker_name = 'process_requests_worker-' + str(processId)
     logger = getLogger(worker_name)
-    logger.info('Initialize process_requests_worker ...')
+    logger.info(f'Initialize process_requests_worker {worker_name}...')
     calc_count = 0
     while calc_count < maxCalcCount:
         request_data, method = req_queue.get()
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
-            calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data, method)
+            logger.error(f'run worker method for {worker_name}.{method}')
+            calculate_embeddings_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
-            upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data)
+            logger.error(f'run worker method for {worker_name}.{method}')
+            upload_factcheck_documents_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
         elif method == 'create_sample_queries':
-            create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_queue, request_data)
+            logger.error(f'run worker method for {worker_name}.{method}')
+            create_sample_queries_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
         else:
-            logger.error(f'No worker method for {method}, ignoring.')
+            logger.error(f'No worker method for {worker_name}.{method}, ignoring.')
 
         calc_count += 1
 
@@ -186,6 +189,17 @@ def process_requests(req_queue, res_queue, err_queue):
                 p.start()
                 processes[i] = p
 
+req_queue = mp.Queue()
+res_queue = mp.Queue()
+err_queue = mp.Queue()
+
+preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue))
+preq.start()
+pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
+pres.start()
+if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
+    p = mp.Process(target=process_redis,  name='process_redis', args=(req_queue, res_queue, err_queue))
+    p.start()
 
 def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')
@@ -197,18 +211,6 @@ def create_app():
             "ready": "api.health.readiness",
         }
     )
-    req_queue = mp.Queue()
-    res_queue = mp.Queue()
-    err_queue = mp.Queue()
-
-    preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue))
-    preq.start()
-    pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
-    pres.start()
-    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
-        p = mp.Process(target=process_redis,  name='process_redis', args=(req_queue, res_queue, err_queue))
-        p.start()
-
     with app.app.app_context():
         current_app.req_queue = req_queue
         current_app.res_queue = res_queue
