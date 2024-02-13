@@ -189,6 +189,17 @@ def process_requests(req_queue, res_queue, err_queue):
                 p.start()
                 processes[i] = p
 
+req_queue = mp.Queue()
+res_queue = mp.Queue()
+err_queue = mp.Queue()
+
+preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue))
+preq.start()
+pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
+pres.start()
+if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
+    p = mp.Process(target=process_redis,  name='process_redis', args=(req_queue, res_queue, err_queue))
+    p.start()
 
 def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')
@@ -200,18 +211,6 @@ def create_app():
             "ready": "api.health.readiness",
         }
     )
-    req_queue = mp.Queue()
-    res_queue = mp.Queue()
-    err_queue = mp.Queue()
-
-    preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue))
-    preq.start()
-    pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
-    pres.start()
-    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
-        p = mp.Process(target=process_redis,  name='process_redis', args=(req_queue, res_queue, err_queue))
-        p.start()
-
     with app.app.app_context():
         current_app.req_queue = req_queue
         current_app.res_queue = res_queue
