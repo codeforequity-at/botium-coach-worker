@@ -116,6 +116,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /static/fact_check/delete_documents:
+    post:
+      summary: Delete embeddings for "ground truth" documentation in index
+      operationId: api.factcheck.delete_factcheck_documents
+      security:
+        - api_key: []
+      requestBody:
+        description: Delete embeddings for "ground truth" documentation in index
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: DeleteFactcheckDocumentRequest
+              $ref: "#/components/schemas/DeleteFactcheckDocumentRequest"
+            example:
+              index: botium-box-index
+              namespace: client1-project1
+      responses:
+        200:
+          description: delete response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FactcheckResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"                
   /static/fact_check/create_sample_queries:
     post:
       summary: Create sample queries from "ground truth" documents
@@ -480,6 +510,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/FactcheckDocument"
+    DeleteFactcheckDocumentRequest:
+      properties:
+        index:
+          type: string
+        environment:
+          type: string
+        namespace:
+          type: string         
     CreateFactcheckSampleQueriesRequest:
       required:
         - factcheckSessionId

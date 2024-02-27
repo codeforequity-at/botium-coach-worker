@@ -1,5 +1,5 @@
 import openai
-import pinecone
+from pinecone import Pinecone
 import re
 import torch
 
@@ -75,8 +75,7 @@ def get_context(question, index, namespace, top_k):
 
         Output: context (dict) - returns most relevant contect based on questions asked and retrieval score from pineocne
     """
-    result = openai.Embedding.create(
-        model="text-embedding-ada-002", input=question)
+    result = openai.Embedding.create(model="text-embedding-ada-002", input=question)
     embedding = result["data"][0]["embedding"]
     # search pinecone index for context passage with the answer
     context = index.query(namespace=namespace, vector=embedding,
@@ -122,9 +121,7 @@ def retrieval_passage(logger, openai, response_llm, pineindex, namespace):
         # figure conflicting articles and stop
         if retrieved_passages:
             # Sort all retrieved passages by the retrieval score.
-            retrieved_passages = sorted(
-                retrieved_passages, key=lambda d: d["retrieval_score"], reverse=True
-            )
+            retrieved_passages = sorted(retrieved_passages, key=lambda d: d["retrieval_score"], reverse=True)
 
             # Normalize the retreival scores into probabilities
             scores = [r["retrieval_score"] for r in retrieved_passages]
@@ -286,14 +283,9 @@ def pinecone_init(logger, api_key, environment, index_name):
 
     Output: document similarities - Dict of most relevant passages from documents 
     """
-    try:
-        pinecone.init(api_key=api_key, environment=environment)
-        index = pinecone.Index(index_name)
-        return index
-    except Exception as error:
-        # handle the exception
-        logger.info("An exception occurred:", error)
-
+    pc = Pinecone(api_key=api_key, environment=environment)
+    index = pc.Index(index_name)        
+    return index
 
 def document_preprocessing(logger, text):
     """
@@ -344,16 +336,14 @@ def upsert_document(logger, openai, split_content, filename, page_num, embedding
         for content in split_content:
             para += 1
             iid = filename[:-4] + '_' + str(page_num) + '_' + str(para)
-            result = openai.Embedding.create(
-                model=embedding_model, input=content)
+            result = openai.Embedding.create(model=embedding_model, input=content)
             embedding = result["data"][0]["embedding"]
             vector = [{'id': iid,
                        'values': embedding,
                        'metadata': {"filename": filename, "word_count": len(content.split()), 'context': content}
                        }]
             pineindex.upsert(vectors=vector, namespace=namespace)
-            logger.info('Uploaded content to Pinecone index. {0} {1}'.format(
-                iid, vector[0]["metadata"]))
+            logger.info('Uploaded content to Pinecone index. {0} {1}'.format(iid, vector[0]["metadata"]))
     except Exception as error:
         raise Exception("Failed to upload content: {0}".format(error))
 
