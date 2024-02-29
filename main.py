@@ -162,10 +162,10 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
             calculate_embeddings_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
             logger.error(f'run worker method for {worker_name}.{method}')
-            upload_factcheck_documents_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
+            upload_factcheck_documents_worker(getLogger(f'{worker_name}.upload_factcheck_documents'), worker_name, req_queue, res_queue, err_queue, request_data)
         elif method == 'create_sample_queries':
             logger.error(f'run worker method for {worker_name}.{method}')
-            create_sample_queries_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
+            create_sample_queries_worker(getLogger(f'{worker_name}.create_sample_queries'), worker_name, req_queue, res_queue, err_queue, request_data)
         else:
             logger.error(f'No worker method for {worker_name}.{method}, ignoring.')
 

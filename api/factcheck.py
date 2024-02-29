@@ -74,7 +74,10 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         pineindex = pinecone_init(logger, pine_api_key, pine_env, index)
 
         logger.info(f'Deleting vectors in Pinecone index {index} in environment {pine_env}/{namespace}')
-        pineindex.delete(delete_all=True, namespace=namespace)
+        try:
+            pineindex.delete(delete_all=True, namespace=namespace)
+        except Exception as error:
+            logger.warn(f'Cleaning namespace in Pinecone index {index} in environment {pine_env}/{namespace} failed: {str(error)}')
 
         for document in documents:
             current_filename = document["filename"]
