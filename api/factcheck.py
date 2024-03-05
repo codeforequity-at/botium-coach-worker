@@ -8,14 +8,16 @@ from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
 
 logger = getLogger('fact_checker')
+createIndexLogger = getLogger(f'fact_checker.create_index')
+deleteLogger = getLogger(f'fact_checker.delete_factcheck_documents')
+factCheckLogger = getLogger(f'fact_checker.factcheck')
+
 pine_api_key = os.environ.get('PINECONE_API')
 pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
 pine_index = os.environ.get('PINECONE_INDEX')
 openai.api_key = os.environ.get('OPEN_API')
 
 def create_index(CreateIndexRequest):
-    logger = getLogger(f'fact_checker.create_index.{str(uuid.uuid4())}')
-
     index = CreateIndexRequest.get('index', pine_index)
     pine_env = CreateIndexRequest.get('environment', pine_environment)
     try:
@@ -37,19 +39,18 @@ def create_index(CreateIndexRequest):
               replicas=1
             )
         )
-        logger.info(f'Created Pinecone index {index} in environment {pine_env}')
+        createIndexLogger.info(f'Created Pinecone index {index} in environment {pine_env}')
         return {
             'status': "finished",
             'message': f'Successfully created index {index} in environment {pine_env}'
         }
     except Exception as error:
-        logger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {str(error)}')
+        createIndexLogger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
         return {
             'status': "failed",
             'err': f'Creating index {index} in environment {pine_env} failed: {str(error)}'
         }
-
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     embedding_model = "text-embedding-ada-002"
@@ -101,7 +102,6 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         }
         res_queue.put((response_data,))
 
-
 def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
 
@@ -117,8 +117,6 @@ def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     }
 
 def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
-    logger = getLogger(f'fact_checker.delete_factcheck_documents.{str(uuid.uuid4())}')
-
     index = DeleteFactcheckDocumentRequest.get('index', pine_index)
     pine_env = DeleteFactcheckDocumentRequest.get('environment', pine_environment)
     namespace = DeleteFactcheckDocumentRequest.get('namespace', None)
@@ -130,11 +128,11 @@ def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
         }
 
     try:
-        pineindex = pinecone_init(logger, pine_api_key, pine_env, index)   
+        pineindex = pinecone_init(deleteLogger, pine_api_key, pine_env, index)   
 
         if namespace in pineindex.describe_index_stats()['namespaces'].keys():
             pineindex.delete(delete_all=True, namespace=namespace)
-            logger.info(f'Deleted namespace {namespace} in Pinecone index {index} in environment {pine_env}')
+            deleteLogger.info(f'Deleted namespace {namespace} in Pinecone index {index} in environment {pine_env}')
             return {
                 'status': "finished",
                 'message': f'Successfully deleted namespace {namespace} in index {index} in environment {pine_env}'
@@ -145,7 +143,7 @@ def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
                 'message': f'No Namespace {namespace} found in index {index} in environment {pine_env}'
             }
     except Exception as error:
-        logger.error(f'Deleting namespace {namespace} in Pinecone index {index} in environment {pine_env} failed: {str(error)}')
+        deleteLogger.error(f'Deleting namespace {namespace} in Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
         return {
             'status': "failed",
@@ -208,7 +206,6 @@ def create_sample_queries(CreateFactcheckSampleQueriesRequest):
 
 
 def factcheck(factcheckRequest):
-    logger = getLogger(f'fact_checker.factcheck.{str(uuid.uuid4())}')
     """
         Fact checks a statment given the ground truth docs stored on pinecone index
 
@@ -228,8 +225,8 @@ def factcheck(factcheckRequest):
     namespace = factcheckRequest.get('namespace', None)
     statement = factcheckRequest['statement']
 
-    pineindex = pinecone_init(logger, pine_api_key, pine_env, index)
-    editor_responses, agreement_gates, status = editor(logger,
+    pineindex = pinecone_init(factCheckLogger, pine_api_key, pine_env, index)
+    editor_responses, agreement_gates, status = editor(factCheckLogger,
         openai, statement, pineindex, namespace)
 
     result = {'status': status,
