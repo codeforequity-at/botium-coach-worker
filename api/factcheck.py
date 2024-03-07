@@ -1,6 +1,5 @@
 import openai
 import os
-import uuid
 from pinecone import Pinecone, PodSpec
 
 from flask import current_app
