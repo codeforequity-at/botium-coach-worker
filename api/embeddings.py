@@ -24,6 +24,7 @@ from flask_healthz import healthz
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 
+embeddingsLogger = getLogger('calculate_embeddings')
 
 class CalcStatus(str, Enum):
     CHI2_ANALYSIS_RUNNING = 'CHI2_ANALYSIS_RUNNING'
@@ -455,16 +456,11 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             logger.debug(json.dumps(response_data, indent=2))
             res_queue.put((response_data,))
 
-
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
         tfVersion=tf.__version__, ptVersion=torch.__version__, ptCuda=str(torch.cuda.is_available()))
 
-
 def calculate_embeddings(embeddingsRequest):
-
-    logger = getLogger('calculate_embeddings')
-
     coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
     clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
     testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
@@ -475,7 +471,7 @@ def calculate_embeddings(embeddingsRequest):
         boxEndpoint = os.environ.get('COACH_DEV_BOX_ENDPOINT')
 
     try:
-        logger.info('Checking callback url availability (' + boxEndpoint + ') ...')
+        embeddingsLogger.info('Checking callback url availability (' + boxEndpoint + ') ...')
         response_data = {
             "method": "ping"
         }
@@ -484,7 +480,7 @@ def calculate_embeddings(embeddingsRequest):
             raise Exception(
                 'Ping check for callback url failed: Status Code ' + str(res.status_code))
     except Exception as e:
-        logger.info('Error: Checking callback url availability: ' + str(e))
+        embeddingsLogger.info('Error: Checking callback url availability: ' + str(e))
         return {
             'status': 'rejected',
             'coachSessionId': coachSessionId,

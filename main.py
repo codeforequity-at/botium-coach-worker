@@ -153,19 +153,24 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
     worker_name = 'process_requests_worker-' + str(processId)
     logger = getLogger(worker_name)
     logger.info(f'Initialize process_requests_worker {worker_name}...')
+
+    embeddingsLogger = getLogger(f'{worker_name}.calculate_embeddings')
+    fcUploadLogger = getLogger(f'{worker_name}.upload_factcheck_documents')
+    fcSampleLogger = getLogger(f'{worker_name}.create_sample_queries')
+
     calc_count = 0
     while calc_count < maxCalcCount:
         request_data, method = req_queue.get()
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
-            logger.error(f'run worker method for {worker_name}.{method}')
-            calculate_embeddings_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data, method)
+            logger.info(f'run worker method for {worker_name}.{method}')
+            calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
-            logger.error(f'run worker method for {worker_name}.{method}')
-            upload_factcheck_documents_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
+            logger.info(f'run worker method for {worker_name}.{method}')
+            upload_factcheck_documents_worker(fcUploadLogger, worker_name, req_queue, res_queue, err_queue, request_data)
         elif method == 'create_sample_queries':
-            logger.error(f'run worker method for {worker_name}.{method}')
-            create_sample_queries_worker(getLogger(f'{worker_name}.calculate_embeddings'), worker_name, req_queue, res_queue, err_queue, request_data)
+            logger.info(f'run worker method for {worker_name}.{method}')
+            create_sample_queries_worker(fcSampleLogger, worker_name, req_queue, res_queue, err_queue, request_data)
         else:
             logger.error(f'No worker method for {worker_name}.{method}, ignoring.')
 

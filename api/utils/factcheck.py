@@ -1,7 +1,16 @@
 import openai
-import pinecone
+from pinecone import Pinecone
 import re
 import torch
+from .retry import openai_retry_with_exponential_backoff
+
+@openai_retry_with_exponential_backoff
+def completions_with_backoff(**kwargs):
+    return openai.ChatCompletion.create(**kwargs)
+
+@openai_retry_with_exponential_backoff
+def embeddings_with_backoff(**kwargs):
+    return openai.Embedding.create(**kwargs)
 
 def create_query(openai, response_llm):
     """ Create query/facts which are required to be verified
@@ -12,7 +21,7 @@ def create_query(openai, response_llm):
         Output: questions (List) - list of questions to gather evidence to fact check statement
     """
     response_llm = 'Statement:= ' + response_llm
-    response = openai.ChatCompletion.create(
+    response = completions_with_backoff(
         model="gpt-4", messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
             {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd"},
@@ -39,7 +48,7 @@ def create_query(openai, response_llm):
 
 def create_sample_questions(openai, text):
     text = 'Statement:= ' + text
-    response = openai.ChatCompletion.create(
+    response = completions_with_backoff(
         model="gpt-4", messages=[
             {"role": "system", "content": "You are a helpful assistant with the ability to verify the facts in a given statement. Your task is to read the provided statement and break it down into individual facts, sentences, or contexts that require verification. Each aspect of the statement should be treated with a level of skepticism, assuming that there might be some factual errors. Your role is to generate queries to validate each fact, seeking clarification to ensure accurate and consistent information. Please assist in fact-checking by asking questions to verify the details presented in the statement."},
             {"role": "user", "content": "Statement:= Time of My Life is a song by American singer-songwriter Bill Medley from the soundtrack of the 1987 film Dirty Dancing. The song was produced by Michael Lloyd"},
@@ -75,8 +84,7 @@ def get_context(question, index, namespace, top_k):
 
         Output: context (dict) - returns most relevant contect based on questions asked and retrieval score from pineocne
     """
-    result = openai.Embedding.create(
-        model="text-embedding-ada-002", input=question)
+    result = embeddings_with_backoff(model="text-embedding-ada-002", input=question)
     embedding = result["data"][0]["embedding"]
     # search pinecone index for context passage with the answer
     context = index.query(namespace=namespace, vector=embedding,
@@ -122,9 +130,7 @@ def retrieval_passage(logger, openai, response_llm, pineindex, namespace):
         # figure conflicting articles and stop
         if retrieved_passages:
             # Sort all retrieved passages by the retrieval score.
-            retrieved_passages = sorted(
-                retrieved_passages, key=lambda d: d["retrieval_score"], reverse=True
-            )
+            retrieved_passages = sorted(retrieved_passages, key=lambda d: d["retrieval_score"], reverse=True)
 
             # Normalize the retreival scores into probabilities
             scores = [r["retrieval_score"] for r in retrieved_passages]
@@ -180,7 +186,7 @@ def agreement_gate(logger, openai, response_llm, pineindex, namespace):
         user_llm = "Statement:= " + response_llm + " \n Query:= " + \
             used_evidences[i]['query'] + \
             " \n Article:= " + used_evidences[i]['text']
-        response = openai.ChatCompletion.create(
+        response = completions_with_backoff(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant specialized in performing fact-checking between a given statement and an accompanying document based on the queries provided. Your goal is to ensure consistent and accurate results throughout the fact-checking process. For each query, you will compare both the statement and the document to determine if they agree or disagree on the specific facts presented. Any even slight agreement or disagreement between the two will be concluded as disagree. You will thoroughly provide reasoning for each conclusion reached and in therefore explicilty tell if you agree or disagree. If there are any discrepancies or inconsistencies between the statement and the article you will explicitly state disagree for clarity."},
@@ -242,7 +248,7 @@ def editor(logger, openai, response_llm, pineindex, namespace):
             user_llm = "Statement:= " + response_llm + " \n Query:= " + \
                 used_evidences[i]['query'] + " \n Article:= " + \
                 used_evidences[i]['text'] + agreement_gates[i]['reason']
-            response = openai.ChatCompletion.create(
+            response = completions_with_backoff(
                 model="gpt-4",
                 messages=[
                     # {"role": "system", "content": "You are a helpful assistant.Who fixes the statement using the reasoning provided as there is a disagreement between article and statement on the query."  },
@@ -286,14 +292,9 @@ def pinecone_init(logger, api_key, environment, index_name):
 
     Output: document similarities - Dict of most relevant passages from documents 
     """
-    try:
-        pinecone.init(api_key=api_key, environment=environment)
-        index = pinecone.Index(index_name)
-        return index
-    except Exception as error:
-        # handle the exception
-        logger.info("An exception occurred:", error)
-
+    pc = Pinecone(api_key=api_key, environment=environment)
+    index = pc.Index(index_name)        
+    return index
 
 def document_preprocessing(logger, text):
     """
@@ -344,16 +345,14 @@ def upsert_document(logger, openai, split_content, filename, page_num, embedding
         for content in split_content:
             para += 1
             iid = filename[:-4] + '_' + str(page_num) + '_' + str(para)
-            result = openai.Embedding.create(
-                model=embedding_model, input=content)
+            result = embeddings_with_backoff(model=embedding_model, input=content)
             embedding = result["data"][0]["embedding"]
             vector = [{'id': iid,
                        'values': embedding,
                        'metadata': {"filename": filename, "word_count": len(content.split()), 'context': content}
                        }]
             pineindex.upsert(vectors=vector, namespace=namespace)
-            logger.info('Uploaded content to Pinecone index. {0} {1}'.format(
-                iid, vector[0]["metadata"]))
+            logger.info('Uploaded content to Pinecone index. {0} {1}'.format(iid, vector[0]["metadata"]))
     except Exception as error:
         raise Exception("Failed to upload content: {0}".format(error))
 

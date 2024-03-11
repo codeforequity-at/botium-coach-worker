@@ -38,6 +38,9 @@ def getLogger(name):
     #log_format = '%(asctime)-15s %(clientId)s %(message)s'
     #logging.basicConfig(level=log_level, datefmt=log_datefmt)
     logger = logging.getLogger(name)
+    if len(logger.handlers) > 0:
+        return logger
+
     logger.propagate = False
     logHandler = logging.StreamHandler()
     if int(os.environ.get('JSON_LOGGING', 0)) == 1:
