@@ -150,7 +150,8 @@ def process_responses(req_queue, res_queue, err_queue):
                         max_retries)
 
 def process_requests_worker(req_queue, res_queue, err_queue, processId):
-    worker_name = 'process_requests_worker-' + str(processId)
+    pid = os.getpid()
+    worker_name = 'process_requests_worker-' + str(pid) + '-' + str(processId)
     logger = getLogger(worker_name)
     logger.info(f'Initialize process_requests_worker {worker_name}...')
 
@@ -177,11 +178,12 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
         calc_count += 1
 
 def process_requests(req_queue, res_queue, err_queue):
+    pid = os.getpid()
     logger = getLogger('process_requests')
     logger.info('Worker process_requests started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{i}', args=(req_queue, res_queue, err_queue, i))
+        p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, i))
         p.daemon = False
         p.start()
         processes.append(p)
@@ -189,7 +191,7 @@ def process_requests(req_queue, res_queue, err_queue):
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{i}', args=(req_queue, res_queue, err_queue, i))
+                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
