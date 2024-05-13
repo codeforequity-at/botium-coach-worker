@@ -4,10 +4,9 @@ import connexion
 from functools import singledispatch
 from flask import current_app
 from flask_healthz import healthz
-import multiprocessing.dummy as mp
+import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
 from api.factcheck import upload_factcheck_documents_worker, create_sample_queries_worker
-from multiprocessing import Process, RawValue, Lock
 import json
 import time
 import requests
