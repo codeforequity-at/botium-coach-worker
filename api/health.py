@@ -1,21 +1,8 @@
 import os
-import redis
 from flask_healthz import HealthError
-from .redis_client import getRedis
 from flask import current_app
 
-
-def check_redis():
-    if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
-        try:
-            red = getRedis(timeout=0.5)
-            red.ping()
-        except Exception as e:
-            raise HealthError('Redis error: {}'.format(str(e)))
-
-
 def liveness():
-    check_redis()
     with current_app.app_context():
         err_queue = current_app.err_queue
         item = None
@@ -29,4 +16,4 @@ def liveness():
 
 
 def readiness():
-    check_redis()
+    return None

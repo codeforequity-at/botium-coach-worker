@@ -107,8 +107,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
 
     def sendStatus(category, calc_status, step, max_steps, message):
         logger.info(message, extra=log_extras)
-        status_data['redisKey'] = 'coachworker_status_' + \
-            category + '_' + coachSessionId
         status_data['json'] = {
             "method": "calculate_" + category,
             "clientId": clientId,
@@ -121,10 +119,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         res_queue.put((status_data, None, None))
 
     if method == "calculate_chi2":
-        response_data['redisKey'] = 'coachworker_res_chi2_' + coachSessionId
-        response_data['deleteRedisKey'] = 'coachworker_req_chi2_' + \
-            coachSessionId
-
         if len(intents) == 0:
             response_data['json'] = {
                 "method": "calculate_chi2",
@@ -234,10 +228,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             res_queue.put((response_data,))
 
     if method == "calculate_embeddings":
-        response_data['redisKey'] = 'coachworker_res_embeddings_' + \
-            coachSessionId
-        response_data['deleteRedisKey'] = 'coachworker_req_embeddings_' + \
-            coachSessionId
 
         logger.info('Loading word embeddings model from tfhub ...')
         try:

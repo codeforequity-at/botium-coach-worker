@@ -13,52 +13,11 @@ import time
 import requests
 import numpy as np
 from api.utils.log import getLogger
-from api.redis_client import getRedis
 
 
-redis_enabled = int(os.environ.get('REDIS_ENABLE', 0)) == 1
 max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
 retry_delay_seconds = int(os.environ.get('COACH_RETRY_REQUEST_DELAY', 10))
 maxCalcCount = int(os.environ.get('COACH_MAX_CALCULATIONS_PER_WORKER', 100))
-
-def process_redis(req_queue, res_queue, err_queue):
-    logger = getLogger('process_redis')
-
-    in_queue = []
-    red = getRedis()
-
-    logger.info('Worker process_redis started...')
-    while True:
-        for k in red.scan_iter("coachworker_req*"):
-            if k not in in_queue:
-                if k.decode("utf-8").startswith('coachworker_req_chi2'):
-                    req_obj = json.loads(red.get(k))
-                    req_queue.put((req_obj, "calculate_chi2"))
-                    res_queue.put(({
-                      'redisKey': 'coachworker_status_chi2_' + req_obj['coachSessionId'],
-                      'data': {
-                        "method": "calculate_chi2",
-                        "clientId": req_obj['clientId'],
-                        "coachSessionId": req_obj['coachSessionId'],
-                        "status": 'QUEUED',
-                        'statusDescription': 'Request for Chi2 Analysis is queued'
-                      }
-                    },))
-                if k.decode("utf-8").startswith('coachworker_req_embeddings'):
-                    req_obj = json.loads(red.get(k))
-                    req_queue.put((req_obj, "calculate_embeddings"))
-                    res_queue.put(({
-                      'redisKey': 'coachworker_status_embeddings_' + req_obj['coachSessionId'],
-                      'data': {
-                        "method": "calculate_embeddings",
-                        "clientId": req_obj['clientId'],
-                        "coachSessionId": req_obj['coachSessionId'],
-                        "status": 'QUEUED',
-                        'statusDescription': 'Request for Embeddings Analysis is queued'
-                      }
-                    },))
-                in_queue.append(k)
-        time.sleep(5)
 
 @singledispatch
 def to_serializable(val):
@@ -74,8 +33,6 @@ def process_responses(req_queue, res_queue, err_queue):
     logger = getLogger('process_responses')
 
     red = None
-    if redis_enabled:
-        red = getRedis()
 
     logger.info('Worker process_responses started...')
     while True:
@@ -85,37 +42,8 @@ def process_responses(req_queue, res_queue, err_queue):
             retryCount = max_retries
 
         if retryMethod is None:
-            if redis_enabled and 'redisKey' in response_data:
-                res_queue.put((response_data, retryCount, 'retryRedis'))
             if 'boxEndpoint' in response_data:
                 res_queue.put((response_data, retryCount, 'retryEndpoint'))
-        elif redis_enabled and retryMethod == 'retryRedis':
-            try:
-                data = json.dumps(response_data['json'], default=to_serializable) if 'json' in response_data else response_data['data']
-                red.set(response_data['redisKey'], data, ex=600)
-                if 'deleteRedisKey' in response_data:
-                  red.delete(response_data['deleteRedisKey'])
-
-                logger.info('Sending redis response to %s ( %s of %s ) successful',
-                    response_data['redisKey'],
-                    max_retries - retryCount + 1,
-                    max_retries,
-                    extra=response_data['log_extras'] if 'log_extras' in response_data else None)
-            except Exception as e:
-                logger.error('%s', e, extra=response_data['log_extras'] if 'log_extras' in response_data else None)
-                if retryCount > 1:
-                    logger.info('Sending redis response to %s ( %s of %s ) failed, trying again in %s seconds',
-                        response_data['redisKey'],
-                        max_retries - retryCount + 1,
-                        max_retries,
-                        retry_delay_seconds)
-                    time.sleep(retry_delay_seconds)
-                    res_queue.put((response_data, retryCount - 1, retryMethod))
-                else:
-                    logger.error('Sending redis response to %s ( %s of %s ) failed finally, no retries anymore',
-                        response_data['redisKey'],
-                        max_retries - retryCount + 1,
-                        max_retries)
         elif retryMethod == 'retryEndpoint':
             boxEndpoint = response_data['boxEndpoint']
             # for testing purposes on local environment
@@ -204,9 +132,6 @@ preq = mp.Process(target=process_requests, name='process_requests', args=(req_qu
 preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
-if int(os.environ.get('REDIS_ENABLE', 0)) == 1:
-    p = mp.Process(target=process_redis,  name='process_redis', args=(req_queue, res_queue, err_queue))
-    p.start()
 
 def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')

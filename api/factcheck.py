@@ -65,9 +65,6 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         response_data['boxEndpoint'] = UploadFactcheckDocumentRequest['boxEndpoint']
         response_data['header'] = {"content-type": "application/json"}
 
-    response_data['redisKey'] = 'coachworker_res_factcheckupload_' + sessionId
-    response_data['deleteRedisKey'] = 'coachworker_req_factcheckupload_' + sessionId
-
     current_filename = None
 
     try:
@@ -157,9 +154,6 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
     if 'boxEndpoint' in CreateFactcheckSampleQueriesRequest:
         response_data['boxEndpoint'] = CreateFactcheckSampleQueriesRequest['boxEndpoint']
         response_data['header'] = {"content-type": "application/json"}
-
-    response_data['redisKey'] = 'coachworker_res_createsamplequeries_' + sessionId
-    response_data['deleteRedisKey'] = 'coachworker_req_createsamplequeries_' + sessionId
 
     current_filename = None
 
