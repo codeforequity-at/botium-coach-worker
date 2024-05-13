@@ -4,7 +4,7 @@ import connexion
 from functools import singledispatch
 from flask import current_app
 from flask_healthz import healthz
-import multiprocessing as mp
+import multiprocessing.dummy as mp
 from api.embeddings import calculate_embeddings_worker
 from api.factcheck import upload_factcheck_documents_worker, create_sample_queries_worker
 from multiprocessing import Process, RawValue, Lock
@@ -13,7 +13,6 @@ import time
 import requests
 import numpy as np
 from api.utils.log import getLogger
-
 
 max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
 retry_delay_seconds = int(os.environ.get('COACH_RETRY_REQUEST_DELAY', 10))
