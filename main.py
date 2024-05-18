@@ -12,6 +12,8 @@ import time
 import requests
 import numpy as np
 from api.utils.log import getLogger
+from gevents import monkey
+monkey.patch_all()
 
 max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
 retry_delay_seconds = int(os.environ.get('COACH_RETRY_REQUEST_DELAY', 10))
@@ -106,7 +108,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
 def process_requests(req_queue, res_queue, err_queue):
     pid = os.getpid()
     logger = getLogger('process_requests')
-    logger.info('Worker process_requests started...')
+    logger.info('Worker process_requests started....')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
         p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, i))
