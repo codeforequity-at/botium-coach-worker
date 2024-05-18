@@ -12,8 +12,6 @@ import time
 import requests
 import numpy as np
 from api.utils.log import getLogger
-from gevent import monkey
-monkey.patch_all()
 
 max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
 retry_delay_seconds = int(os.environ.get('COACH_RETRY_REQUEST_DELAY', 10))
