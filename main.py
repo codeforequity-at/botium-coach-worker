@@ -12,7 +12,7 @@ import time
 import requests
 import numpy as np
 from api.utils.log import getLogger
-from gevents import monkey
+from gevent import monkey
 monkey.patch_all()
 
 max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
