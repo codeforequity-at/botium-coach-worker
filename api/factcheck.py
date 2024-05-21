@@ -6,6 +6,11 @@ from flask import current_app
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
 
+import gevent.monkey
+gevent.monkey.patch_socket()
+
+import gevent
+
 logger = getLogger('fact_checker')
 createIndexLogger = getLogger(f'fact_checker.create_index')
 deleteLogger = getLogger(f'fact_checker.delete_factcheck_documents')
@@ -218,9 +223,11 @@ def factcheck(factcheckRequest):
     namespace = factcheckRequest.get('namespace', None)
     statement = factcheckRequest['statement']
 
-    pineindex = pinecone_init(factCheckLogger, pine_api_key, pine_env, index)
-    editor_responses, agreement_gates, status = editor(factCheckLogger,
-        openai, statement, pineindex, namespace)
+    t = gevent.spawn(pinecone_init, factCheckLogger, pine_api_key, pine_env, index)
+    pineindex = t.value
+
+    t2 = gevent.spawn(editor, factCheckLogger, openai, statement, pineindex, namespace)
+    editor_responses, agreement_gates, status = t2.value
 
     result = {'status': status,
               'reasoning': agreement_gates,
