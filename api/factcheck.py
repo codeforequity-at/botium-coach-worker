@@ -4,6 +4,7 @@ from pinecone import Pinecone, PodSpec
 import json
 
 from flask import current_app
+from flask import Response
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
 
@@ -24,10 +25,10 @@ async def create_index(CreateIndexRequest):
         pc = Pinecone(api_key=pine_api_key, environment=pine_env)
         active_indexes = pc.list_indexes().names()
         if index in active_indexes:
-            return json.dumps({
+            return Response(json.dumps({
                 'status': "finished",
                 'message': f'Index {index} in environment {pine_env} already active'
-            })
+            }), mimetype='application/json')
 
         pc.create_index(
             name=index,
@@ -40,17 +41,17 @@ async def create_index(CreateIndexRequest):
             )
         )
         createIndexLogger.info(f'Created Pinecone index {index} in environment {pine_env}')
-        return json.dumps({
+        return Response(json.dumps({
             'status': "finished",
             'message': f'Successfully created index {index} in environment {pine_env}'
-        })
+        }), mimetype='application/json')
     except Exception as error:
         createIndexLogger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
-        return json.dumps({
+        return Response(json.dumps({
             'status': "failed",
             'err': f'Creating index {index} in environment {pine_env} failed: {str(error)}'
-        })
+        }), mimetype='application/json')
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     embedding_model = "text-embedding-ada-002"
