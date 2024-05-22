@@ -1,6 +1,7 @@
 import openai
 import os
 from pinecone import Pinecone, PodSpec
+import json
 
 from flask import current_app
 from .utils.log import getLogger
@@ -39,17 +40,17 @@ async def create_index(CreateIndexRequest):
             )
         )
         createIndexLogger.info(f'Created Pinecone index {index} in environment {pine_env}')
-        return {
+        return json.dumps({
             'status': "finished",
             'message': f'Successfully created index {index} in environment {pine_env}'
-        }
+        })
     except Exception as error:
         createIndexLogger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
-        return {
+        return json.dumps({
             'status': "failed",
             'err': f'Creating index {index} in environment {pine_env} failed: {str(error)}'
-        }
+        })
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     embedding_model = "text-embedding-ada-002"
@@ -106,11 +107,11 @@ async def upload_factcheck_documents(UploadFactcheckDocumentRequest):
         req_queue.put((UploadFactcheckDocumentRequest,
                       "upload_factcheck_documents"))
 
-    return {
+    return json.dumps({
         'status': 'queued',
         'message': "Started uploading documents to index.",
         'factcheckSessionId': sessionId
-    }
+    })
 
 def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
     index = DeleteFactcheckDocumentRequest.get('index', pine_index)
@@ -129,22 +130,22 @@ def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
         if namespace in pineindex.describe_index_stats()['namespaces'].keys():
             pineindex.delete(delete_all=True, namespace=namespace)
             deleteLogger.info(f'Deleted namespace {namespace} in Pinecone index {index} in environment {pine_env}')
-            return {
+            return json.dumps({
                 'status': "finished",
                 'message': f'Successfully deleted namespace {namespace} in index {index} in environment {pine_env}'
-            }
+            })
         else:
-            return {
+            return json.dumps({
                 'status': "finished",
                 'message': f'No Namespace {namespace} found in index {index} in environment {pine_env}'
-            }
+            })
     except Exception as error:
         deleteLogger.error(f'Deleting namespace {namespace} in Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
-        return {
+        return json.dumps({
             'status': "failed",
             'err': f'Deleting namespace {namespace} in index {index} in environment {pine_env} failed: {str(error)}'
-        }
+        })
 
 def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_queue, CreateFactcheckSampleQueriesRequest):
     sessionId = CreateFactcheckSampleQueriesRequest['factcheckSessionId']
@@ -191,11 +192,11 @@ async def create_sample_queries(CreateFactcheckSampleQueriesRequest):
         req_queue.put((CreateFactcheckSampleQueriesRequest,
                       "create_sample_queries"))
 
-    return {
+    return json.dumps({
         'status': 'queued',
         'message': "Started creating sample queries.",
         'factcheckSessionId': sessionId
-    }
+    })
 
 
 async def factcheck(factcheckRequest):
@@ -225,4 +226,4 @@ async def factcheck(factcheckRequest):
     result = {'status': status,
               'reasoning': agreement_gates,
               'fixed_statement': editor_responses}
-    return result
+    return return json.dumps(result)
