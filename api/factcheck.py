@@ -104,9 +104,10 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
 async def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
 
-    req_queue = context.req_queue
-    req_queue.put((UploadFactcheckDocumentRequest,
-                      "upload_factcheck_documents"))
+    with app.app_context():
+        req_queue = context.req_queue
+        req_queue.put((UploadFactcheckDocumentRequest,
+                        "upload_factcheck_documents"))
 
     return json.dumps({
         'status': 'queued',
@@ -188,9 +189,10 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
 async def create_sample_queries(CreateFactcheckSampleQueriesRequest):
     sessionId = CreateFactcheckSampleQueriesRequest['factcheckSessionId']
 
-    req_queue = context.req_queue
-    req_queue.put((CreateFactcheckSampleQueriesRequest,
-                      "create_sample_queries"))
+    with app.app_context():
+        req_queue = context.req_queue
+        req_queue.put((CreateFactcheckSampleQueriesRequest,
+                        "create_sample_queries"))
 
     return json.dumps({
         'status': 'queued',

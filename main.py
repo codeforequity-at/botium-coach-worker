@@ -143,9 +143,10 @@ def create_app():
     #        "ready": "api.health.readiness",
     #    }
     #)
-    context.req_queue = req_queue
-    context.res_queue = res_queue
-    context.err_queue = err_queue
+    with app.app_context():
+        context.req_queue = req_queue
+        context.res_queue = res_queue
+        context.err_queue = err_queue
 
     return app
 

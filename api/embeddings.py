@@ -482,9 +482,10 @@ def calculate_embeddings(embeddingsRequest):
             'error_message': str(e)
         }
 
-    req_queue = context.req_queue
-    req_queue.put((embeddingsRequest, "calculate_chi2"))
-    req_queue.put((embeddingsRequest, "calculate_embeddings"))
+    with app.app_context():
+        req_queue = context.req_queue
+        req_queue.put((embeddingsRequest, "calculate_chi2"))
+        req_queue.put((embeddingsRequest, "calculate_embeddings"))
 
     return {
         'status': 'queued',
