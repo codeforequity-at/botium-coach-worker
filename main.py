@@ -14,6 +14,7 @@ import time
 import requests
 import numpy as np
 from api.utils.log import getLogger
+from a2wsgi import WSGIMiddleware
 
 max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
 retry_delay_seconds = int(os.environ.get('COACH_RETRY_REQUEST_DELAY', 10))
@@ -145,6 +146,7 @@ class MyContextMiddleware:
 
 def create_app():
     app = connexion.AsyncApp(__name__, specification_dir='openapi/')
+    app = WSGIMiddleware(app)
     app.add_api('botium_coach_worker_api.yaml')
     app.add_middleware(MyContextMiddleware)
     #app.app.register_blueprint(healthz, url_prefix="/healthz")
