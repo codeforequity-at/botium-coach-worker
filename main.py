@@ -133,10 +133,20 @@ preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
 
+class MyContextMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        scope["req_queue"] = req_queue
+        scope["res_queue"] = res_queue
+        scope["err_queue"] = err_queue
+        await self.app(scope, receive, send)
+
 def create_app():
     app = connexion.AsyncApp(__name__, specification_dir='openapi/')
-    
     app.add_api('botium_coach_worker_api.yaml')
+    app.add_middleware(MyContextMiddleware)
     #app.app.register_blueprint(healthz, url_prefix="/healthz")
     #app.app.config.update(
     #    HEALTHZ={
@@ -144,9 +154,6 @@ def create_app():
     #        "ready": "api.health.readiness",
     #    }
     #)
-    app.context.req_queue = req_queue
-    app.context.res_queue = res_queue
-    app.context.err_queue = err_queue
 
     return app
 
