@@ -20,7 +20,6 @@ from enum import Enum
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from flask import current_app
-from flask_healthz import healthz
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 
