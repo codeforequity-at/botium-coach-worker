@@ -8,6 +8,7 @@ from connexion.context import context
 from flask import Response
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
+from starlette.responses import JSONResponse
 
 logger = getLogger('fact_checker')
 createIndexLogger = getLogger(f'fact_checker.create_index')
@@ -19,17 +20,19 @@ pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
 pine_index = os.environ.get('PINECONE_INDEX')
 openai.api_key = os.environ.get('OPEN_API')
 
-def create_index(CreateIndexRequest):
+async def create_index(scope, receive, send):
+    CreateIndexRequest = await request.json()
     index = CreateIndexRequest.get('index', pine_index)
     pine_env = CreateIndexRequest.get('environment', pine_environment)
     try:
         pc = Pinecone(api_key=pine_api_key, environment=pine_env)
         active_indexes = pc.list_indexes().names()
         if index in active_indexes:
-            return {
+            res = JSONResponse({
                 'status': "finished",
                 'message': f'Index {index} in environment {pine_env} already active'
-            }
+            })
+            await res(scope, receive, send)
 
         pc.create_index(
             name=index,
@@ -42,17 +45,19 @@ def create_index(CreateIndexRequest):
             )
         )
         createIndexLogger.info(f'Created Pinecone index {index} in environment {pine_env}')
-        return {
+        res = JSONResponse({
             'status': "finished",
             'message': f'Successfully created index {index} in environment {pine_env}'
-        }
+        })
+        await res(scope, receive, send)
     except Exception as error:
         createIndexLogger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
-        return {
+        res = JSONResponse({
             'status': "failed",
             'err': f'Creating index {index} in environment {pine_env} failed: {str(error)}'
-        }
+        })
+        await res(scope, receive, send)
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     embedding_model = "text-embedding-ada-002"
