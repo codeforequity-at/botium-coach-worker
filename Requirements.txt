@@ -10,7 +10,7 @@ chardet==3.0.4
 charset-normalizer==3.3.2
 click==7.1.2
 clickclick==1.2.2
-connexion==2.7.0
+connexion==3.0.6
 cycler==0.10.0
 Deprecated==1.2.14
 dnspython==2.4.2

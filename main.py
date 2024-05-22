@@ -133,7 +133,7 @@ pres = mp.Process(target=process_responses, name='process_responses', args=(req_
 pres.start()
 
 def create_app():
-    app = connexion.App(__name__, specification_dir='openapi/')
+    app = connexion.AsyncApp(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
     app.app.register_blueprint(healthz, url_prefix="/healthz")
     app.app.config.update(
