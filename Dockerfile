@@ -27,5 +27,5 @@ ENV LOGLEVEL INFO
 ENV WEB_CONCURRENCY 1
 ENV COACH_MAX_UTTERANCES_FOR_EMBEDDINGS 500
 ENV PORT 8080
-ENV GUNICORN_CMD_ARGS --worker-class="uvicorn.workers.UvicornWorker" --timeout 18000 -u coach -g coach
+ENV GUNICORN_CMD_ARGS --worker-class uvicorn.workers.UvicornWorker --timeout 18000 -u coach -g coach
 ENV GUNICORN_MODE 1
