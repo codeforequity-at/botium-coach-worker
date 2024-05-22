@@ -16,7 +16,7 @@ pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
 pine_index = os.environ.get('PINECONE_INDEX')
 openai.api_key = os.environ.get('OPEN_API')
 
-def create_index(CreateIndexRequest):
+async def create_index(CreateIndexRequest):
     index = CreateIndexRequest.get('index', pine_index)
     pine_env = CreateIndexRequest.get('environment', pine_environment)
     try:
@@ -98,7 +98,7 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         }
         res_queue.put((response_data,))
 
-def upload_factcheck_documents(UploadFactcheckDocumentRequest):
+async def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
 
     with current_app.app_context():
@@ -183,7 +183,7 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
         res_queue.put((response_data,))
 
 
-def create_sample_queries(CreateFactcheckSampleQueriesRequest):
+async def create_sample_queries(CreateFactcheckSampleQueriesRequest):
     sessionId = CreateFactcheckSampleQueriesRequest['factcheckSessionId']
 
     with current_app.app_context():
@@ -198,7 +198,7 @@ def create_sample_queries(CreateFactcheckSampleQueriesRequest):
     }
 
 
-def factcheck(factcheckRequest):
+async def factcheck(factcheckRequest):
     """
         Fact checks a statment given the ground truth docs stored on pinecone index
 
