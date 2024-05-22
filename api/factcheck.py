@@ -6,10 +6,8 @@ from flask import current_app
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
 
-import gevent.monkey
-gevent.monkey.patch_socket()
-
 import gevent
+
 
 logger = getLogger('fact_checker')
 createIndexLogger = getLogger(f'fact_checker.create_index')
@@ -108,7 +106,7 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         }
         res_queue.put((response_data,))
 
-def upload_factcheck_documents2(UploadFactcheckDocumentRequest):
+def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
 
     with current_app.app_context():
@@ -121,11 +119,6 @@ def upload_factcheck_documents2(UploadFactcheckDocumentRequest):
         'message': "Started uploading documents to index.",
         'factcheckSessionId': sessionId
     }
-
-def upload_factcheck_documents(UploadFactcheckDocumentRequest):
-    t = gevent.joinall([gevent.spawn(upload_factcheck_documents_worker, logger, 'upload_factcheck_documents', current_app.req_queue, current_app.res_queue, current_app.err_queue, UploadFactcheckDocumentRequest)])
-    print (t[0].value)
-    return t[0].value
 
 def delete_factcheck_documents2(DeleteFactcheckDocumentRequest):
     index = DeleteFactcheckDocumentRequest.get('index', pine_index)
