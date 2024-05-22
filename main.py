@@ -135,6 +135,7 @@ pres.start()
 
 def create_app():
     app = connexion.AsyncApp(__name__, specification_dir='openapi/')
+    
     app.add_api('botium_coach_worker_api.yaml')
     #app.app.register_blueprint(healthz, url_prefix="/healthz")
     #app.app.config.update(
@@ -143,10 +144,9 @@ def create_app():
     #        "ready": "api.health.readiness",
     #    }
     #)
-    with app.app_context():
-        context.req_queue = req_queue
-        context.res_queue = res_queue
-        context.err_queue = err_queue
+    app.context.req_queue = req_queue
+    app.context.res_queue = res_queue
+    app.context.err_queue = err_queue
 
     return app
 
