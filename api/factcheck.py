@@ -24,10 +24,10 @@ async def create_index(CreateIndexRequest):
         pc = Pinecone(api_key=pine_api_key, environment=pine_env)
         active_indexes = pc.list_indexes().names()
         if index in active_indexes:
-            return {
+            return json.dumps({
                 'status': "finished",
                 'message': f'Index {index} in environment {pine_env} already active'
-            }
+            })
 
         pc.create_index(
             name=index,
@@ -119,10 +119,10 @@ def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
     namespace = DeleteFactcheckDocumentRequest.get('namespace', None)
 
     if namespace is None or namespace == "":
-        return {
+        return json.dumps({
             'status': "finished",
             'message': f'Namespace not given for index {index} in environment {pine_env}'
-        }
+        })
 
     try:
         pineindex = pinecone_init(deleteLogger, pine_api_key, pine_env, index)   
@@ -226,4 +226,4 @@ async def factcheck(factcheckRequest):
     result = {'status': status,
               'reasoning': agreement_gates,
               'fixed_statement': editor_responses}
-    return return json.dumps(result)
+    return json.dumps(result)
