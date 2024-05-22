@@ -95,4 +95,5 @@ wrapt==1.12.1
 yarl==1.9.3
 zope.event==5.0
 zope.interface==6.1
+uvicorn==0.29.0
 git+https://github.com/huggingface/transformers.git

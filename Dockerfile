@@ -2,7 +2,7 @@ FROM tiangolo/meinheld-gunicorn-flask:python3.8
 
 COPY ./Requirements.txt /app/Requirements.txt
 RUN pip install --upgrade pip
-RUN pip install -r /app/Requirements.txt
+RUN pip install --default-timeout=1000 --timeout 100 --retries 10 -r /app/Requirements.txt
 RUN pip install greenlet==0.4.17
 COPY ./setup /app/setup
 
@@ -27,5 +27,5 @@ ENV LOGLEVEL INFO
 ENV WEB_CONCURRENCY 1
 ENV COACH_MAX_UTTERANCES_FOR_EMBEDDINGS 500
 ENV PORT 8080
-ENV GUNICORN_CMD_ARGS --worker-class gevent --timeout 18000 -u coach -g coach
+ENV GUNICORN_CMD_ARGS --worker-class --worker-class uvicorn.workers.UvicornWorker --timeout 18000 -u coach -g coach
 ENV GUNICORN_MODE 1

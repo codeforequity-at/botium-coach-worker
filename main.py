@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-from gevent import monkey
-monkey.patch_socket()
-
 import os
 import connexion
 from functools import singledispatch
