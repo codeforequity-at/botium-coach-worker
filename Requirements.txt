@@ -31,7 +31,7 @@ h5py==2.10.0
 huggingface-hub==0.23.0
 idna==2.9
 inflection==0.5.0
-itsdangerous==1.1.0
+itsdangerous==2.1.2
 Jinja2==3.1.2
 joblib==0.15.1
 jsonschema==4.0.1
