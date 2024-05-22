@@ -32,7 +32,7 @@ huggingface-hub==0.23.0
 idna==2.9
 inflection==0.5.0
 itsdangerous==1.1.0
-Jinja2==3.0.0
+Jinja2==3.1.2
 joblib==0.15.1
 jsonschema==4.0.1
 Keras-Preprocessing==1.1.2
