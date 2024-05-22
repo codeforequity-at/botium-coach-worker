@@ -89,7 +89,7 @@ tqdm==4.64.1
 typing-extensions==4.8.0
 tzdata==2023.3
 urllib3==2.2.1
-Werkzeug==2.2.1
+Werkzeug==3.0.0
 wrapt==1.12.1
 yarl==1.9.3
 zope.event==5.0
