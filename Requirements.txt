@@ -21,11 +21,11 @@ flask-healthz==0.0.3
 frozenlist==1.4.0
 fsspec==2023.10.0
 gast==0.3.3
-gevent==23.9.1
 google-auth==1.18.0
 google-auth-oauthlib==0.4.1
 google-pasta==0.2.0
-greenlet==3.0.3
+gevent==20.9.0
+greenlet==0.4.17
 grpcio==1.47.0
 h5py==2.10.0
 huggingface-hub==0.23.0

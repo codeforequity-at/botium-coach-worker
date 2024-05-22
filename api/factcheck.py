@@ -21,7 +21,7 @@ pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
 pine_index = os.environ.get('PINECONE_INDEX')
 openai.api_key = os.environ.get('OPEN_API')
 
-def create_index(CreateIndexRequest):
+def create_index2(CreateIndexRequest):
     index = CreateIndexRequest.get('index', pine_index)
     pine_env = CreateIndexRequest.get('environment', pine_environment)
     try:
@@ -55,6 +55,11 @@ def create_index(CreateIndexRequest):
             'status': "failed",
             'err': f'Creating index {index} in environment {pine_env} failed: {str(error)}'
         }
+
+def create_index(CreateIndexRequest):
+    t = gevent.joinall([gevent.spawn(create_index2, CreateIndexRequest)])
+    print (t[0].value)
+    return t[0].value
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     embedding_model = "text-embedding-ada-002"
@@ -103,7 +108,7 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
         }
         res_queue.put((response_data,))
 
-def upload_factcheck_documents(UploadFactcheckDocumentRequest):
+def upload_factcheck_documents2(UploadFactcheckDocumentRequest):
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
 
     with current_app.app_context():
@@ -117,7 +122,12 @@ def upload_factcheck_documents(UploadFactcheckDocumentRequest):
         'factcheckSessionId': sessionId
     }
 
-def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
+def upload_factcheck_documents(UploadFactcheckDocumentRequest):
+    t = gevent.joinall([gevent.spawn(upload_factcheck_documents_worker, logger, 'upload_factcheck_documents', current_app.req_queue, current_app.res_queue, current_app.err_queue, UploadFactcheckDocumentRequest)])
+    print (t[0].value)
+    return t[0].value
+
+def delete_factcheck_documents2(DeleteFactcheckDocumentRequest):
     index = DeleteFactcheckDocumentRequest.get('index', pine_index)
     pine_env = DeleteFactcheckDocumentRequest.get('environment', pine_environment)
     namespace = DeleteFactcheckDocumentRequest.get('namespace', None)
@@ -150,6 +160,11 @@ def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
             'status': "failed",
             'err': f'Deleting namespace {namespace} in index {index} in environment {pine_env} failed: {str(error)}'
         }
+
+def delete_factcheck_documents(DeleteFactcheckDocumentRequest):
+    t = gevent.joinall([gevent.spawn(delete_factcheck_documents2, DeleteFactcheckDocumentRequest)])
+    print (t[0].value)
+    return t[0].value
 
 def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_queue, CreateFactcheckSampleQueriesRequest):
     sessionId = CreateFactcheckSampleQueriesRequest['factcheckSessionId']
@@ -188,7 +203,7 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
         res_queue.put((response_data,))
 
 
-def create_sample_queries(CreateFactcheckSampleQueriesRequest):
+def create_sample_queries2(CreateFactcheckSampleQueriesRequest):
     sessionId = CreateFactcheckSampleQueriesRequest['factcheckSessionId']
 
     with current_app.app_context():
@@ -202,8 +217,13 @@ def create_sample_queries(CreateFactcheckSampleQueriesRequest):
         'factcheckSessionId': sessionId
     }
 
+def create_sample_queries(CreateFactcheckSampleQueriesRequest):
+    t = gevent.joinall([gevent.spawn(create_sample_queries_worker, logger, 'create_sample_queries', current_app.req_queue, current_app.res_queue, current_app.err_queue, CreateFactcheckSampleQueriesRequest)])
+    print (t[0].value)
+    return t[0].value
 
-def factcheck(factcheckRequest):
+
+def factcheck2(factcheckRequest):
     """
         Fact checks a statment given the ground truth docs stored on pinecone index
 
@@ -223,13 +243,16 @@ def factcheck(factcheckRequest):
     namespace = factcheckRequest.get('namespace', None)
     statement = factcheckRequest['statement']
 
-    t = gevent.spawn(pinecone_init, factCheckLogger, pine_api_key, pine_env, index)
-    pineindex = t.value
+    pineindex = pinecone_init(factCheckLogger, pine_api_key, pine_env, index)
 
-    t2 = gevent.spawn(editor, factCheckLogger, openai, statement, pineindex, namespace)
-    editor_responses, agreement_gates, status = t2.value
+    editor_responses, agreement_gates, status = editor(factCheckLogger, openai, statement, pineindex, namespace)
 
     result = {'status': status,
               'reasoning': agreement_gates,
               'fixed_statement': editor_responses}
     return result
+
+def factcheck(factcheckRequest):
+    t = gevent.joinall([gevent.spawn(factcheck2, factcheckRequest)])
+    print (t[0].value)
+    return t[0].value
