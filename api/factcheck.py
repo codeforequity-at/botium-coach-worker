@@ -4,6 +4,7 @@ from pinecone import Pinecone, PodSpec
 import json
 
 from flask import current_app
+from connexion.context import context
 from flask import Response
 from .utils.log import getLogger
 from .utils.factcheck import editor, document_upsert_pinecone, pinecone_init, create_sample_questions
@@ -103,9 +104,8 @@ def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue,
 async def upload_factcheck_documents(UploadFactcheckDocumentRequest):
     sessionId = UploadFactcheckDocumentRequest['factcheckSessionId']
 
-    with current_app.app_context():
-        req_queue = current_app.req_queue
-        req_queue.put((UploadFactcheckDocumentRequest,
+    req_queue = context.req_queue
+    req_queue.put((UploadFactcheckDocumentRequest,
                       "upload_factcheck_documents"))
 
     return json.dumps({
@@ -188,9 +188,8 @@ def create_sample_queries_worker(logger, worker_name, req_queue, res_queue, err_
 async def create_sample_queries(CreateFactcheckSampleQueriesRequest):
     sessionId = CreateFactcheckSampleQueriesRequest['factcheckSessionId']
 
-    with current_app.app_context():
-        req_queue = current_app.req_queue
-        req_queue.put((CreateFactcheckSampleQueriesRequest,
+    req_queue = context.req_queue
+    req_queue.put((CreateFactcheckSampleQueriesRequest,
                       "create_sample_queries"))
 
     return json.dumps({

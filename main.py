@@ -2,6 +2,7 @@
 
 import os
 import connexion
+from connexion.context import context
 from functools import singledispatch
 from flask import current_app
 #from flask_healthz import healthz
@@ -142,10 +143,9 @@ def create_app():
     #        "ready": "api.health.readiness",
     #    }
     #)
-    with app.app.app_context():
-        current_app.req_queue = req_queue
-        current_app.res_queue = res_queue
-        current_app.err_queue = err_queue
+    context.req_queue = req_queue
+    context.res_queue = res_queue
+    context.err_queue = err_queue
 
     return app
 
