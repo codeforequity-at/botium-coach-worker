@@ -18,17 +18,17 @@ pine_environment = os.environ.get('PINECONE_ENVIRONMENT')
 pine_index = os.environ.get('PINECONE_INDEX')
 openai.api_key = os.environ.get('OPEN_API')
 
-async def create_index(CreateIndexRequest):
+def create_index(CreateIndexRequest):
     index = CreateIndexRequest.get('index', pine_index)
     pine_env = CreateIndexRequest.get('environment', pine_environment)
     try:
         pc = Pinecone(api_key=pine_api_key, environment=pine_env)
         active_indexes = pc.list_indexes().names()
         if index in active_indexes:
-            return Response(json.dumps({
+            return {
                 'status': "finished",
                 'message': f'Index {index} in environment {pine_env} already active'
-            }), mimetype='application/json')
+            }
 
         pc.create_index(
             name=index,
@@ -41,17 +41,17 @@ async def create_index(CreateIndexRequest):
             )
         )
         createIndexLogger.info(f'Created Pinecone index {index} in environment {pine_env}')
-        return Response(json.dumps({
+        return {
             'status': "finished",
             'message': f'Successfully created index {index} in environment {pine_env}'
-        }), mimetype='application/json')
+        }
     except Exception as error:
         createIndexLogger.error(f'Creating Pinecone index {index} in environment {pine_env} failed: {str(error)}')
         # handle the exception
-        return Response(json.dumps({
+        return {
             'status': "failed",
             'err': f'Creating index {index} in environment {pine_env} failed: {str(error)}'
-        }), mimetype='application/json')
+        }
 
 def upload_factcheck_documents_worker(logger, worker_name, req_queue, res_queue, err_queue, UploadFactcheckDocumentRequest):
     embedding_model = "text-embedding-ada-002"

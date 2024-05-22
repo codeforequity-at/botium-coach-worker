@@ -4,7 +4,7 @@ import os
 import connexion
 from functools import singledispatch
 from flask import current_app
-from flask_healthz import healthz
+#from flask_healthz import healthz
 import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
 from api.factcheck import upload_factcheck_documents_worker, create_sample_queries_worker
@@ -135,13 +135,13 @@ pres.start()
 def create_app():
     app = connexion.AsyncApp(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
-    app.app.register_blueprint(healthz, url_prefix="/healthz")
-    app.app.config.update(
-        HEALTHZ={
-            "live": "api.health.liveness",
-            "ready": "api.health.readiness",
-        }
-    )
+    #app.app.register_blueprint(healthz, url_prefix="/healthz")
+    #app.app.config.update(
+    #    HEALTHZ={
+    #        "live": "api.health.liveness",
+    #        "ready": "api.health.readiness",
+    #    }
+    #)
     with app.app.app_context():
         current_app.req_queue = req_queue
         current_app.res_queue = res_queue
