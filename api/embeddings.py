@@ -20,7 +20,7 @@ from enum import Enum
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from flask import current_app
-from connexion.context import context
+from flask_healthz import healthz
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -482,8 +482,8 @@ def calculate_embeddings(embeddingsRequest):
             'error_message': str(e)
         }
 
-    with app.app_context():
-        req_queue = context.req_queue
+    with current_app.app_context():
+        req_queue = current_app.req_queue
         req_queue.put((embeddingsRequest, "calculate_chi2"))
         req_queue.put((embeddingsRequest, "calculate_embeddings"))
 

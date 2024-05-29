@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-
 import os
 import connexion
-from connexion.context import context
 from functools import singledispatch
 from flask import current_app
-#from flask_healthz import healthz
+from flask_healthz import healthz
 import multiprocessing as mp
 from api.embeddings import calculate_embeddings_worker
 from api.factcheck import upload_factcheck_documents_worker, create_sample_queries_worker
@@ -14,7 +12,6 @@ import time
 import requests
 import numpy as np
 from api.utils.log import getLogger
-from a2wsgi import WSGIMiddleware
 
 max_retries = int(os.environ.get('COACH_RETRY_REQUEST_RETRIES', 12))
 retry_delay_seconds = int(os.environ.get('COACH_RETRY_REQUEST_DELAY', 10))
@@ -109,7 +106,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
 def process_requests(req_queue, res_queue, err_queue):
     pid = os.getpid()
     logger = getLogger('process_requests')
-    logger.info('Worker process_requests started....')
+    logger.info('Worker process_requests started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
         p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, i))
@@ -134,28 +131,20 @@ preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
 
-class MyContextMiddleware:
-    def __init__(self, app):
-        self.app = app
-
-    async def __call__(self, scope, receive, send):
-        scope["req_queue"] = req_queue
-        scope["res_queue"] = res_queue
-        scope["err_queue"] = err_queue
-        await self.app(scope, receive, send)
-
 def create_app():
-    app = connexion.AsyncApp(__name__, specification_dir='openapi/')
-    app = WSGIMiddleware(app)
+    app = connexion.App(__name__, specification_dir='openapi/')
     app.add_api('botium_coach_worker_api.yaml')
-    app.add_middleware(MyContextMiddleware)
-    #app.app.register_blueprint(healthz, url_prefix="/healthz")
-    #app.app.config.update(
-    #    HEALTHZ={
-    #        "live": "api.health.liveness",
-    #        "ready": "api.health.readiness",
-    #    }
-    #)
+    app.app.register_blueprint(healthz, url_prefix="/healthz")
+    app.app.config.update(
+        HEALTHZ={
+            "live": "api.health.liveness",
+            "ready": "api.health.readiness",
+        }
+    )
+    with app.app.app_context():
+        current_app.req_queue = req_queue
+        current_app.res_queue = res_queue
+        current_app.err_queue = err_queue
 
     return app
 
