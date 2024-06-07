@@ -102,7 +102,7 @@ def _compute_chi2_top_feature_obj(obj):
         obj['logger'], obj['log_extras'], obj['worker_name'], obj['features'], obj['labels'], obj['vectorizer'], obj['label'], obj['significance_level']
     )
 
-def get_chi2_analysis(logger, log_extras, worker_name, workspace_pd, num_xgrams=5, significance_level=0.05):
+def get_chi2_analysis(logger, log_extras, worker_name, sendStatus, CalcStatus, workspace_pd, num_xgrams=5, significance_level=0.05):
     """
     find correlated unigram and bigram of each intent with Chi2 analysis
     :param workspace_pd: dataframe, workspace data
@@ -142,6 +142,7 @@ def get_chi2_analysis(logger, log_extras, worker_name, workspace_pd, num_xgrams=
         })
     results = executer.map(_compute_chi2_top_feature_obj, tuple(args))
 
+    data = list()
     for r in results:
         unigrams, bigrams, label = r
 
@@ -168,6 +169,12 @@ def get_chi2_analysis(logger, log_extras, worker_name, workspace_pd, num_xgrams=
             else:
                 bigram_intent_dict[frozenset(bigrams[-N:])] = list()
                 bigram_intent_dict[frozenset(bigrams[-N:])].append(label)
+        
+        data.append(r)
+        progress = len(data)
+        
+        sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_RUNNING,
+                1, 4, f'Chi2 Analysis running  {int(progress * 100/len(args))}% ({progress}/{len(args)})')
 
     chi_df = [ { 'name': name, 'unigrams': unigrams, 'bigrams': bigrams } for name, unigrams, bigrams in zip(classes, chi_unigrams, chi_bigrams)]
 
