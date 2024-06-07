@@ -83,14 +83,16 @@ def cosine_similarity_worker(w):
 def status_update_worker(logger, status_queue, res_queue):
     latest_status_data = None
     while True:
-        status_data = status_queue.get(timeout=5)
-        if status_data is not None:
-            latest_status_data = status_data
-        if latest_status_data is not None:
-            logger.info(latest_status_data['json']['message'], extra=log_extras)
-            updated_status_data = latest_status_data.copy()
-            updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-            res_queue.put((updated_status_data, None, None))
+        try:
+            status_data = status_queue.get(timeout=5)
+            if status_data is not None:
+                latest_status_data = status_data
+        except Exception as e:
+            if latest_status_data is not None:
+                logger.info(latest_status_data['json']['message'], extra=log_extras)
+                updated_status_data = latest_status_data.copy()
+                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                res_queue.put((updated_status_data, None, None))
 
 
 def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, embeddingsRequest, method):
