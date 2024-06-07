@@ -228,15 +228,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             res_queue.put((response_data,))
 
     if method == "calculate_embeddings":
-
-        logger.info('Loading word embeddings model from tfhub ...')
-        try:
-            generate_embeddings = hub.load(
-                'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
-        except Exception as e:
-            err_queue.put(str(e))
-        logger.info('Word embeddings model ready.')
-
         if len(intents) == 0:
             response_data['json'] = {
                 "method": "calculate_embeddings",
@@ -256,6 +247,16 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                 response_data['json'], indent=2), extra=log_extras)
             res_queue.put((response_data,))
             return
+
+        sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_RUNNING, 1, 4, "Loading word embeddings model")
+
+        logger.info('Loading word embeddings model from tfhub ...')
+        try:
+            generate_embeddings = hub.load(
+                'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
+        except Exception as e:
+            err_queue.put(str(e))
+        logger.info('Word embeddings model ready.')
 
         try:
             if not 'maxxgrams' in filter:
@@ -347,10 +348,9 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                        2, 4, 'Principal Component Analysis ready')
 
             sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_RUNNING,
-                       3, 4, 'Preparation for Cosine Similarity Analysis running')
+                       3, 4, f'Preparation for Cosine Similarity Analysis for {len(flattenedForCosine)} examples running')
             try:
-                logger.info('Preparing cosine similarity for %s examples', len(
-                    flattenedForCosine), extra=log_extras)
+                logger.info('Preparing cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
 
                 workers = []
                 for i in range(len(flattenedForCosine)):
@@ -370,18 +370,23 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                            3, 4, 'Preparation for Cosine Similarity Analysis failed - {}'.format(e))
                 exit(1)
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_READY,
-                       3, 4, 'Preparation for Cosine Similarity Analysis ready')
+            #sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_READY,
+            #           3, 4, 'Preparation for Cosine Similarity Analysis ready')
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING,
-                       4, 4, 'Cosine Similarity Analysis running')
-            logger.info('Running cosine similarity for %s examples',
-                        len(flattenedForCosine), extra=log_extras)
+            #sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING,
+            #           4, 4, f'Cosine Similarity Analysis running for {len(flattenedForCosine)} examples ')
+            logger.info('Running cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
 
             # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
-            executer = ThreadPoolExecutor(max_workers=os.environ.get(
-                'COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
-            data = list(executer.map(cosine_similarity_worker, tuple(workers)))
+            executer = ThreadPoolExecutor(max_workers=os.environ.get('COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
+            data = list()
+            for result in executer.map(cosine_similarity_worker, tuple(workers)):
+                data.append(result)
+                progress = len(data)
+                if progress % 5000 == 0:
+                    sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING,
+                        4, 4, f'Cosine Similarity Analysis calculations {int(progress * 100/len(workers))}% ({progress}/{len(workers)})')
+            #data = list(executer.map(cosine_similarity_worker, tuple(workers)))
 
             logger.info('Ready with cosine similarity for %s pairs, preparing results', len(
                 data), extra=log_extras)
