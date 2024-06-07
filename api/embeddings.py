@@ -12,6 +12,8 @@ import tensorflow_hub as hub
 import tensorflow as tf
 import tensorflow_text
 import torch
+import threading
+from datetime import datetime
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -105,6 +107,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_data['boxEndpoint'] = response_data['boxEndpoint']
         status_data['header'] = response_data['header']
 
+    latest_status_data = None
+
     def sendStatus(category, calc_status, step, max_steps, message):
         logger.info(message, extra=log_extras)
         status_data['json'] = {
@@ -117,6 +121,15 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             "steps": max_steps
         }
         res_queue.put((status_data, None, None))
+        latest_status_data = status_data
+
+    def sendStatusTimer():
+        if latest_status_data is not None:
+            updated_status_data = latest_status_data.copy()
+            updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+            res_queue.put((latest_status_data, None, None))
+
+    threading.Timer(5.0, sendStatusTimer).start()
 
     if method == "calculate_chi2":
         if len(intents) == 0:
