@@ -70,6 +70,13 @@ maxCalcCount = 100
 if 'COACH_MAX_CALCULATIONS_PER_WORKER' in os.environ:
     maxCalcCount = int(os.environ['COACH_MAX_CALCULATIONS_PER_WORKER'])
 
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
 
 def cosine_similarity_worker(w):
     intent_1 = w[0]
@@ -128,8 +135,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             updated_status_data = latest_status_data.copy()
             updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
             res_queue.put((updated_status_data, None, None))
-
-    threading.Timer(5.0, sendStatusTimer).start()
+    
+    set_interval(sendStatusTimer, 5)
 
     if method == "calculate_chi2":
         if len(intents) == 0:
