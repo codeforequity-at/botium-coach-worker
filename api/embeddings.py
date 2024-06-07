@@ -12,8 +12,8 @@ import tensorflow_hub as hub
 import tensorflow as tf
 import tensorflow_text
 import torch
-import threading
 from datetime import datetime
+import multiprocessing as mp
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -70,14 +70,6 @@ maxCalcCount = 100
 if 'COACH_MAX_CALCULATIONS_PER_WORKER' in os.environ:
     maxCalcCount = int(os.environ['COACH_MAX_CALCULATIONS_PER_WORKER'])
 
-def set_interval(func, sec):
-    def func_wrapper():
-        set_interval(func, sec)
-        func()
-    t = threading.Timer(sec, func_wrapper)
-    t.start()
-    return t
-
 def cosine_similarity_worker(w):
     intent_1 = w[0]
     phrase_1 = w[1]
@@ -87,6 +79,18 @@ def cosine_similarity_worker(w):
     embedd_2 = w[5]
     similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
+
+def status_update_worker(status_queue, res_queue):
+    latest_status_data = None
+    while True:
+        status_data = req_queue.get(timeout=5)
+        if status_data is not None:
+            latest_status_data = status_data
+        if latest_status_data is not None:
+            logger.info(latest_status_data['json']['message'], extra=log_extras)
+            updated_status_data = latest_status_data.copy()
+            updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+            res_queue.put((updated_status_data, None, None))
 
 
 def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, embeddingsRequest, method):
@@ -114,7 +118,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_data['boxEndpoint'] = response_data['boxEndpoint']
         status_data['header'] = response_data['header']
 
-    latest_status_data = None
+    status_queue = mp.Queue()
 
     def sendStatus(category, calc_status, step, max_steps, message):
         logger.info(message, extra=log_extras)
@@ -128,17 +132,10 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             "steps": max_steps
         }
         res_queue.put((status_data, None, None))
-        latest_status_data = status_data
+        status_queue.put(status_data)
 
-    def sendStatusTimer():
-        logger.info('Status Timer:' + latest_status_data['json']['message'], extra=log_extras)
-        if latest_status_data is not None:
-            logger.info(latest_status_data['json']['message'], extra=log_extras)
-            updated_status_data = latest_status_data.copy()
-            updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-            res_queue.put((updated_status_data, None, None))
-    
-    set_interval(sendStatusTimer, 5)
+    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(status_queue, res_queue))
+    pstatus.start()
 
     if method == "calculate_chi2":
         if len(intents) == 0:
