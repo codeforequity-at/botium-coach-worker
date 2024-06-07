@@ -80,7 +80,7 @@ def cosine_similarity_worker(w):
     similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
-def status_update_worker(logger, status_queue, res_queue):
+def status_update_worker(logger, log_extras, status_queue, res_queue):
     latest_status_data = None
     while True:
         try:
@@ -89,7 +89,7 @@ def status_update_worker(logger, status_queue, res_queue):
                 latest_status_data = status_data
         except Exception as e:
             if latest_status_data is not None:
-                logger.info(latest_status_data['json']['message'], extra=log_extras)
+                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
                 updated_status_data = latest_status_data.copy()
                 updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                 res_queue.put((updated_status_data, None, None))
@@ -136,7 +136,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         res_queue.put((status_data, None, None))
         status_queue.put(status_data)
 
-    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, status_queue, res_queue))
+    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
     pstatus.start()
 
     if method == "calculate_chi2":
