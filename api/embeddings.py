@@ -80,7 +80,7 @@ def cosine_similarity_worker(w):
     similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
-def status_update_worker(status_queue, res_queue):
+def status_update_worker(logger, status_queue, res_queue):
     latest_status_data = None
     while True:
         status_data = status_queue.get(timeout=5)
@@ -134,7 +134,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         res_queue.put((status_data, None, None))
         status_queue.put(status_data)
 
-    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(status_queue, res_queue))
+    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, status_queue, res_queue))
     pstatus.start()
 
     if method == "calculate_chi2":
