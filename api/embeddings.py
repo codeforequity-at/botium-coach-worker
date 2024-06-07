@@ -127,7 +127,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         if latest_status_data is not None:
             updated_status_data = latest_status_data.copy()
             updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-            res_queue.put((latest_status_data, None, None))
+            res_queue.put((updated_status_data, None, None))
 
     threading.Timer(5.0, sendStatusTimer).start()
 
