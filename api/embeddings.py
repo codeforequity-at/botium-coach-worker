@@ -150,7 +150,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                        1, 4, 'Chi2 Analysis running')
             try:
                 chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(
-                    logger, log_extras, sendStatus, CalcStatus, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
+                    logger, log_extras, worker_name, sendStatus, CalcStatus, flattenedForChi2, num_xgrams=filter['maxxgrams'])
                 # objtofile(chi2, 'chi2', logger)
                 # objtofile(unigram_intent_dict, 'unigram_intent_dict', logger)
                 # objtofile(bigram_intent_dict, 'bigram_intent_dict', logger)
