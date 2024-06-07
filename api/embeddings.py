@@ -14,6 +14,7 @@ import tensorflow_text
 import torch
 from datetime import datetime
 import multiprocessing as mp
+import copy
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -87,10 +88,15 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
             status_data = status_queue.get(timeout=5)
             if status_data is not None:
                 latest_status_data = status_data
+            if latest_status_data is not None:
+                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+                updated_status_data = copy.deepcopy(latest_status_data)
+                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                res_queue.put((updated_status_data, None, None))
         except Exception as e:
             if latest_status_data is not None:
                 logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
-                updated_status_data = latest_status_data.copy()
+                updated_status_data = copy.deepcopy(latest_status_data)
                 updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                 res_queue.put((updated_status_data, None, None))
 
