@@ -83,7 +83,7 @@ def cosine_similarity_worker(w):
 def status_update_worker(status_queue, res_queue):
     latest_status_data = None
     while True:
-        status_data = req_queue.get(timeout=5)
+        status_data = status_queue.get(timeout=5)
         if status_data is not None:
             latest_status_data = status_data
         if latest_status_data is not None:
