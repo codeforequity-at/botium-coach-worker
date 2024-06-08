@@ -533,6 +533,7 @@ def calculate_embeddings(embeddingsRequest):
     }
 
 def cancel_calculate_embeddings(cancelEmbeddingsRequest):
+    testSetId = cancelEmbeddingsRequest['testSetId'] if 'testSetId' in cancelEmbeddingsRequest else None
 
     with current_app.app_context():
         cancel_queue = current_app.cancel_queue
