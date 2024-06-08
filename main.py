@@ -165,23 +165,22 @@ def status_update_worker(status_queue, res_queue):
     logger = getLogger('status_update_worker')
     pid = os.getpid()
     worker_name = 'status_update_worker-' + str(pid)
-    log_extras['worker_name'] = worker_name
-    logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
+    logger.info('Initialize status update worker %s...', worker_name)
     latest_status_data = None
     while True:
-        logger.info('Waiting for status update %s', extra=log_extras)
+        logger.info('Waiting for status update %s')
         try:
             status_data = status_queue.get(timeout=5)
             time.sleep(1)
             latest_status_data = status_data
             if latest_status_data is not None:
-                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+                logger.info(latest_status_data['json']['statusDescription'])
                 updated_status_data = copy.deepcopy(latest_status_data)
                 updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                 res_queue.put((updated_status_data, None, None))
         except Exception as e:
             if latest_status_data is not None:
-                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+                logger.info(latest_status_data['json']['statusDescription'])
                 updated_status_data = copy.deepcopy(latest_status_data)
                 updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                 res_queue.put((updated_status_data, None, None))
