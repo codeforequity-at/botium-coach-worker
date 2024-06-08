@@ -102,8 +102,8 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
-            cancel_queue.put(request_data)
-            time.sleep(5)
+            #cancel_queue.put(request_data)
+            #time.sleep(5)
             running_queue.put((request_data, os.getpid()))
             calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
@@ -147,18 +147,23 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
         cancel_data = cancel_queue.get()
         testSetId = cancel_data['testSetId']
         logger.info('Killing job for testSetId %s', testSetId)
-        running_job = running_queue.get()
-        job_data, pid = running_job
-        logger.info('Checking running job for testSetId %s', job_data['testSetId'])
-        if job_data['testSetId'] == testSetId:
+        while True:
             try:
-                logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
-                kill_queue.put(pid)
-                logger.info('Killed worker %s for testSetId %s', pid, testSetId)
+                running_job = running_queue.get(timeout=1)
+                job_data, pid = running_job
+                logger.info('Checking running job for testSetId %s', job_data['testSetId'])
+                if job_data['testSetId'] == testSetId:
+                    try:
+                        logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
+                        kill_queue.put(pid)
+                        logger.info('Killed worker %s for testSetId %s', pid, testSetId)
+                    except Exception as e:
+                        logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+                else:
+                    running_queue.put((job_data, pid))
             except Exception as e:
-                logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
-        else:
-            running_queue.put((job_data, pid))
+                logger.info('No running job found for testSetId %s', testSetId)
+                break
         time.sleep(0.1)
         
 
