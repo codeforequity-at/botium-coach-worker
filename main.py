@@ -126,15 +126,10 @@ def process_requests(req_queue, res_queue, err_queue, running_queue, kill_queue)
         processes.append(p)
     while True:
         kill_queue.put(None)
-        _pids = []
         for _pid in iter(kill_queue.get, None):
-            _pids.append(_pid)
+            os.kill(_pid, 9)
         for i in range(len(processes)):
             p = processes[i]
-            for _pid in _pids:
-                if p.pid == _pid:
-                    logger.info('Killing worker %s', _pid)
-                    killtree(_pid)
             if not p.is_alive():
                 p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, i))
                 p.daemon = False
