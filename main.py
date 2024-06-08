@@ -102,8 +102,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, proc
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
-            running_queue.put((request_data, pid))
-            calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, request_data, method)
+            calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
             logger.info(f'run worker method for {worker_name}.{method}')
             upload_factcheck_documents_worker(fcUploadLogger, worker_name, req_queue, res_queue, err_queue, request_data)
@@ -152,12 +151,13 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
         while True:
             try:
                 running_job = running_queue.get(timeout=5)
-                job_data, pid = running_job
+                job_data, pid, child_pid = running_job
                 logger.info('Checking running job for testSetId %s', job_data['testSetId'])
                 if job_data['testSetId'] == testSetId:
                     try:
                         logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
                         kill_queue.put(pid)
+                        kill_queue.put(child_pid)
                         logger.info('Killed worker %s for testSetId %s', pid, testSetId)
                     except Exception as e:
                         logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
