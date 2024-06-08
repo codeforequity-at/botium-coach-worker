@@ -17,6 +17,7 @@ import psutil
 def killtree(pid, including_parent=True):
     parent = psutil.Process(pid)
     for child in parent.children():
+        print('Killing child process %s' % child.pid)
         child.kill()
 
     if including_parent:
