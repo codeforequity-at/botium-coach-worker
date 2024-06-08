@@ -15,6 +15,7 @@ from api.utils.log import getLogger
 import psutil
 import copy
 from datetime import datetime
+import sys
 
 def killtree(pid, including_parent=True):
     parent = psutil.Process(pid)
@@ -120,6 +121,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
         calc_count += 1
 
     logger.info(f'Worker {worker_name} finished')
+    sys.exit(0)
 
 def process_requests(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue,):
     pid = os.getpid()
