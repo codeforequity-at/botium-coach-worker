@@ -120,7 +120,7 @@ def process_requests(req_queue, res_queue, err_queue, running_queue):
             p = processes[i]
             if not p.is_alive():
                 p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, i))
-                p.daemon = True
+                p.daemon = False
                 p.start()
                 processes[i] = p
 
@@ -133,11 +133,12 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
         logger.info('Killing job for testSetId %s', testSetId)
         while True:
             try:
-                running_job = running_queue.get(timeout=1)
+                running_job = running_queue.get(timeout=5)
                 job_data, pid = running_job
                 logger.info('Checking running job for testSetId %s', job_data['testSetId'])
                 if job_data['testSetId'] == testSetId:
                     try:
+                        logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
                         os.killpg(os.getpgid(pid), 9)
                         logger.info('Killed worker %s for testSetId %s', pid, testSetId)
                     except Exception as e:
@@ -147,6 +148,8 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
             except Exception as e:
                 logger.error('Error checking running jobs: %s', e)
                 break
+            time.sleep(0.1)
+        time.sleep(0.1)
         
 
 req_queue = mp.Queue()
