@@ -494,9 +494,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             logger.debug(json.dumps(response_data, indent=2))
             res_queue.put((response_data,))
 
-    pstatus.terminate()
-    pstatus.join()
-
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
         tfVersion=tf.__version__, ptVersion=torch.__version__, ptCuda=str(torch.cuda.is_available()))
