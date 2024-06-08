@@ -145,7 +145,7 @@ err_queue = mp.Queue()
 running_queue = mp.Queue()
 cancel_queue = mp.Queue()
 
-preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue))
+preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue))
 preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
