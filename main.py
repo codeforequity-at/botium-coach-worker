@@ -128,7 +128,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
     logger = getLogger('process_cancel_worker')
     logger.info('Worker process_cancel_worker started...')
     while True:
-        cancel_data = cancel_queue.get()
+        cancel_data = cancel_queue.get(timeout=1)
         testSetId = cancel_data['testSetId']
         logger.info('Killing job for testSetId %s', testSetId)
         while True:
@@ -142,6 +142,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
                         logger.info('Killed worker %s for testSetId %s', pid, testSetId)
                     except Exception as e:
                         logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+                        pass
                 else:
                     running_queue.put((job_data, pid))
             except Exception as e:
