@@ -131,7 +131,8 @@ def process_requests(req_queue, res_queue, err_queue, running_queue, cancel_queu
         processes.append(p)
     while True:
         kill_queue.put(None)
-        for _pid in iter(kill_queue.get, None):
+        pids = list(iter(kill_queue.get, None))
+        for _pid in pids:
             logger.info('Killing worker %s', _pid)
             os.kill(_pid, 9)
         for i in range(len(processes)):
