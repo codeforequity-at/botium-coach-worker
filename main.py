@@ -134,7 +134,7 @@ def process_requests(req_queue, res_queue, err_queue, running_queue, kill_queue)
             for _pid in _pids:
                 if p.pid == _pid:
                     logger.info('Killing worker %s', _pid)
-                    killtree(_pid)
+                    os.kill(_pid, 9)
             if not p.is_alive():
                 p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, i))
                 p.daemon = False
