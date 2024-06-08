@@ -222,7 +222,7 @@ paths:
               $ref: "#/components/schemas/CancelEmbeddingsRequest"
             example:
               testSetId: 'asdfasdfasdfasd'
-       responses:
+      responses:
         '201':
           description: Embeddings Response
           content:
@@ -231,7 +231,7 @@ paths:
                 $ref: "#/components/schemas/CancelEmbeddingsResponse"
               example:
                 status': 'cancelled'
-                coachSessionId: 'testSetId',
+                coachSessionId: 'testSetId'
         default:
           description: unexpected error
           content:
