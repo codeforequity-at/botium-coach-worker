@@ -16,6 +16,7 @@ from datetime import datetime
 import multiprocessing as mp
 import copy
 import atexit
+import threading
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -62,6 +63,15 @@ class CalcStatus(str, Enum):
 def objtofile(data, filename, logger):
     with open('test_data/' + filename + '.obj', 'wb') as outfile:
         pickle.dump(data, outfile)
+
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
+
 
 
 maxUtterancesForEmbeddings = -1
@@ -146,14 +156,24 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         res_queue.put((status_data, None, None))
         status_queue.put(status_data)
 
-    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
-    pstatus.daemon = False
-    pstatus.start()
+    #pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
+    #pstatus.daemon = False
+    #pstatus.start()
 
-    def kill_processes():
-        status_queue.put('kill')
+    #def kill_processes():
+    #    status_queue.put('kill')
 
-    atexit.register(kill_processes)
+    #atexit.register(kill_processes)
+
+    latest_status_data = None
+
+    def sendStatusTimer():
+        logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+        updated_status_data = copy.deepcopy(latest_status_data)
+        updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        res_queue.put((updated_status_data, None, None))
+
+    set_interval(sendStatusTimer, 10)
 
     if method == "calculate_chi2":
         if len(intents) == 0:
