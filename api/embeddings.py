@@ -156,7 +156,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
 
     atexit.register(kill_processes)
     signal.signal(signal.SIGTERM, kill_processes)
-    signal.signal(signal.SIGKILL, kill_processes)
     signal.signal(signal.SIGINT, kill_processes)
 
     if method == "calculate_chi2":
