@@ -131,21 +131,21 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
         cancel_data = cancel_queue.get()
         testSetId = cancel_data['testSetId']
         logger.info('Killing job for testSetId %s', testSetId)
-        running_queue.put(None)
         while True:
-            running_job = running_queue.get()
-            if running_job is None:
+            try:
+                running_job = running_queue.get(timeout=1)
+                job_data, pid = running_job
+                logger.info('Checking running job for testSetId %s', job_data['testSetId'])
+                if job_data['testSetId'] == testSetId:
+                    try:
+                        os.killpg(os.getpgid(pid), 9)
+                        logger.info('Killed worker %s for testSetId %s', pid, testSetId)
+                    except Exception as e:
+                        logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+                else:
+                    running_queue.put((job_data, pid))
+            except Exception as e:
                 break
-            job_data, pid = running_job
-            logger.info('Checking running job for testSetId %s', job_data['testSetId'])
-            if job_data['testSetId'] == testSetId:
-                try:
-                    os.killpg(os.getpgid(pid), 9)
-                    logger.info('Killed worker %s for testSetId %s', pid, testSetId)
-                except Exception as e:
-                    logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
-            else:
-                running_queue.put((job_data, pid))
         
 
 req_queue = mp.Queue()
