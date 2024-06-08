@@ -83,7 +83,7 @@ def cosine_similarity_worker(w):
     similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
-def status_update_worker(logger, log_extras, status_queue, res_queue, running_queue, embeddingsRequest, ppid):
+def status_update_worker(logger, log_extras, status_queue, res_queue):
     pid = os.getpid()
     ppid = os.getppid()
     worker_name = 'status_update_worker-' + str(pid) + '-' + str(ppid)
@@ -149,9 +149,9 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         }
         status_queue.put(status_data)
 
-    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue, running_queue, embeddingsRequest, os.getpid()))
+    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
     pstatus.start()
-    running_queue.put((embeddingsRequest, ppid))
+    running_queue.put((embeddingsRequest, os.getpid()))
 
     #def kill_processes():
     #    logger.info('Killing status update worker', extra=log_extras)
