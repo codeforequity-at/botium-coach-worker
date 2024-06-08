@@ -16,7 +16,7 @@ import psutil
 
 def killtree(pid, including_parent=True):
     parent = psutil.Process(pid)
-    for child in parent.children(recursive=True):
+    for child in parent.children():
         child.kill()
 
     if including_parent:
@@ -134,7 +134,7 @@ def process_requests(req_queue, res_queue, err_queue, running_queue, kill_queue)
             for _pid in _pids:
                 if p.pid == _pid:
                     logger.info('Killing worker %s', _pid)
-                    os.kill(_pid, 9)
+                    killtree(_pid)
             if not p.is_alive():
                 p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, i))
                 p.daemon = False
