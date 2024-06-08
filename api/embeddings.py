@@ -531,3 +531,14 @@ def calculate_embeddings(embeddingsRequest):
         'boxEndpoint': boxEndpoint,
         'workerEndpoint': os.environ.get('COACH_HOSTNAME', '')
     }
+
+def cancel_calculate_embeddings(cancelEmbeddingsRequest):
+
+    with current_app.app_context():
+        cancel_queue = current_app.cancel_queue
+        cancel_queue.put(cancelEmbeddingsRequest)
+
+    return {
+        'status': 'cancelled',
+        "testSetId": testSetId
+    }

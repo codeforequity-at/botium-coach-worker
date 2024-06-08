@@ -75,7 +75,7 @@ def process_responses(req_queue, res_queue, err_queue):
                         max_retries - retryCount + 1,
                         max_retries)
 
-def process_requests_worker(req_queue, res_queue, err_queue, processId):
+def process_requests_worker(req_queue, res_queue, err_queue, running_queue, processId):
     pid = os.getpid()
     worker_name = 'process_requests_worker-' + str(pid) + '-' + str(processId)
     logger = getLogger(worker_name)
@@ -91,6 +91,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
+            running_queue.put((request_data, pid))
             calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
             logger.info(f'run worker method for {worker_name}.{method}')
@@ -103,13 +104,13 @@ def process_requests_worker(req_queue, res_queue, err_queue, processId):
 
         calc_count += 1
 
-def process_requests(req_queue, res_queue, err_queue):
+def process_requests(req_queue, res_queue, err_queue, running_queue):
     pid = os.getpid()
     logger = getLogger('process_requests')
     logger.info('Worker process_requests started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, i))
+        p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, i))
         p.daemon = False
         p.start()
         processes.append(p)
@@ -117,19 +118,39 @@ def process_requests(req_queue, res_queue, err_queue):
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, i))
+                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
 
+def process_cancel_worker(req_queue, running_queue, cancel_queue):
+    logger = getLogger('process_cancel_worker')
+    logger.info('Worker process_cancel_worker started...')
+    while True:
+        cancel_data = cancel_queue.get()
+        testSetId = cancel_data['testSetId']
+        for running_job in iter(running_queue.get, None):
+            job_data, pid = running_job
+            if job_data['testSetId'] == testSetId:
+                os.kill(pid, 9)
+                logger.info('Killed worker %s for testSetId %s', pid, testSetId)
+            else:
+                running_queue.put((job_data, pid))
+        time.sleep(1)
+        
+
 req_queue = mp.Queue()
 res_queue = mp.Queue()
 err_queue = mp.Queue()
+running_queue = mp.Queue()
+cancel_queue = mp.Queue()
 
 preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue))
 preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
+pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue))
+pcancel.start()
 
 def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')
@@ -145,6 +166,7 @@ def create_app():
         current_app.req_queue = req_queue
         current_app.res_queue = res_queue
         current_app.err_queue = err_queue
+        current_app.cancel_queue = cancel_queue
 
     return app
 
