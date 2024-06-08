@@ -88,6 +88,8 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
         try:
             status_data = status_queue.get(timeout=10)
             if status_data is not None:
+                if status_data == 'kill':
+                    break
                 latest_status_data = status_data
             if latest_status_data is not None:
                 logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
@@ -147,7 +149,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
     pstatus.start()
 
     def kill_processes():
-        pstatus.terminate()
+        status_queue.put('kill')
 
     atexit.register(kill_processes)
 
