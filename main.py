@@ -147,24 +147,18 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
         cancel_data = cancel_queue.get()
         testSetId = cancel_data['testSetId']
         logger.info('Killing job for testSetId %s', testSetId)
-        while True:
+        running_job = running_queue.get()
+        job_data, pid = running_job
+        logger.info('Checking running job for testSetId %s', job_data['testSetId'])
+        if job_data['testSetId'] == testSetId:
             try:
-                running_job = running_queue.get(timeout=5)
-                job_data, pid = running_job
-                logger.info('Checking running job for testSetId %s', job_data['testSetId'])
-                if job_data['testSetId'] == testSetId:
-                    try:
-                        logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
-                        kill_queue.put(pid)
-                        logger.info('Killed worker %s for testSetId %s', pid, testSetId)
-                    except Exception as e:
-                        logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
-                else:
-                    running_queue.put((job_data, pid))
+                logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
+                kill_queue.put(pid)
+                logger.info('Killed worker %s for testSetId %s', pid, testSetId)
             except Exception as e:
-                logger.error('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAError checking running jobs: %s', e)
-                break
-            time.sleep(0.1)
+                logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+        else:
+            running_queue.put((job_data, pid))
         time.sleep(0.1)
         
 
