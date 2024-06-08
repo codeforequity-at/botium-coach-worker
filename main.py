@@ -138,7 +138,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
                 if job_data['testSetId'] == testSetId:
                     try:
                         logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
-                        os.kill(pid, 9)
+                        os.kill(pid, 15)
                         logger.info('Killed worker %s for testSetId %s', pid, testSetId)
                     except Exception as e:
                         logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
