@@ -89,8 +89,7 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
         logger.info('Waiting for status update', extra=log_extras)
         try:
             status_data = status_queue.get(timeout=30)
-            if status_data == 'kill':
-                break
+            time.sleep(30)
             latest_status_data = status_data
             if latest_status_data is not None:
                 logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
