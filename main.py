@@ -13,6 +13,7 @@ import requests
 import numpy as np
 from api.utils.log import getLogger
 import psutil
+import copy
 
 def killtree(pid, including_parent=True):
     parent = psutil.Process(pid)
