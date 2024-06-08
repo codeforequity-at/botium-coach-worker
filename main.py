@@ -89,7 +89,6 @@ def process_responses(req_queue, res_queue, err_queue):
                         max_retries)
 
 def process_requests_worker(req_queue, res_queue, err_queue, running_queue, cancel_queue, processId):
-    os.setpgrp()
     pid = os.getpid()
     worker_name = 'process_requests_worker-' + str(pid) + '-' + str(processId)
     logger = getLogger(worker_name)
@@ -121,7 +120,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
         calc_count += 1
 
     logger.info(f'Worker {worker_name} finished')
-    sys.exit(0)
+    os.kill(os.getpid(), 9)
 
 def process_requests(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue,):
     pid = os.getpid()
