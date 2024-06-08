@@ -103,7 +103,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, proc
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
             cancel_queue.put(request_data)
-            time.sleep(1)
+            time.sleep(5)
             calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
             logger.info(f'run worker method for {worker_name}.{method}')
