@@ -132,7 +132,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
         for running_job in iter(running_queue.get, None):
             job_data, pid = running_job
             if job_data['testSetId'] == testSetId:
-                os.killpg(os.getpgid(p.pid), 9)
+                os.killpg(os.getpgid(pid), 9)
                 logger.info('Killed worker %s for testSetId %s', pid, testSetId)
             else:
                 running_queue.put((job_data, pid))
