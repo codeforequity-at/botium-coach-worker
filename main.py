@@ -148,7 +148,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
         testSetId = cancel_data['testSetId']
         logger.info('Killing job for testSetId %s', testSetId)
         running_queue.put(None)
-        running_jobs = iter(running_queue.get, None)
+        running_jobs = list(iter(running_queue.get, None))
         if len(running_jobs) == 0:
             logger.info('No running jobs for testSetId %s', testSetId)
         for running_job in running_jobs:
