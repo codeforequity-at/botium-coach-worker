@@ -76,7 +76,6 @@ def process_responses(req_queue, res_queue, err_queue):
                         max_retries)
 
 def process_requests_worker(req_queue, res_queue, err_queue, running_queue, processId):
-    os.setpgrp()
     pid = os.getpid()
     worker_name = 'process_requests_worker-' + str(pid) + '-' + str(processId)
     logger = getLogger(worker_name)
@@ -139,7 +138,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
                 if job_data['testSetId'] == testSetId:
                     try:
                         logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
-                        os.killpg(os.getpgid(pid), 9)
+                        os.kill(pid, 9)
                         logger.info('Killed worker %s for testSetId %s', pid, testSetId)
                     except Exception as e:
                         logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
