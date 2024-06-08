@@ -139,6 +139,7 @@ def process_requests(req_queue, res_queue, err_queue, running_queue, cancel_queu
             os.kill(_pid, 9)
         for i in range(len(processes)):
             p = processes[i]
+            logger.info('Is process %s alive? %s', i, p.is_alive())
             if not p.is_alive():
                 p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, i))
                 p.daemon = False
