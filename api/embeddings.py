@@ -151,8 +151,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         }
         status_queue.put(status_data)
 
-    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
-    pstatus.start()
+    #pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
+    #pstatus.start()
 
     #def kill_processes():
     #    logger.info('Killing status update worker', extra=log_extras)
