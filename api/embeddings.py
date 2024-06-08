@@ -88,7 +88,7 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
     while True:
         logger.info('Waiting for status update', extra=log_extras)
         try:
-            status_data = status_queue.get(timeout=10)
+            status_data = status_queue.get(timeout=30)
             if status_data == 'kill':
                 break
             latest_status_data = status_data
@@ -149,14 +149,14 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
     pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
     pstatus.start()
 
-    def kill_processes():
-        logger.info('Killing status update worker', extra=log_extras)
-        pstatus.kill()
-        logger.info('Killed status update worker', extra=log_extras)
+    #def kill_processes():
+    #    logger.info('Killing status update worker', extra=log_extras)
+    #    pstatus.kill()
+    #    logger.info('Killed status update worker', extra=log_extras)
 
-    atexit.register(kill_processes)
-    signal.signal(signal.SIGTERM, kill_processes)
-    signal.signal(signal.SIGINT, kill_processes)
+    #atexit.register(kill_processes)
+    #signal.signal(signal.SIGTERM, kill_processes)
+    #signal.signal(signal.SIGINT, kill_processes)
 
     if method == "calculate_chi2":
         if len(intents) == 0:
