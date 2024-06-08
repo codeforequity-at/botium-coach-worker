@@ -84,6 +84,10 @@ def cosine_similarity_worker(w):
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
 def status_update_worker(logger, log_extras, status_queue, res_queue):
+    pid = os.getpid()
+    worker_name = 'status_update_worker-' + str(pid)
+    log_extras['worker_name'] = worker_name
+    logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
     latest_status_data = None
     while True:
         logger.info('Waiting for status update', extra=log_extras)
@@ -104,7 +108,7 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
                 res_queue.put((updated_status_data, None, None))
 
 
-def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, embeddingsRequest, method):
+def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, running_queue, embeddingsRequest, method):
     coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
     clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
     testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
@@ -146,6 +150,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
 
     pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
     pstatus.start()
+    running_queue.put((request_data, pid, pstatus.pid))
 
     #def kill_processes():
     #    logger.info('Killing status update worker', extra=log_extras)
