@@ -53,6 +53,7 @@ pandas==2.0.3
 Pillow==10.1.0
 pinecone-client==3.1.0
 protobuf==3.12.2
+psutil==5.8.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pyparsing==2.4.7
