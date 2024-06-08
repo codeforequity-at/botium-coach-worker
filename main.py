@@ -145,6 +145,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
                 else:
                     running_queue.put((job_data, pid))
             except Exception as e:
+                logger.error('Error checking running jobs: %s', e)
                 break
         
 
