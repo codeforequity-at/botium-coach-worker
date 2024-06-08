@@ -16,6 +16,7 @@ from datetime import datetime
 import multiprocessing as mp
 import copy
 import atexit
+import signal
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -154,6 +155,9 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_queue.put('kill')
 
     atexit.register(kill_processes)
+    signal.signal(signal.SIGTERM, kill_processes)
+    signal.signal(signal.SIGKILL, kill_processes)
+    signal.signal(signal.SIGINT, kill_processes)
 
     if method == "calculate_chi2":
         if len(intents) == 0:
