@@ -104,7 +104,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, proc
 
         calc_count += 1
 
-def process_requests(req_queue, res_queue, err_queue, running_queue):
+def process_requests(req_queue, res_queue, err_queue, running_queue, kill_queue):
     pid = os.getpid()
     logger = getLogger('process_requests')
     logger.info('Worker process_requests started...')
@@ -115,15 +115,23 @@ def process_requests(req_queue, res_queue, err_queue, running_queue):
         p.start()
         processes.append(p)
     while True:
+        kill_queue.put(None)
+        _pids = []
+        for _pid in iter(kill_queue.get, None):
+            _pids.append(_pid)
         for i in range(len(processes)):
             p = processes[i]
+            for _pid in _pids:
+                if p.pid == _pid:
+                    logger.info('Killing worker %s', _pid)
+                    p.terminate()
             if not p.is_alive():
                 p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
 
-def process_cancel_worker(req_queue, running_queue, cancel_queue):
+def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
     logger = getLogger('process_cancel_worker')
     logger.info('Worker process_cancel_worker started...')
     while True:
@@ -138,7 +146,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
                 if job_data['testSetId'] == testSetId:
                     try:
                         logger.info('Killing worker %s / %s for testSetId %s', pid, os.getpgid(pid), testSetId)
-                        os.kill(pid, 15)
+                        kill_queue.put(pid)
                         logger.info('Killed worker %s for testSetId %s', pid, testSetId)
                     except Exception as e:
                         logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
@@ -156,12 +164,13 @@ res_queue = mp.Queue()
 err_queue = mp.Queue()
 running_queue = mp.Queue()
 cancel_queue = mp.Queue()
+kill_queue = mp.Queue()
 
-preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue))
+preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue, kill_queue))
 preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
-pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue))
+pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue, kill_queue))
 pcancel.start()
 
 def create_app():

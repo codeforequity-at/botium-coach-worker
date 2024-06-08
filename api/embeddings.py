@@ -147,15 +147,12 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_queue.put(status_data)
 
     pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
-    pstatus.daemon = False
     pstatus.start()
 
     def kill_processes():
         logger.info('Killing status update worker', extra=log_extras)
-        status_queue.put('kill')
-        pstatus.join()
+        pstatus.kill()
         logger.info('Killed status update worker', extra=log_extras)
-        sys.exit(0)
 
     atexit.register(kill_processes)
     signal.signal(signal.SIGTERM, kill_processes)
