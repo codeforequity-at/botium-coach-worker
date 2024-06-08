@@ -85,12 +85,12 @@ def cosine_similarity_worker(w):
 
 def status_update_worker(logger, log_extras, status_queue, res_queue):
     pid = os.getpid()
-    ppid = os.getppid()
-    worker_name = 'status_update_worker-' + str(pid) + '-' + str(ppid)
+    worker_name = 'status_update_worker-' + str(pid)
     log_extras['worker_name'] = worker_name
     logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
     latest_status_data = None
     while True:
+        ppid = os.getppid()
         logger.info('Waiting for status update %s', ppid, extra=log_extras)
         try:
             status_data = status_queue.get(timeout=5)
