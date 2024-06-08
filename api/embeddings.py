@@ -174,7 +174,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             # objtofile(flattenedForChi2, 'flattenedForChi2', logger)
 
             sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_RUNNING,
-                       1, 4, 'Chi2 Analysis running')
+                       1, 4, 'Chi2 Analysis started')
             try:
                 chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(
                     logger, log_extras, worker_name, flattenedForChi2, sendStatus, CalcStatus, num_xgrams=filter['maxxgrams'])
@@ -477,6 +477,9 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             }
             logger.debug(json.dumps(response_data, indent=2))
             res_queue.put((response_data,))
+
+    pstatus.terminate()
+    pstatus.join()
 
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
