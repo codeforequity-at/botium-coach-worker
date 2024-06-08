@@ -142,6 +142,9 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
 
     status_queue = mp.Queue()
 
+
+    latest_status_data = None
+
     def sendStatus(category, calc_status, step, max_steps, message):
         logger.info(message, extra=log_extras)
         status_data['json'] = {
@@ -155,6 +158,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         }
         res_queue.put((status_data, None, None))
         status_queue.put(status_data)
+        latest_status_data = status_data
 
     #pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
     #pstatus.daemon = False
@@ -165,13 +169,12 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
 
     #atexit.register(kill_processes)
 
-    latest_status_data = None
-
     def sendStatusTimer():
-        logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
-        updated_status_data = copy.deepcopy(latest_status_data)
-        updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-        res_queue.put((updated_status_data, None, None))
+        if latest_status_data is not None:
+            logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+            updated_status_data = copy.deepcopy(latest_status_data)
+            updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+            res_queue.put((updated_status_data, None, None))
 
     set_interval(sendStatusTimer, 10)
 
