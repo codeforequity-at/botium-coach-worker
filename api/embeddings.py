@@ -15,6 +15,7 @@ import torch
 from datetime import datetime
 import multiprocessing as mp
 import copy
+import atexit
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -143,8 +144,12 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_queue.put(status_data)
 
     pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
-    pstatus.daemon = True
     pstatus.start()
+
+    def kill_processes():
+        pstatus.terminate()
+
+    atexit.register(kill_processes)
 
     if method == "calculate_chi2":
         if len(intents) == 0:
