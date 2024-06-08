@@ -85,7 +85,7 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
     latest_status_data = None
     while True:
         try:
-            status_data = status_queue.get(timeout=5)
+            status_data = status_queue.get(timeout=10)
             if status_data is not None:
                 latest_status_data = status_data
             if latest_status_data is not None:
