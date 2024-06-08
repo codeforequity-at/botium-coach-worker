@@ -83,35 +83,35 @@ def cosine_similarity_worker(w):
     similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
-def status_update_worker(logger, log_extras, status_queue, res_queue):
-    pid = os.getpid()
-    worker_name = 'status_update_worker-' + str(pid)
-    log_extras['worker_name'] = worker_name
-    logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
-    latest_status_data = None
-    while os.getppid() > 1:
-        logger.info('Waiting for status update %s', extra=log_extras)
-        try:
-            status_data = status_queue.get(timeout=5)
-            if status_data == 'kill':
-                logger.info('Killing status update worker %s', worker_name, extra=log_extras)
-                break
-            time.sleep(5)
-            latest_status_data = status_data
-            if latest_status_data is not None:
-                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
-                updated_status_data = copy.deepcopy(latest_status_data)
-                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-                res_queue.put((updated_status_data, None, None))
-        except Exception as e:
-            if latest_status_data is not None:
-                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
-                updated_status_data = copy.deepcopy(latest_status_data)
-                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-                res_queue.put((updated_status_data, None, None))
+#def status_update_worker(logger, log_extras, status_queue, res_queue):
+#    pid = os.getpid()
+#    worker_name = 'status_update_worker-' + str(pid)
+#    log_extras['worker_name'] = worker_name
+#    logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
+#    latest_status_data = None
+#    while os.getppid() > 1:
+#        logger.info('Waiting for status update %s', extra=log_extras)
+#        try:
+#            status_data = status_queue.get(timeout=5)
+#            if status_data == 'kill':
+#                logger.info('Killing status update worker %s', worker_name, extra=log_extras)
+#                break
+#            time.sleep(5)
+#            latest_status_data = status_data
+#            if latest_status_data is not None:
+#                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+#                updated_status_data = copy.deepcopy(latest_status_data)
+#                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+#                res_queue.put((updated_status_data, None, None))
+#        except Exception as e:
+#            if latest_status_data is not None:
+#                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+#                updated_status_data = copy.deepcopy(latest_status_data)
+#                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+#                res_queue.put((updated_status_data, None, None))
 
 
-def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, running_queue, embeddingsRequest, method):
+def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, running_queue, status_queue, embeddingsRequest, method):
     coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
     clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
     testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
@@ -136,7 +136,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_data['boxEndpoint'] = response_data['boxEndpoint']
         status_data['header'] = response_data['header']
 
-    status_queue = mp.Queue()
+    #status_queue = mp.Queue()
 
     def sendStatus(category, calc_status, step, max_steps, message):
         logger.info(message, extra=log_extras)
@@ -496,7 +496,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             logger.debug(json.dumps(response_data, indent=2))
             res_queue.put((response_data,))
 
-    status_queue.put('kill')
+    #status_queue.put('kill')
 
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(

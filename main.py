@@ -85,7 +85,7 @@ def process_responses(req_queue, res_queue, err_queue):
                         max_retries - retryCount + 1,
                         max_retries)
 
-def process_requests_worker(req_queue, res_queue, err_queue, running_queue, cancel_queue, processId):
+def process_requests_worker(req_queue, res_queue, err_queue, running_queue, cancel_queue, status_queue, processId):
     #os.setpgrp()
     pid = os.getpid()
     worker_name = 'process_requests_worker-' + str(pid) + '-' + str(processId)
@@ -105,7 +105,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
             cancel_queue.put(request_data)
             time.sleep(10)
             running_queue.put((request_data, os.getpid()))
-            calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
+            calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, status_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
             logger.info(f'run worker method for {worker_name}.{method}')
             upload_factcheck_documents_worker(fcUploadLogger, worker_name, req_queue, res_queue, err_queue, request_data)
@@ -117,13 +117,13 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
 
         calc_count += 1
 
-def process_requests(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue):
+def process_requests(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue, status_queue):
     pid = os.getpid()
     logger = getLogger('process_requests')
     logger.info('Worker process_requests started...')
     processes = []
     for i in range(int(os.environ.get('COACH_PARALLEL_WORKERS', 1))):
-        p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, i))
+        p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, status_queue, i))
         p.daemon = False
         p.start()
         processes.append(p)
@@ -135,7 +135,7 @@ def process_requests(req_queue, res_queue, err_queue, running_queue, cancel_queu
         for i in range(len(processes)):
             p = processes[i]
             if not p.is_alive():
-                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, i))
+                p = mp.Process(target=process_requests_worker, name=f'process_requests_worker-{str(pid)}-{i}', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, status_queue, i))
                 p.daemon = False
                 p.start()
                 processes[i] = p
@@ -160,6 +160,31 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
             else:
                 running_queue.put((job_data, pid))
         time.sleep(0.1)
+
+def status_update_worker(status_queue, res_queue):
+    logger = getLogger('status_update_worker')
+    pid = os.getpid()
+    worker_name = 'status_update_worker-' + str(pid)
+    log_extras['worker_name'] = worker_name
+    logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
+    latest_status_data = None
+    while True:
+        logger.info('Waiting for status update %s', extra=log_extras)
+        try:
+            status_data = status_queue.get(timeout=5)
+            time.sleep(1)
+            latest_status_data = status_data
+            if latest_status_data is not None:
+                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+                updated_status_data = copy.deepcopy(latest_status_data)
+                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                res_queue.put((updated_status_data, None, None))
+        except Exception as e:
+            if latest_status_data is not None:
+                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+                updated_status_data = copy.deepcopy(latest_status_data)
+                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                res_queue.put((updated_status_data, None, None))
         
 
 req_queue = mp.Queue()
@@ -168,13 +193,16 @@ err_queue = mp.Queue()
 running_queue = mp.Queue()
 cancel_queue = mp.Queue()
 kill_queue = mp.Queue()
+status_queue = mp.Queue()
 
-preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue))
+preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue, status_queue))
 preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
 pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue, kill_queue))
 pcancel.start()
+pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(status_queue, res_queue))
+pstatus.start()
 
 def create_app():
     app = connexion.App(__name__, specification_dir='openapi/')
