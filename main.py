@@ -130,6 +130,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue):
     while True:
         cancel_data = cancel_queue.get()
         testSetId = cancel_data['testSetId']
+        running_queue.put(None)
         for running_job in iter(running_queue.get, None):
             job_data, pid = running_job
             if job_data['testSetId'] == testSetId:
