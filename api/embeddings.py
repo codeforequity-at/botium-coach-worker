@@ -89,9 +89,8 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
     log_extras['worker_name'] = worker_name
     logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
     latest_status_data = None
-    while True:
-        ppid = os.getppid()
-        logger.info('Waiting for status update %s', ppid, extra=log_extras)
+    while os.getppid() > 1:
+        logger.info('Waiting for status update %s', extra=log_extras)
         try:
             status_data = status_queue.get(timeout=5)
             time.sleep(5)
