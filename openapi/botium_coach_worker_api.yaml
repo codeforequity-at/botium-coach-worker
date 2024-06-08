@@ -206,6 +206,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /static/cancel_calculate_embeddings:
+    post:
+      summary: Cancel word embeddings calculation
+      operationId: api.embeddings.cancel_calculate_embeddings
+      security:
+        - api_key: []
+      requestBody:
+        description: Botium data set with user examples
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: cancelEmbeddingsRequest
+              $ref: "#/components/schemas/CancelEmbeddingsRequest"
+            example:
+              testSetId: 'asdfasdfasdfasd'
+       responses:
+        '201':
+          description: Embeddings Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CancelEmbeddingsResponse"
+              example:
+                status': 'cancelled'
+                coachSessionId: 'testSetId',
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /static/calculate_embeddings:
     post:
       summary: Calculate word embedding statistics on a data set
@@ -319,6 +351,12 @@ components:
       in: header
       x-apikeyInfoFunc: api.shared.apikey_auth
   schemas:
+    CancelEmbeddingsRequest:
+      required:
+        - testSetId
+      properties:
+        testSetId:
+          type: string
     EmbeddingsRequest:
       required:
         - coachSessionId
