@@ -93,6 +93,9 @@ def status_update_worker(logger, log_extras, status_queue, res_queue):
         logger.info('Waiting for status update %s', extra=log_extras)
         try:
             status_data = status_queue.get(timeout=5)
+            if status_data == 'kill':
+                logger.info('Killing status update worker %s', worker_name, extra=log_extras)
+                break
             time.sleep(5)
             latest_status_data = status_data
             if latest_status_data is not None:
@@ -492,6 +495,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             }
             logger.debug(json.dumps(response_data, indent=2))
             res_queue.put((response_data,))
+
+    status_queue.put('kill')
 
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
