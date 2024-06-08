@@ -392,6 +392,12 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Intent"
+    CancelEmbeddingsResponse:
+      properties:
+        status:
+          type: string
+        testSetId:
+          type: string
     EmbeddingsResponse:
       properties:
         status:
