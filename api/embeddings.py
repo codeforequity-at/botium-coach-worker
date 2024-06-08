@@ -85,6 +85,7 @@ def cosine_similarity_worker(w):
 def status_update_worker(logger, log_extras, status_queue, res_queue):
     latest_status_data = None
     while True:
+        logger.info('Waiting for status update', extra=log_extras)
         try:
             status_data = status_queue.get(timeout=10)
             if status_data is not None:
@@ -146,6 +147,7 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_queue.put(status_data)
 
     pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
+    pstatus.daemon = False
     pstatus.start()
 
     def kill_processes():
