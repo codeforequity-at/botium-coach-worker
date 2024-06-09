@@ -107,6 +107,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
             testSetId = request_data['testSetId']
+            running_queue.put(None)
             running_jobs = list(iter(running_queue.get, None))
             if len(running_jobs) == 0:
                 logger.info('No running jobs for testSetId %s', testSetId)
