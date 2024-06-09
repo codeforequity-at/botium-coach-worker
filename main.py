@@ -186,7 +186,6 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
                 logger.info('Killed worker %s for testSetId %s', pid, testSetId)
             else:
                 running_queue.put((job_data, pid))
-            cancel_queue_done.put(testSetId)
         time.sleep(0.1)
 
 req_queue = mp.Queue()
@@ -196,11 +195,11 @@ running_queue = mp.Queue()
 cancel_queue = mp.Queue()
 kill_queue = mp.Queue()
 
-preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, cancel_queue_done, kill_queue))
+preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue))
 preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
-pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue, cancel_queue_done, kill_queue))
+pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue, kill_queue))
 pcancel.start()
 
 def create_app():

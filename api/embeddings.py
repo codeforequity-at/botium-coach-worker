@@ -534,7 +534,6 @@ def calculate_embeddings(embeddingsRequest):
     with current_app.app_context():
         req_queue = current_app.req_queue
         cancel_queue = current_app.cancel_queue
-        cancel_queue.put(embeddingsRequest)
         req_queue.put((embeddingsRequest, "calculate_chi2"))
         req_queue.put((embeddingsRequest, "calculate_embeddings"))
 
