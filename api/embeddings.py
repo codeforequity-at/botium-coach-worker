@@ -514,7 +514,7 @@ def calculate_embeddings(embeddingsRequest):
         response_data = {
             "method": "ping"
         }
-        res = requests.post(boxEndpoint, json=response_data)
+        res = requests.post(boxEndpoint, json=response_data, timeout=5)
         if res.status_code != 200 and res.status_code != 400:
             raise Exception(
                 'Ping check for callback url failed: Status Code ' + str(res.status_code))
