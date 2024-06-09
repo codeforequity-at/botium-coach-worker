@@ -164,7 +164,8 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
             job_data, pid = running_job
             if job_data['testSetId'] == testSetId:
                 logger.info('Killing worker %s for testSetId %s', pid, testSetId)
-                kill_queue.put(pid)
+                #kill_queue.put(pid)
+                os.kill(pid, 9)
                 logger.info('Killed worker %s for testSetId %s', pid, testSetId)
             else:
                 running_queue.put((job_data, pid))
