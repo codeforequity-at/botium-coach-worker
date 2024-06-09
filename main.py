@@ -106,7 +106,22 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
-            time.sleep(30)
+            testSetId = request_data['testSetId']
+            running_jobs = list(iter(running_queue.get, None))
+            if len(running_jobs) == 0:
+                logger.info('No running jobs for testSetId %s', testSetId)
+            for running_job in running_jobs:
+                job_data, pid = running_job
+                if job_data['testSetId'] == testSetId:
+                    logger.info('Killing worker %s for testSetId %s', pid, testSetId)
+                    #kill_queue.put(pid)
+                    try:
+                        os.kill(pid, 9)
+                    except Exception as e:
+                        logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+                    logger.info('Killed worker %s for testSetId %s', pid, testSetId)
+                else:
+                    running_queue.put((job_data, pid))
             running_queue.put((request_data, os.getpid()))
             calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
@@ -171,6 +186,7 @@ def process_cancel_worker(req_queue, running_queue, cancel_queue, kill_queue):
                 logger.info('Killed worker %s for testSetId %s', pid, testSetId)
             else:
                 running_queue.put((job_data, pid))
+            cancel_queue_done.put(testSetId)
         time.sleep(0.1)
 
 req_queue = mp.Queue()
@@ -180,11 +196,11 @@ running_queue = mp.Queue()
 cancel_queue = mp.Queue()
 kill_queue = mp.Queue()
 
-preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, kill_queue))
+preq = mp.Process(target=process_requests, name='process_requests', args=(req_queue, res_queue, err_queue, running_queue, cancel_queue, cancel_queue_done, kill_queue))
 preq.start()
 pres = mp.Process(target=process_responses, name='process_responses', args=(req_queue, res_queue, err_queue))
 pres.start()
-pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue, kill_queue))
+pcancel = mp.Process(target=process_cancel_worker, name='process_cancel_worker', args=(req_queue, running_queue, cancel_queue, cancel_queue_done, kill_queue))
 pcancel.start()
 
 def create_app():
