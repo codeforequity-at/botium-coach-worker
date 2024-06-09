@@ -55,6 +55,8 @@ def process_responses(req_queue, res_queue, err_queue):
         if retryMethod is None:
             if 'boxEndpoint' in response_data:
                 res_queue.put((response_data, retryCount, 'retryEndpoint'))
+        elif retryMethod == 'stopWorker':
+            os.kill(response_data, 9)
         elif retryMethod == 'retryEndpoint':
             boxEndpoint = response_data['boxEndpoint']
             # for testing purposes on local environment
@@ -119,6 +121,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
 
         calc_count += 1
 
+    res_queue.put((os.getpid(), None, 'stopWorker'))
     logger.info(f'Worker {worker_name} finished')
     #os.kill(os.getpid(), 9)
 
