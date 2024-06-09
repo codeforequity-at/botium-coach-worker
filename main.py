@@ -106,7 +106,6 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
-            cancel_queue.put(request_data)
             time.sleep(30)
             running_queue.put((request_data, os.getpid()))
             calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
