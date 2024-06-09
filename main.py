@@ -113,6 +113,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
                 logger.info('No running jobs for testSetId %s', testSetId)
             for running_job in running_jobs:
                 job_data, pid = running_job
+                logger.info('lololo ' + json.dumps(job_data))
                 if job_data['testSetId'] == testSetId:
                     logger.info('Killing worker %s for testSetId %s', pid, testSetId)
                     #kill_queue.put(pid)
