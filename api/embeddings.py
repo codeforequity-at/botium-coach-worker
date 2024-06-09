@@ -145,7 +145,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             "step": step,
             "steps": max_steps
         }
-        status_queue.put(status_data)
+        res_queue.put((status_data, None, None))
+        #status_queue.put(status_data)
 
     pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
     pstatus.start()
@@ -493,7 +494,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             res_queue.put((response_data,))
 
     status_queue.put('kill')
-    pstatus.terminate()
 
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
