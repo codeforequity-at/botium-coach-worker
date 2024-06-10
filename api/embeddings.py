@@ -12,6 +12,11 @@ import tensorflow_hub as hub
 import tensorflow as tf
 import tensorflow_text
 import torch
+from datetime import datetime
+import multiprocessing as mp
+import copy
+import atexit
+import signal
 
 from api.term_analysis import chi2_analyzer, similarity_analyzer
 from api.utils import pandas_utils
@@ -68,7 +73,6 @@ maxCalcCount = 100
 if 'COACH_MAX_CALCULATIONS_PER_WORKER' in os.environ:
     maxCalcCount = int(os.environ['COACH_MAX_CALCULATIONS_PER_WORKER'])
 
-
 def cosine_similarity_worker(w):
     intent_1 = w[0]
     phrase_1 = w[1]
@@ -79,8 +83,31 @@ def cosine_similarity_worker(w):
     similarity = cosine_similarity([embedd_1], [embedd_2])[0][0]
     return [intent_1, phrase_1, intent_2, phrase_2, similarity]
 
+def status_update_worker(logger, log_extras, status_queue, res_queue):
+    pid = os.getpid()
+    worker_name = 'status_update_worker-' + str(pid)
+    log_extras['worker_name'] = worker_name
+    logger.info('Initialize status update worker %s...', worker_name, extra=log_extras)
+    latest_status_data = None
+    while os.getppid() > 1:
+        logger.info('Waiting for status update %s', extra=log_extras)
+        status_queue.put(None)
+        status_list = list(iter(status_queue.get, None))
+        if len(status_list) > 0:
+            status_data = status_list[-1]
+            if status_data == 'kill':
+                logger.info('Killing status update worker %s', worker_name, extra=log_extras)
+                break
+            time.sleep(5)
+            latest_status_data = status_data
+            if latest_status_data is not None:
+                logger.info(latest_status_data['json']['statusDescription'], extra=log_extras)
+                updated_status_data = copy.deepcopy(latest_status_data)
+                updated_status_data['json']['statusDescription'] = updated_status_data['json']['statusDescription'] + ' - Latest status update at ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                res_queue.put((updated_status_data, None, None))
 
-def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, embeddingsRequest, method):
+
+def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_queue, running_queue, embeddingsRequest, method):
     coachSessionId = embeddingsRequest['coachSessionId'] if 'coachSessionId' in embeddingsRequest else None
     clientId = embeddingsRequest['clientId'] if 'clientId' in embeddingsRequest else None
     testSetId = embeddingsRequest['testSetId'] if 'testSetId' in embeddingsRequest else None
@@ -105,10 +132,10 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
         status_data['boxEndpoint'] = response_data['boxEndpoint']
         status_data['header'] = response_data['header']
 
+    status_queue = mp.Queue()
+
     def sendStatus(category, calc_status, step, max_steps, message):
         logger.info(message, extra=log_extras)
-        status_data['redisKey'] = 'coachworker_status_' + \
-            category + '_' + coachSessionId
         status_data['json'] = {
             "method": "calculate_" + category,
             "clientId": clientId,
@@ -118,13 +145,22 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             "step": step,
             "steps": max_steps
         }
-        res_queue.put((status_data, None, None))
+        #res_queue.put((status_data, None, None))
+        status_queue.put(status_data)
+
+    pstatus = mp.Process(target=status_update_worker, name='status_update_worker', args=(logger, log_extras, status_queue, res_queue))
+    pstatus.start()
+
+    #def kill_processes():
+    #    logger.info('Killing status update worker', extra=log_extras)
+    #    pstatus.kill()
+    #    logger.info('Killed status update worker', extra=log_extras)
+
+    #atexit.register(kill_processes)
+    #signal.signal(signal.SIGTERM, kill_processes)
+    #signal.signal(signal.SIGINT, kill_processes)
 
     if method == "calculate_chi2":
-        response_data['redisKey'] = 'coachworker_res_chi2_' + coachSessionId
-        response_data['deleteRedisKey'] = 'coachworker_req_chi2_' + \
-            coachSessionId
-
         if len(intents) == 0:
             response_data['json'] = {
                 "method": "calculate_chi2",
@@ -153,10 +189,10 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             # objtofile(flattenedForChi2, 'flattenedForChi2', logger)
 
             sendStatus('chi2', CalcStatus.CHI2_ANALYSIS_RUNNING,
-                       1, 4, 'Chi2 Analysis running')
+                       1, 4, 'Chi2 Analysis started')
             try:
                 chi2, unigram_intent_dict, bigram_intent_dict = chi2_analyzer.get_chi2_analysis(
-                    logger, log_extras, worker_name, flattenedForChi2, num_xgrams=filter['maxxgrams'])
+                    logger, log_extras, worker_name, flattenedForChi2, sendStatus, CalcStatus, num_xgrams=filter['maxxgrams'])
                 # objtofile(chi2, 'chi2', logger)
                 # objtofile(unigram_intent_dict, 'unigram_intent_dict', logger)
                 # objtofile(bigram_intent_dict, 'bigram_intent_dict', logger)
@@ -234,19 +270,6 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             res_queue.put((response_data,))
 
     if method == "calculate_embeddings":
-        response_data['redisKey'] = 'coachworker_res_embeddings_' + \
-            coachSessionId
-        response_data['deleteRedisKey'] = 'coachworker_req_embeddings_' + \
-            coachSessionId
-
-        logger.info('Loading word embeddings model from tfhub ...')
-        try:
-            generate_embeddings = hub.load(
-                'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
-        except Exception as e:
-            err_queue.put(str(e))
-        logger.info('Word embeddings model ready.')
-
         if len(intents) == 0:
             response_data['json'] = {
                 "method": "calculate_embeddings",
@@ -266,6 +289,16 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                 response_data['json'], indent=2), extra=log_extras)
             res_queue.put((response_data,))
             return
+
+        sendStatus('embeddings', CalcStatus.EMBEDDINGS_INTENTS_RUNNING, 1, 4, "Loading word embeddings model")
+
+        logger.info('Loading word embeddings model from tfhub ...')
+        try:
+            generate_embeddings = hub.load(
+                'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')
+        except Exception as e:
+            err_queue.put(str(e))
+        logger.info('Word embeddings model ready.')
 
         try:
             if not 'maxxgrams' in filter:
@@ -357,10 +390,9 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                        2, 4, 'Principal Component Analysis ready')
 
             sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_RUNNING,
-                       3, 4, 'Preparation for Cosine Similarity Analysis running')
+                       3, 4, f'Preparation for Cosine Similarity Analysis for {len(flattenedForCosine)} examples running')
             try:
-                logger.info('Preparing cosine similarity for %s examples', len(
-                    flattenedForCosine), extra=log_extras)
+                logger.info('Preparing cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
 
                 workers = []
                 for i in range(len(flattenedForCosine)):
@@ -380,18 +412,23 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
                            3, 4, 'Preparation for Cosine Similarity Analysis failed - {}'.format(e))
                 exit(1)
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_READY,
-                       3, 4, 'Preparation for Cosine Similarity Analysis ready')
+            #sendStatus('embeddings', CalcStatus.EMBEDDINGS_PREPARE_COSINE_SIMILARITY_READY,
+            #           3, 4, 'Preparation for Cosine Similarity Analysis ready')
 
-            sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING,
-                       4, 4, 'Cosine Similarity Analysis running')
-            logger.info('Running cosine similarity for %s examples',
-                        len(flattenedForCosine), extra=log_extras)
+            #sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING,
+            #           4, 4, f'Cosine Similarity Analysis running for {len(flattenedForCosine)} examples ')
+            logger.info('Running cosine similarity for %s examples', len(flattenedForCosine), extra=log_extras)
 
             # data = Parallel(n_jobs=-1)(delayed(cosine_similarity_worker)(w[0], w[1], w[2], w[3], w[4], w[5]) for w in workers)
-            executer = ThreadPoolExecutor(max_workers=os.environ.get(
-                'COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
-            data = list(executer.map(cosine_similarity_worker, tuple(workers)))
+            executer = ThreadPoolExecutor(max_workers=os.environ.get('COACH_THREADS_EMBEDDINGS_COSINE_SIMILARITY', 3))
+            data = list()
+            for result in executer.map(cosine_similarity_worker, tuple(workers)):
+                data.append(result)
+                progress = len(data)
+                if progress % 5000 == 0:
+                    sendStatus('embeddings', CalcStatus.EMBEDDINGS_COSINE_SIMILARITY_RUNNING,
+                        4, 4, f'Cosine Similarity Analysis calculations {int(progress * 100/len(workers))}% ({progress}/{len(workers)})')
+            #data = list(executer.map(cosine_similarity_worker, tuple(workers)))
 
             logger.info('Ready with cosine similarity for %s pairs, preparing results', len(
                 data), extra=log_extras)
@@ -456,6 +493,8 @@ def calculate_embeddings_worker(logger, worker_name, req_queue, res_queue, err_q
             logger.debug(json.dumps(response_data, indent=2))
             res_queue.put((response_data,))
 
+    status_queue.put('kill')
+
 def ping():
     return 'Botium Coach Worker. Tensorflow Version: {tfVersion} PyTorch Version: {ptVersion}, Cuda: {ptCuda}'.format(
         tfVersion=tf.__version__, ptVersion=torch.__version__, ptCuda=str(torch.cuda.is_available()))
@@ -475,7 +514,7 @@ def calculate_embeddings(embeddingsRequest):
         response_data = {
             "method": "ping"
         }
-        res = requests.post(boxEndpoint, json=response_data)
+        res = requests.post(boxEndpoint, json=response_data, timeout=60)
         if res.status_code != 200 and res.status_code != 400:
             raise Exception(
                 'Ping check for callback url failed: Status Code ' + str(res.status_code))
@@ -494,6 +533,24 @@ def calculate_embeddings(embeddingsRequest):
 
     with current_app.app_context():
         req_queue = current_app.req_queue
+        running_queue = current_app.running_queue
+        #testSetId = embeddingsRequest['testSetId']
+        #running_queue.put(None)
+        #running_jobs = list(iter(running_queue.get, None))
+        #if len(running_jobs) == 0:
+        #    embeddingsLogger.info('No running jobs for testSetId %s', testSetId)
+        #for running_job in running_jobs:
+        #    job_data, pid = running_job
+        #    if job_data['testSetId'] == testSetId:
+        #        embeddingsLogger.info('Killing worker %s for testSetId %s', pid, testSetId)
+                #kill_queue.put(pid)
+        #        try:
+        #            os.kill(pid, 9)
+        #        except Exception as e:
+        #            embeddingsLogger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+        #        embeddingsLogger.info('Killed worker %s for testSetId %s', pid, testSetId)
+        #    else:
+        #        running_queue.put((job_data, pid))
         req_queue.put((embeddingsRequest, "calculate_chi2"))
         req_queue.put((embeddingsRequest, "calculate_embeddings"))
 
@@ -505,4 +562,16 @@ def calculate_embeddings(embeddingsRequest):
         "testSetName": testSetName,
         'boxEndpoint': boxEndpoint,
         'workerEndpoint': os.environ.get('COACH_HOSTNAME', '')
+    }
+
+def cancel_calculate_embeddings(cancelEmbeddingsRequest):
+    testSetId = cancelEmbeddingsRequest['testSetId'] if 'testSetId' in cancelEmbeddingsRequest else None
+
+    with current_app.app_context():
+        cancel_queue = current_app.cancel_queue
+        cancel_queue.put(cancelEmbeddingsRequest)
+
+    return {
+        'status': 'cancelled',
+        "testSetId": testSetId
     }

@@ -51,6 +51,7 @@ def ambiguous_examples_analysis(logger, log_extras, worker_name, workspace_pd, t
 
     logger.info('chi2 similarity: sorting by similarity', extra=log_extras)
     similarity_df_sorted = similar_utterance_pd.sort_values(by=["similarity"], ascending=False)
+    logger.info('chi2 similarity: sorting by similarity done', extra=log_extras)
     return [ { 'name1': name1, 'example1': example1, 'name2': name2, 'example2': example2, 'similarity': similarity } for name1, example1, name2, example2, similarity in zip(similarity_df_sorted['name1'], similarity_df_sorted['example1'], similarity_df_sorted['name2'], similarity_df_sorted['example2'], similarity_df_sorted['similarity'])]
 
 def _calculate_cosine_similarity(logger, log_extras, worker_name, workspace_bow):
@@ -65,4 +66,5 @@ def _calculate_cosine_similarity(logger, log_extras, worker_name, workspace_bow)
     workspace_bow = workspace_bow / np.linalg.norm(workspace_bow, axis=1, keepdims=True)
     logger.info('Calculating cosine similarity: dot product ...', extra=log_extras)
     cosine_similarity_matrix = workspace_bow.dot(np.transpose(workspace_bow))
+    logger.info('Calculating cosine similarity done ...', extra=log_extras)
     return cosine_similarity_matrix
