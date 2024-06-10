@@ -106,25 +106,25 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
 
         if method == 'calculate_chi2' or method == 'calculate_embeddings':
             logger.info(f'run worker method for {worker_name}.{method}')
-            testSetId = request_data['testSetId']
-            running_queue.put(None)
-            running_jobs = list(iter(running_queue.get, None))
-            if len(running_jobs) == 0:
-                logger.info('No running jobs for testSetId %s', testSetId)
-            for running_job in running_jobs:
-                job_data, pid = running_job
-                logger.info('lololo ' + json.dumps(job_data))
-                if job_data['testSetId'] == testSetId:
-                    logger.info('Killing worker %s for testSetId %s', pid, testSetId)
+            #testSetId = request_data['testSetId']
+            #running_queue.put(None)
+            #running_jobs = list(iter(running_queue.get, None))
+            #if len(running_jobs) == 0:
+            #    logger.info('No running jobs for testSetId %s', testSetId)
+            #for running_job in running_jobs:
+            #    job_data, pid = running_job
+            #    logger.info('lololo ' + json.dumps(job_data))
+            #    if job_data['testSetId'] == testSetId:
+            #        logger.info('Killing worker %s for testSetId %s', pid, testSetId)
                     #kill_queue.put(pid)
-                    try:
-                        os.kill(pid, 9)
-                    except Exception as e:
-                        logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
-                    logger.info('Killed worker %s for testSetId %s', pid, testSetId)
-                else:
-                    running_queue.put((job_data, pid))
-            running_queue.put((request_data, os.getpid()))
+            #        try:
+            #            os.kill(pid, 9)
+            #        except Exception as e:
+            #            logger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+            #        logger.info('Killed worker %s for testSetId %s', pid, testSetId)
+            #    else:
+            #        running_queue.put((job_data, pid))
+            #running_queue.put((request_data, os.getpid()))
             calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
             logger.info(f'run worker method for {worker_name}.{method}')
