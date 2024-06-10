@@ -68,7 +68,7 @@ def process_responses(req_queue, res_queue, err_queue):
             try:
                 headers = response_data["header"] if 'header' in response_data else None
                 data = json.dumps(response_data['json'], default=to_serializable) if 'json' in response_data else response_data['data']
-                res = requests.post(boxEndpoint, headers=headers, data=data, timeout=10)
+                res = requests.post(boxEndpoint, headers=headers, data=data, timeout=60)
                 if res.status_code != 200:
                     raise Exception('Wrong status code ' + str(res.status_code))
 
