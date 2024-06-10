@@ -127,7 +127,7 @@ def process_requests_worker(req_queue, res_queue, err_queue, running_queue, canc
             #        logger.info('Killed worker %s for testSetId %s', pid, testSetId)
             #    else:
             #        running_queue.put((job_data, pid))
-            #running_queue.put((request_data, os.getpid()))
+            running_queue.put((request_data, os.getpid()))
             calculate_embeddings_worker(embeddingsLogger, worker_name, req_queue, res_queue, err_queue, running_queue, request_data, method)
         elif method == 'upload_factcheck_documents':
             logger.info(f'run worker method for {worker_name}.{method}')
@@ -222,6 +222,7 @@ def create_app():
         current_app.res_queue = res_queue
         current_app.err_queue = err_queue
         current_app.cancel_queue = cancel_queue
+        current_app.running_queue = running_queue
 
     return app
 
