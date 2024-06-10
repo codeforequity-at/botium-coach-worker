@@ -534,23 +534,23 @@ def calculate_embeddings(embeddingsRequest):
     with current_app.app_context():
         req_queue = current_app.req_queue
         running_queue = current_app.running_queue
-        testSetId = embeddingsRequest['testSetId']
-        running_queue.put(None)
-        running_jobs = list(iter(running_queue.get, None))
-        if len(running_jobs) == 0:
-            embeddingsLogger.info('No running jobs for testSetId %s', testSetId)
-        for running_job in running_jobs:
-            job_data, pid = running_job
-            if job_data['testSetId'] == testSetId:
-                embeddingsLogger.info('Killing worker %s for testSetId %s', pid, testSetId)
+        #testSetId = embeddingsRequest['testSetId']
+        #running_queue.put(None)
+        #running_jobs = list(iter(running_queue.get, None))
+        #if len(running_jobs) == 0:
+        #    embeddingsLogger.info('No running jobs for testSetId %s', testSetId)
+        #for running_job in running_jobs:
+        #    job_data, pid = running_job
+        #    if job_data['testSetId'] == testSetId:
+        #        embeddingsLogger.info('Killing worker %s for testSetId %s', pid, testSetId)
                 #kill_queue.put(pid)
-                try:
-                    os.kill(pid, 9)
-                except Exception as e:
-                    embeddingsLogger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
-                embeddingsLogger.info('Killed worker %s for testSetId %s', pid, testSetId)
-            else:
-                running_queue.put((job_data, pid))
+        #        try:
+        #            os.kill(pid, 9)
+        #        except Exception as e:
+        #            embeddingsLogger.error('Error killing worker %s for testSetId %s: %s', pid, testSetId, e)
+        #        embeddingsLogger.info('Killed worker %s for testSetId %s', pid, testSetId)
+        #    else:
+        #        running_queue.put((job_data, pid))
         req_queue.put((embeddingsRequest, "calculate_chi2"))
         req_queue.put((embeddingsRequest, "calculate_embeddings"))
 
