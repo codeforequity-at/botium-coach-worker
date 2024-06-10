@@ -56,7 +56,10 @@ def process_responses(req_queue, res_queue, err_queue):
             if 'boxEndpoint' in response_data:
                 res_queue.put((response_data, retryCount, 'retryEndpoint'))
         elif retryMethod == 'stopWorker':
-            os.kill(response_data, 9)
+            try:
+                os.kill(response_data, 9)
+            except Exception as e:
+                logger.error('Error killing worker %s: %s', response_data, e)
         elif retryMethod == 'retryEndpoint':
             boxEndpoint = response_data['boxEndpoint']
             # for testing purposes on local environment
