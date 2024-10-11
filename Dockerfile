@@ -23,6 +23,11 @@ COPY ./test_data /app/test_data
 RUN groupadd -r -g 1000 coach && useradd -r -u 1000 -g 1000 -d /app -s /bin/bash coach
 RUN chown -R 1000:1000 /app
 
+RUN mkdir -p /app/temp && chown -R 1000:1000 /app/temp
+VOLUME /app/temp
+
+ENV TMPDIR /app/temp
+
 ENV LOGLEVEL INFO
 ENV WEB_CONCURRENCY 1
 ENV COACH_MAX_UTTERANCES_FOR_EMBEDDINGS 500
